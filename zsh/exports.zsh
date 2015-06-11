@@ -4,7 +4,7 @@ export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
 export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 
 # Setup terminal, and turn on colors
-export TERM=xterm-256color
+export TERM=xterm-256color-italic
 export CLICOLOR=1
 
 # Enable color in grep
@@ -33,8 +33,14 @@ export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export CLICOLOR="yes"
 export PAGER="less"
-export EDITOR="vim"
+export EDITOR="vi"
 [[ -e $commands[nvim] ]] && export EDITOR="nvim" && alias vi="nvim"
 
+export NVIM_TUI_ENABLE_TRUE_COLOR=1
 export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+export BOOT_CLOJURE_VERSION='1.7.0-RC1'
+
+export DOCKER_HOST=tcp://192.168.99.101:2376
+export DOCKER_CERT_PATH=/Users/samflores/.docker/machine/machines/dev
+export DOCKER_TLS_VERIFY=1 
 
