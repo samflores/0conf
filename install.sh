@@ -14,6 +14,8 @@ ln -s $origin/gitignore_global ~/.gitignore_global
 ln -s $origin/zsh ~/.zsh
 ln -s $origin/zshrc ~/.zshrc
 
+ln -s $origin/tmux.conf ~/.tmux.conf
+
 git submodule init
 git submodule update
 
