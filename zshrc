@@ -9,6 +9,7 @@ source ~/.zsh/functions.zsh
 source ~/.zsh/history.zsh
 source ~/.zsh/zsh_hooks.zsh
 source ~/.zsh/path.zsh
+source ~/.zsh/tmux.zsh
 
 # Externals
 source ~/.zsh/syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -20,3 +21,4 @@ source ~/.zsh/history-substring-search/zsh-history-substring-search.zsh
   alias chrb=chruby && \
   chruby 2.2.2
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
