@@ -1,33 +1,42 @@
 call plug#begin('~/.vim/plugged')
 
-Plug 'ajh17/VimCompletesMe'
+" languages support
+Plug 'Superbil/llvm.vim'
 Plug 'cespare/vim-toml'
 Plug 'guns/vim-clojure-static'
-Plug 'hail2u/vim-css3-syntax'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
-Plug 'junegunn/vim-oblique'
-Plug 'junegunn/vim-pseudocl'
-Plug 'mustache/vim-mustache-handlebars'
+Plug 'kchmck/vim-coffee-script'
+Plug 'othree/html5.vim'
 Plug 'psql.vim'
+Plug 'wting/rust.vim'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'hail2u/vim-css3-syntax'
+
+" general stuff
+Plug 'ajh17/VimCompletesMe'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'kshenoy/vim-signature'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
-Plug 'wting/rust.vim'
+Plug 'tpope/vim-surround'
 
-Plug 'JavaScript-Indent', { 'for': ['html', 'javascript'] }
+" coloscheme
+Plug 'whatyouhide/vim-gotham'
+
+" on demand
 Plug 'guns/vim-sexp', { 'for': 'clojure' }
 Plug 'junegunn/vim-easy-align', { 'on': ['EasyAlign'] }
+Plug 'mattn/emmet-vim', { 'for': ['html', 'eruby', 'css', 'scss'] }
 Plug 'raymond-w-ko/vim-niji', { 'for': 'clojure' }
-Plug 'tpope/vim-commentary', { 'on': ['Commentary', 'CommentaryLine'] }
 Plug 'tpope/vim-dispatch', { 'on': [ 'Start', 'Dispatch' ] }
 Plug 'tpope/vim-eunuch', { 'on': ['Mkdir', 'Unlink', 'Move'] }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'tpope/vim-jdaddy', { 'for': 'json' }
 Plug 'tpope/vim-scriptease', { 'for': 'vim' }
 Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' }
-Plug 'tpope/vim-surround', { 'on': ['Csurround', 'Dsurround', 'Ysurround'] }
-Plug 'venantius/vim-cljfmt', { 'for': 'clojure' }
 
 call plug#end()
 
