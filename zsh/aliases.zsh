@@ -67,6 +67,7 @@ alias brl='brew list'
 alias brs='brew search'
 alias bru='brew upgrade'
 alias brU='brew update && brew upgrade'
+alias bro='brew update && brew outdated'
 alias brx='brew remove'
 
 # Git
@@ -225,3 +226,5 @@ alias gwX='git rm -rf'
 
 # PostgreSQL
 alias runpg='postgres -D /usr/local/var/postgres &'
+
+alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
