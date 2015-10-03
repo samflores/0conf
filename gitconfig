@@ -1,6 +1,6 @@
 [user]
-	name = Samuel Flores
-	email = me@samflor.es
+  name = Samuel Flores
+  email = me@samflor.es
 [diff]
 [color]
   ui               = auto
@@ -41,4 +41,4 @@
 [github]
   user             = samflores
 [push]
-	default = simple
+  default = simple
