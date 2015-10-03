@@ -19,6 +19,6 @@ source ~/.zsh/history-substring-search/zsh-history-substring-search.zsh
 [[ $+commands[chruby-exec] ]] && \
   source "${commands[chruby-exec]:h:h}/share/chruby/chruby.sh" && \
   alias chrb=chruby && \
-  chruby 2.2.2
+  chruby 2.2.3
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
