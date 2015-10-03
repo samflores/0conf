@@ -85,19 +85,16 @@ set sidescroll=1
 set sidescrolloff=10
 
 set laststatus=1
-" set statusline=%f\ %{fugitive#statusline()}%=%l,%c\ %P
+set statusline=%f\ %{fugitive#statusline()}%=%l,%c\ %P
 
 set virtualedit+=block
 set wildignore+=.hg,.git,.svn                    " Version control
 set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg   " binary images
 set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
-set wildignore+=*.spl                            " compiled spelling word lists
 set wildignore+=*.sw?                            " Vim swap files
 set wildignore+=*.DS_Store                       " OSX bullshit
 set wildignore+=*.luac                           " Lua byte code
-set wildignore+=migrations                       " Django migrations
-set wildignore+=*.pyc                            " Python byte code
 set wildignore+=*.orig                           " Merge resolution files
 set wildignore+=classes                          " Clojure/Leiningen
 set wildignore+=lib
@@ -113,6 +110,7 @@ nnoremap zG 2zg
 
 set fillchars=diff:⣿,vert:│
 
+" ag > grep
 set grepprg=ag\ --nogroup\ --nocolor\ --column
 
 " Save when losing focus
@@ -121,15 +119,26 @@ au FocusLost * :silent! wall
 " Resize splits when the window is resized
 au VimResized * :wincmd =
 
+augroup filetype
+  au!
+  autocmd BufRead,BufNewFile *.ll set filetype=llvm
+augroup END
+
 augroup term
   au!
   autocmd BufNew,BufNewFile,BufRead term://* set nospell nolist
 augroup END
 
+augroup rustpeg
+  au!
+  au BufNewFile,BufRead *.rustpeg setf rust
+augroup END
+
 augroup clojure
   au!
   au BufNewFile,BufRead build.boot setf clojure
-  autocmd FileType clojure let b:vcm_tab_complete = 'user'
+  au FileType clojure setlocal lw+=match,go,go-loop,
+  au FileType clojure let b:vcm_tab_complete = 'user'
 augroup END
 
 augroup cline
@@ -140,8 +149,8 @@ augroup END
 
 augroup trailing
   au!
-  au InsertEnter * :set listchars-=trail:⌴
-  au InsertLeave * :set listchars+=trail:⌴
+  au InsertEnter * set listchars-=trail:⌴
+  au InsertLeave * set listchars+=trail:⌴
 augroup END
 
 augroup line_return
@@ -169,20 +178,20 @@ endif
 
 syntax on
 set background=dark
-colorscheme onedark
-highlight Normal guibg=#282c35
-highlight VertSplit guibg=#282c35 guifg=#2c323d
-highlight CursorLine guibg=#2c323d
-highlight TabLine guibg=#2c323d guifg=#5f6b85
-highlight TabLineFill guibg=#2c323d
-highlight TabLineSel guibg=#282c35 guifg=#9098a0 gui=NONE
-highlight StatusLine guibg=#282c35 guifg=#5f6b85
-highlight StatusLineNC guibg=#282c35 guifg=#2c323d
+colorscheme gotham
+" highlight Normal guibg=#282c35
+" highlight VertSplit guibg=#282c35 guifg=#2c323d
+" highlight CursorLine guibg=#2c323d
+" highlight TabLine guibg=#2c323d guifg=#5f6b85
+" highlight TabLineFill guibg=#2c323d
+" highlight TabLineSel guibg=#282c35 guifg=#9098a0 gui=NONE
+" highlight StatusLine guibg=#282c35 guifg=#5f6b85
+" highlight StatusLineNC guibg=#282c35 guifg=#2c323d
+" highlight ErrorMsg guifg=#282c35
+" highlight NonText guifg=#2c323d
 highlight Comment gui=italic
 highlight String gui=italic
 highlight Define gui=bold
-highlight SpellBad guibg=#282c35 gui=undercurl guisp=#ff0000
-highlight NonText guifg=#2c323d
 
 " Highlight VCS conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
@@ -244,7 +253,7 @@ nnoremap <leader>i :set list!<cr>
 " Toggle spell
 nnoremap <leader>z :set spell!<cr>
 
-" Unfuck my screen
+" [U]nfuck my screen
 nnoremap U :syntax sync fromstart<cr>:redraw!<cr>
 
 " Quick editing
@@ -255,27 +264,19 @@ nnoremap <leader>ez :vsplit ~/.zshrc\|set bufhidden=wipe<cr>
 nnoremap <leader>et :vsplit ~/.tmux.conf\|set bufhidden=wipe<cr>
 
 " Use sane regexes.
-" nnoremap / /\v
-" vnoremap / /\v
-" nnoremap ? ?\v
-" vnoremap ? ?\v
+nnoremap / /\v
+vnoremap / /\v
+nnoremap ? ?\v
+vnoremap ? ?\v
 
 " Keep search matches in the middle of the window.
-" nnoremap n nzzzv
-" nnoremap N Nzzzv
+nnoremap n nzzzv
+nnoremap N Nzzzv
 
 " Same when jumping around
 nnoremap g; g;zz
 nnoremap g, g,zz
 nnoremap <c-o> <c-o>zz
-
-autocmd! User Oblique
-autocmd! User ObliqueStar
-autocmd! User ObliqueRepeat
-
-autocmd User Oblique       normal! zz
-autocmd User ObliqueStar   normal! zz
-autocmd User ObliqueRepeat normal! zz
 
 " Easier to type, and I never use the default behavior.
 noremap H ^
@@ -300,21 +301,29 @@ nnoremap <right> :cnext<cr>zvzz
 nnoremap <up>    :lprev<cr>zvzz
 nnoremap <down>  :lnext<cr>zvzz
 
+" Expand to current path on command mode
 cnoremap %% <c-r>=expand('%:h').'/'<CR>
 
+" Yeah, I'm that lazy
 nnoremap ; :
 nnoremap : ;
 vnoremap ; :
 vnoremap : ;
 
+" I prefer block selection
 nnoremap v <C-V>
 nnoremap <C-V> v
 vnoremap v <C-V>
 vnoremap <C-V> v
 
+" Easier to type
 nnoremap <Leader><Leader> <c-^>
+
+" Most of the time I want to ignore the indentation
 nnoremap 0 ^
 nnoremap <Leader>0 0
+
+" Clear the highlights
 nnoremap <silent> <c-k> :noh<CR>
 
 "" Fugitive mappings
@@ -329,9 +338,23 @@ nnoremap gca :Gcommit --amend<CR>
 vmap <Enter> <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
-highlight ColorColumn ctermbg=16
-call matchadd('ColorColumn', '\%81v', 100)
+highlight ColorColumn ctermfg=15 ctermbg=1 guifg=#d3ebe9 guibg=#c23127
+call matchadd('ColorColumn', '\%81v', 100) 
 
+nnoremap <f10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+tnoremap <Esc> <C-\><C-n>
+
+let g:niji_dark_colours = [
+      \ ["LightCyan","#c6b6ee"],
+      \ ["LightCyan","#8fbfdc"],
+      \ ["Grey","#5f6b85"],
+      \ ["Yellow","#fad07a"],
+      \ ["Green","#799d6a"],
+      \ ["DarkBlue","#b27ecd"],
+      \ ]
+let g:niji_light_colours = g:niji_dark_colours
+
+" FUZZY FINDER STUFF
 " List of buffers
 function! s:buflist()
   redir => ls
@@ -373,25 +396,26 @@ nnoremap <silent> <Leader>/ :call fzf#run({
       \   'down': 10
       \})<cr>
 
-nnoremap <silent> <Leader>t :call fzf#run({
+nnoremap <silent> <Leader>e :call fzf#run({
       \   'source': 'ag -l -g ""',
       \   'sink': 'e ',
       \   'options': '--tac',
       \   'down': <sid>fuzzy_len()
       \})<cr>
 
-nnoremap <f10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-"
-au FileType FZF set nospell
+nnoremap <silent> <Leader>t :call fzf#run({
+      \   'source': 'ag -l -g ""',
+      \   'sink': 'tabe ',
+      \   'options': '--tac',
+      \   'down': <sid>fuzzy_len()
+      \})<cr>
 
-let g:niji_dark_colours = [
-      \ ["LightCyan","#c6b6ee"],
-      \ ["LightCyan","#8fbfdc"],
-      \ ["Grey","#5f6b85"],
-      \ ["Yellow","#fad07a"],
-      \ ["Green","#799d6a"],
-      \ ["DarkBlue","#b27ecd"],
-      \ ]
-let g:niji_light_colours = g:niji_dark_colours 
+nnoremap <silent> <Leader>v :call fzf#run({
+      \   'source': 'ag -l -g ""',
+      \   'sink': 'vsp ',
+      \   'options': '--tac',
+      \   'down': <sid>fuzzy_len()
+      \})<cr>
 
-tnoremap <Esc> <C-\><C-n>
+au! FileType FZF set nospell
+
