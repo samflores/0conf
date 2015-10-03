@@ -38,7 +38,7 @@ export EDITOR="vi"
 
 export NVIM_TUI_ENABLE_TRUE_COLOR=1
 export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-export BOOT_CLOJURE_VERSION='1.7.0-RC1'
+export BOOT_CLOJURE_VERSION='1.7.0'
 
 export DOCKER_HOST=tcp://192.168.99.101:2376
 export DOCKER_CERT_PATH=/Users/samflores/.docker/machine/machines/dev
