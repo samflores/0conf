@@ -257,11 +257,11 @@ nnoremap <leader>z :set spell!<cr>
 nnoremap U :syntax sync fromstart<cr>:redraw!<cr>
 
 " Quick editing
-nnoremap <leader>ev :vsplit $MYVIMRC\|set bufhidden=wipe<cr>
-nnoremap <leader>ed :vsplit ~/.vim/custom-dictionary.utf-8.add\|set bufhidden=wipe<cr>
-nnoremap <leader>eg :vsplit ~/.gitconfig\|set bufhidden=wipe<cr>
-nnoremap <leader>ez :vsplit ~/.zshrc\|set bufhidden=wipe<cr>
-nnoremap <leader>et :vsplit ~/.tmux.conf\|set bufhidden=wipe<cr>
+nnoremap <leader>vv :vsplit $MYVIMRC\|set bufhidden=wipe<cr>
+nnoremap <leader>vd :vsplit ~/.vim/custom-dictionary.utf-8.add\|set bufhidden=wipe<cr>
+nnoremap <leader>vg :vsplit ~/.gitconfig\|set bufhidden=wipe<cr>
+nnoremap <leader>vz :vsplit ~/.zshrc\|set bufhidden=wipe<cr>
+nnoremap <leader>vt :vsplit ~/.tmux.conf\|set bufhidden=wipe<cr>
 
 " Use sane regexes.
 nnoremap / /\v
