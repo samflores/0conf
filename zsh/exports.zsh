@@ -1,7 +1,7 @@
-export GIT_AUTHOR_NAME="Samuel Flores"
-export GIT_AUTHOR_EMAIL="me@samflor.es"
-export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
-export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+export GIT_AUTHOR_NAME='Samuel Flores'
+export GIT_AUTHOR_EMAIL='me@samflor.es'
+export GIT_COMMITTER_NAME='$GIT_AUTHOR_NAME'
+export GIT_COMMITTER_EMAIL='$GIT_AUTHOR_EMAIL'
 
 # Setup terminal, and turn on colors
 export TERM=xterm-256color-italic
@@ -18,29 +18,26 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[38;5;246m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[04;33;146m'
-export LESS="-R --ignore-case --raw-control-chars"
+export LESS='-R --ignore-case --raw-control-chars'
 
 # Java
 [[ -e /usr/libexec/java_home ]] && export JAVA_HOME=$(/usr/libexec/java_home)
-export JRUBY_OPTS="-J-XX:+TieredCompilation -J-XX:TieredStopAtLevel=1 -J-noverify"
+export JRUBY_OPTS='-J-XX:+TieredCompilation -J-XX:TieredStopAtLevel=1 -J-noverify'
 
 # Compiling stuff on OS X
-[[ -e $commands[brew] ]] && export ARCHFLAGS="-arch x86_64"
+[[ -e $commands[brew] ]] && export ARCHFLAGS='-arch x86_64'
 
 # Lang && Editor
 export LC_COLLATE=C
-export LANG="en_US.UTF-8"
-export LC_ALL="en_US.UTF-8"
-export CLICOLOR="yes"
-export PAGER="less"
-export EDITOR="vi"
-[[ -e $commands[nvim] ]] && export EDITOR="nvim" && alias vi="nvim"
+export LANG='en_US.UTF-8'
+export LC_ALL='en_US.UTF-8'
+export CLICOLOR='yes'
+export PAGER='less'
+export VISUAL='nvim'
+export EDITOR=$VISUAL
 
 export NVIM_TUI_ENABLE_TRUE_COLOR=1
 export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-export BOOT_CLOJURE_VERSION='1.7.0'
-
-export DOCKER_HOST=tcp://192.168.99.101:2376
-export DOCKER_CERT_PATH=/Users/samflores/.docker/machine/machines/dev
-export DOCKER_TLS_VERIFY=1 
+export NVIM_LISTEN_ADDRESS=.nvimsocket 
+export EVENT_NOKQUEUE=1
 

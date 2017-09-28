@@ -172,3 +172,5 @@ tags
 tmp/
 tramp
 xcuserdata
+.env*
+database.yml

@@ -1,6 +1,6 @@
 [user]
-  name = Samuel Flores
-  email = me@samflor.es
+  name             = Samuel Flores
+  email            = me@samflor.es
 [diff]
 [color]
   ui               = auto
@@ -30,7 +30,7 @@
   ds               = diff --stat=160,120
   dh1              = diff HEAD~1
 [format]
-  pretty           = format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+  pretty           = format:%C(yellow)%h%Creset - %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
 [merge]
   tool             = vimdiff
 [core]
@@ -41,4 +41,4 @@
 [github]
   user             = samflores
 [push]
-  default = simple
+  default          = simple

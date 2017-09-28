@@ -1,46 +1,77 @@
 call plug#begin('~/.vim/plugged')
 
-" languages support
-Plug 'Superbil/llvm.vim'
-Plug 'cespare/vim-toml'
-Plug 'guns/vim-clojure-static'
 Plug 'kchmck/vim-coffee-script'
 Plug 'othree/html5.vim'
-Plug 'psql.vim'
-Plug 'wting/rust.vim'
-Plug 'mustache/vim-mustache-handlebars'
+Plug 'csscomb/vim-csscomb', { 'for': ['css', 'scss'] }
+Plug 'mattn/emmet-vim', { 'for': ['html', 'eruby', 'css', 'scss'] }
+Plug 'niquola/vim-pg'
 Plug 'hail2u/vim-css3-syntax'
+Plug 'mxw/vim-jsx'
+Plug 'pangloss/vim-javascript'
+Plug 'tpope/vim-jdaddy', { 'for': 'json' }
+Plug 'vim-scripts/django.vim', { 'for': ['python'] }
+Plug 'hynek/vim-python-pep8-indent', { 'for': ['python'] }
+Plug 'terryma/vim-multiple-cursors'
 
-" general stuff
-Plug 'ajh17/VimCompletesMe'
+Plug 'vim-scripts/dbext.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-dispatch'
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-eunuch', { 'on': ['Mkdir', 'Unlink', 'Move'] }
+Plug 'rbgrouleff/bclose.vim'
+
 Plug 'kshenoy/vim-signature'
+Plug 'tpope/vim-salve'
+
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+Plug 'guns/vim-sexp', { 'for': 'clojure' }
+Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' }
+
+if has('nvim')
+  Plug 'roxma/nvim-completion-manager'
+  Plug 'neovim/node-host', { 'tag': 'v0.0.1' }
+  Plug 'snoe/clj-refactor.nvim', { 'for': 'clojure' }
+  Plug 'clojure-vim/acid.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'clojure-vim/async-clj-omni', { 'for': 'clojure' }
+endif
+Plug 'sirver/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'bhurlow/vim-parinfer'
+
+
+Plug 'w0rp/ale'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rails'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
-
-" coloscheme
-Plug 'whatyouhide/vim-gotham'
-
-" on demand
-Plug 'guns/vim-sexp', { 'for': 'clojure' }
-Plug 'junegunn/vim-easy-align', { 'on': ['EasyAlign'] }
-Plug 'mattn/emmet-vim', { 'for': ['html', 'eruby', 'css', 'scss'] }
-Plug 'raymond-w-ko/vim-niji', { 'for': 'clojure' }
-Plug 'tpope/vim-dispatch', { 'on': [ 'Start', 'Dispatch' ] }
-Plug 'tpope/vim-eunuch', { 'on': ['Mkdir', 'Unlink', 'Move'] }
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-Plug 'tpope/vim-jdaddy', { 'for': 'json' }
 Plug 'tpope/vim-scriptease', { 'for': 'vim' }
-Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' }
+
+Plug 'tpope/vim-rails'
+Plug 'sunaku/vim-ruby-minitest'
+Plug 'rizzatti/dash.vim'
+Plug 'janko-m/vim-test'
+Plug 'jgdavey/vim-blockle'
+
+Plug 'rhysd/vim-crystal'
+Plug 'Superbil/llvm.vim'
+Plug 'cespare/vim-toml'
+Plug 'wting/rust.vim'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'rhysd/vim-rustpeg'
+Plug 'racer-rust/vim-racer'
+Plug 'roxma/nvim-cm-racer'
+
+" colorscheme
+Plug 'chriskempson/base16-vim'
+Plug 'itchyny/lightline.vim'
 
 call plug#end()
 
 set shortmess=atI
+set shiftwidth=2
+set expandtab
 set noshowmode
 set nonumber
 set norelativenumber
@@ -48,9 +79,9 @@ set mouse=a
 set undofile
 set undoreload=10000
 set list
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,space:·
 set lazyredraw
-set matchtime=3
+set matchtime=2
 set showbreak=↪
 set splitbelow
 set splitright
@@ -63,10 +94,10 @@ set synmaxcol=800
 set complete=.,w,b,u,t
 set completeopt=longest,menuone,preview
 set nowrap
-set textwidth=80
+set textwidth=120
 set formatoptions=qrn1j
 set wildmenu
-set wildmode=list:longest
+" set wildmode=list:longest
 set backup                        " enable backups
 set noswapfile                    " it's 2013, Vim.
 set undodir=~/.vim/undos//        " undo files
@@ -84,7 +115,7 @@ set scrolloff=3
 set sidescroll=1
 set sidescrolloff=10
 
-set laststatus=1
+set laststatus=2
 set statusline=%f\ %{fugitive#statusline()}%=%l,%c\ %P
 
 set virtualedit+=block
@@ -98,13 +129,14 @@ set wildignore+=*.luac                           " Lua byte code
 set wildignore+=*.orig                           " Merge resolution files
 set wildignore+=classes                          " Clojure/Leiningen
 set wildignore+=lib
+set path+=**
 
 " Leader
 let mapleader = ","
 let maplocalleader = "\\"
 
 " Spelling
-set spell
+set nospell
 set spelllang=pt_br,en_us
 nnoremap zG 2zg
 
@@ -118,6 +150,11 @@ au FocusLost * :silent! wall
 
 " Resize splits when the window is resized
 au VimResized * :wincmd =
+
+if has('nvim')
+  let g:cm_refresh_default_min_word_len=2
+  let g:cm_smart_enable=1
+endif
 
 augroup filetype
   au!
@@ -138,7 +175,6 @@ augroup clojure
   au!
   au BufNewFile,BufRead build.boot setf clojure
   au FileType clojure setlocal lw+=match,go,go-loop,
-  au FileType clojure let b:vcm_tab_complete = 'user'
 augroup END
 
 augroup cline
@@ -164,6 +200,7 @@ augroup END
 augroup edit_vimrc
   au!
   au BufWritePost .?vimrc source %
+  au BufWritePost init.vim source %
 augroup END
 
 if !isdirectory(expand(&undodir))
@@ -178,29 +215,36 @@ endif
 
 syntax on
 set background=dark
-colorscheme gotham
-" highlight Normal guibg=#282c35
-" highlight VertSplit guibg=#282c35 guifg=#2c323d
-" highlight CursorLine guibg=#2c323d
-" highlight TabLine guibg=#2c323d guifg=#5f6b85
-" highlight TabLineFill guibg=#2c323d
-" highlight TabLineSel guibg=#282c35 guifg=#9098a0 gui=NONE
-" highlight StatusLine guibg=#282c35 guifg=#5f6b85
-" highlight StatusLineNC guibg=#282c35 guifg=#2c323d
-" highlight ErrorMsg guifg=#282c35
-" highlight NonText guifg=#2c323d
-highlight Comment gui=italic
-highlight String gui=italic
-highlight Define gui=bold
+hi clear
+colorscheme base16-grayscale-dark
+set guifont=Operator\ Mono:h18
+
+function! s:ToggleBG()
+  let &background = ( &background == "dark"? "light" : "dark" )
+  if exists("g:colors_name")
+    exe "colorscheme " . g:colors_name
+    if exists("g:loaded_niji")
+      call niji#highlight()
+    endif
+  endif
+endfunction
+
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+nnoremap <silent> <leader>q :call <sid>ToggleBG()<cr>
 
 " Highlight VCS conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " Kill window
-nnoremap K :q<cr>
+nnoremap K :Bclose<cr>
+nnoremap X :q<cr>
 
 " Man
-nnoremap M K
+nnoremap  M K
+nmap     ,M <Plug>DashSearch
 
 " Toggle line numbers
 nnoremap <leader>n :setlocal number!<cr>
@@ -216,10 +260,13 @@ nnoremap <leader>) :tabnext<cr>
 " Wrap
 nnoremap <leader>W :set wrap!<cr>
 
-" Clean trailing whitespace
-nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
+" Clear trailing whitespace
+nnoremap <silent> <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`zmz
 
-" "Uppercase word" mapping.
+" Clear searches
+nnoremap <silent> <leader>k :nohlsearch<cr>
+
+" 'Uppercase word' mapping.
 inoremap <C-u> <esc>mzgUiw`za
 
 " Panic Button
@@ -262,12 +309,6 @@ nnoremap <leader>vd :vsplit ~/.vim/custom-dictionary.utf-8.add\|set bufhidden=wi
 nnoremap <leader>vg :vsplit ~/.gitconfig\|set bufhidden=wipe<cr>
 nnoremap <leader>vz :vsplit ~/.zshrc\|set bufhidden=wipe<cr>
 nnoremap <leader>vt :vsplit ~/.tmux.conf\|set bufhidden=wipe<cr>
-
-" Use sane regexes.
-nnoremap / /\v
-vnoremap / /\v
-nnoremap ? ?\v
-vnoremap ? ?\v
 
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
@@ -323,10 +364,7 @@ nnoremap <Leader><Leader> <c-^>
 nnoremap 0 ^
 nnoremap <Leader>0 0
 
-" Clear the highlights
-nnoremap <silent> <c-k> :noh<CR>
-
-"" Fugitive mappings
+" Fugitive mappings
 nnoremap gws :Gstatus<CR>
 nnoremap gia :Gwrite<CR>
 nnoremap gco :Gread<CR>
@@ -339,10 +377,11 @@ vmap <Enter> <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 highlight ColorColumn ctermfg=15 ctermbg=1 guifg=#d3ebe9 guibg=#c23127
-call matchadd('ColorColumn', '\%81v', 100) 
+call matchadd('ColorColumn', '\%121v', 100)
 
-nnoremap <f10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-tnoremap <Esc> <C-\><C-n>
+if has('nvim')
+  tnoremap <Esc> <C-\><C-n>
+endif
 
 let g:niji_dark_colours = [
       \ ["LightCyan","#c6b6ee"],
@@ -354,68 +393,120 @@ let g:niji_dark_colours = [
       \ ]
 let g:niji_light_colours = g:niji_dark_colours
 
+command! Bufonly call s:CloseHiddenBuffers()
+function! s:CloseHiddenBuffers()
+  let open_buffers = []
+
+  for i in range(tabpagenr('$'))
+    call extend(open_buffers, tabpagebuflist(i + 1))
+  endfor
+
+  for num in range(1, bufnr("$") + 1)
+    if buflisted(num) && index(open_buffers, num) == -1
+      exec "bdelete ".num
+    endif
+  endfor
+endfunction
+
 " FUZZY FINDER STUFF
-" List of buffers
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
-
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
-
-function! s:bufdelete(e)
-  execute 'bdelete' matchstr(a:e, '^[ 0-9]*')
-endfunction
-
-function! s:fuzzy_len()
-  return min([15, 2 + substitute(system('ag -l -lg ""|wc -l'), '^\s*\(.\{-}\)\s*$', '\1', '')])
-endfunction
-
-nnoremap <silent> <Leader>\ :call fzf#run({
-      \   'source':  <sid>buflist(),
-      \   'sink':    function('<sid>bufdelete'),
-      \   'options': '-m --tac',
-      \   'down':    len(<sid>buflist()) + 2
-      \ })<CR>
-
-nnoremap <silent> <Leader><Enter> :call fzf#run({
-      \   'source':  <sid>buflist(),
-      \   'sink':    function('<sid>bufopen'),
-      \   'options': '--tac',
-      \   'down':    len(<sid>buflist()) + 2
-      \ })<CR>
-
-nnoremap <silent> <Leader>/ :call fzf#run({
-      \   'source': v:oldfiles,
-      \   'sink' : 'e ',
-      \   'options' : '--tac',
-      \   'down': 10
-      \})<cr>
-
-nnoremap <silent> <Leader>e :call fzf#run({
-      \   'source': 'ag -l -g ""',
-      \   'sink': 'e ',
-      \   'options': '--tac',
-      \   'down': <sid>fuzzy_len()
-      \})<cr>
-
-nnoremap <silent> <Leader>t :call fzf#run({
-      \   'source': 'ag -l -g ""',
-      \   'sink': 'tabe ',
-      \   'options': '--tac',
-      \   'down': <sid>fuzzy_len()
-      \})<cr>
-
-nnoremap <silent> <Leader>v :call fzf#run({
-      \   'source': 'ag -l -g ""',
-      \   'sink': 'vsp ',
-      \   'options': '--tac',
-      \   'down': <sid>fuzzy_len()
-      \})<cr>
+nnoremap <leader>oo :Files<cr>
+nnoremap <leader>og :GFiles<cr>
+nnoremap <leader>oc :Files app/controllers<cr>
+nnoremap <leader>oC :Files spec/controllers<cr>
+nnoremap <leader>od :Files app/decorators<cr>
+nnoremap <leader>oD :Files spec/decorators<cr>
+nnoremap <leader>ov :Files app/views<cr>
+nnoremap <leader>om :Files app/models<cr>
+nnoremap <leader>oM :Files spec/models<cr>
+nnoremap <leader>of :Files spec/fixtures<cr>
+nnoremap <leader>oF :Files spec/features<cr>
+nnoremap <leader>oj :Files app/assets/javascripts<cr>
+nnoremap <leader>os :Files app/assets/stylesheets<cr>
+nnoremap <leader>ow :Files app/workers<cr>
+nnoremap <leader>oa :Files app/admin<cr>
+nnoremap <leader>ol :Files config/locales<cr>
+nnoremap <leader>o  <Nop>
+nnoremap <leader>bb :Buffers<cr>
 
 au! FileType FZF set nospell
 
+" Rspec mappings
+nnoremap <leader>tt :TestNearest<CR>
+nnoremap <leader>tf :TestFile<CR>
+nnoremap <leader>ta :TestSuite<CR>
+nnoremap <leader>tl :TestLast<CR>
+nnoremap <leader>tg :TestVisit<CR>
+
+let g:test#runner_commands = []
+let test#strategy = "neovim"
+" let test#ruby#minitest#file_pattern = '_spec\.rb'
+
+let g:rspec_command = "compiler rspec | set makeprg=zeus | Make rspec {spec}"
+
+autocmd FileType clojure inoremap <buffer> / /<ESC>:silent! CMagicRequires<CR>a
+
+" nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+" \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+" \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+" dbext profiles
+let g:dbext_default_profile_adapt_prod  = 'type=pgsql:user=uv73be4b6kij0:dbname=de84slt1iucctv:host=ec2-34-197-121-79.compute-1.amazonaws.com:port=5432'
+let g:dbext_default_profile_adapt_stag  = 'type=pgsql:user=ua0ggkfa521ijv:dbname=d9rdavk05hh2aq:host=ec2-23-21-48-149.compute-1.amazonaws.com:port=5512'
+let g:dbext_default_profile_adapt_pbus  = 'type=pgsql:user=oorkwbpbnnioyo:dbname=de2smmai3pniu4:host=ec2-23-21-220-23.compute-1.amazonaws.com:port=5432'
+let g:dbext_default_profile_adapt_sbus  = 'type=pgsql:host=ec2-54-83-205-71.compute-1.amazonaws.com:port=5432:dbname=d5odu03us86v8r:user=gvkzhnfjcytezz'
+let g:dbext_default_profile_adapt_local = 'type=pgsql:user=samflores:dbname=adaptativa-elearning_development:host=localhost:port=5432'
+let g:dbext_default_profile_tuned_prod  = 'type=pgsql:user=root:dbname=modexp:host=modexp-pg.civvlbuhbgn1.sa-east-1.rds.amazonaws.com:port=5432'
+let g:dbext_default_profile_tuned_pbus  = 'type=pgsql:user=tuneduc:dbname=xpenem_bus:host=modwhite.civvlbuhbgn1.sa-east-1.rds.amazonaws.com:port=5432'
+let g:dbext_default_profile_tuned_local = 'type=pgsql:user=samflores:dbname=modexp:host=localhost:port=5432'
+let g:dbext_default_profile='adapt_prod'
+
+" Completion and snippets
+let g:UltiSnipsExpandTrigger="<Plug>(ultisnips_expand)"
+let g:UltiSnipsJumpForwardTrigger='<tab>'
+let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
+
+inoremap <silent> <c-u> <c-r>=cm#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<cr>
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+imap <expr> <Plug>(expand_or_nl) (has_key(v:completed_item,'snippet')?"\<C-U>":"\<CR>")
+imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(cm_inject_snippet)\<Plug>(expand_or_nl)" : "\<CR>")
+
+let g:ale_sign_error = '!'
+let g:ale_sign_warning = '?'
+nmap <silent> <leader>j <Plug>(ale_previous_wrap)
+nmap <silent> <leader>k <Plug>(ale_next_wrap)
+
+autocmd FileType scss noremap <buffer> <leader>bc :CSScomb<CR>
+
+" node plugins
+" call remote#host#RegisterPlugin('node', '/Users/samflores/.0conf/vim/plugged/nvim-parinfer.js/rplugin/node/nvim-parinfer.js', [
+"       \ {'sync': v:true, 'name': 'ParinferIndent', 'type': 'function', 'opts': {'eval': '[getpos(''.''), bufnr(''.''), getline(1,line(''$'')), g:parinfer_mode, g:parinfer_preview_cursor_scope, v:operator, -strlen(@-)]'}},
+"       \ {'sync': v:true, 'name': 'ParinferShift', 'type': 'function', 'opts': {'eval': '[getline(1,line(''$''))]'}},
+"      \ ])
+
+let g:test#python#djangotest#executable = 'envdir .env python manage.py test'
+
+:highlight ALEError ctermbg=none cterm=underline
+
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'filename' ], [ 'linter',  'gitbranch' ] ],
+      \   'right': [ [ 'percent', 'lineinfo' ], [ 'fileencoding', 'filetype' ] ]
+      \ },
+      \ 'component_expand': { 'linter': 'WizErrors', },
+      \ }
+
+function! WizErrors() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:errors = l:counts.error == 0 ? '' : printf('!%d', l:counts.error)
+  let l:serrors = l:counts.style_error == 0 ? '' : printf(' ¡%d', l:counts.style_error)
+  let l:warnings = l:counts.warning == 0 ? '' : printf(' ?%d', l:counts.warning)
+  let l:swarnings = l:counts.style_warning == 0 ? '' : printf(' ¿%d', l:counts.style_warning)
+  return l:errors . l:serrors . l:warnings . l:swarnings
+endfunction
+
+augroup alestatus
+  au!
+  autocmd User ALELint call lightline#update()
+augroup end

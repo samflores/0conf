@@ -49,7 +49,6 @@ alias sftp='noglob sftp'
 alias _='sudo'
 alias b='${(z)BROWSER}'
 alias cp="${aliases[cp]:-cp} -i"
-alias e='${(z)VISUAL:-${(z)EDITOR}}'
 alias ln="${aliases[ln]:-ln} -i"
 alias mkdir="${aliases[mkdir]:-mkdir} -p"
 alias mv="${aliases[mv]:-mv} -i"
@@ -58,6 +57,7 @@ alias po='popd'
 alias pu='pushd'
 alias rm="${aliases[rm]:-rm} -i"
 alias type='type -a'
+alias e='${(z)VISUAL:-${(z)EDITOR}}'
 
 # Homebrew
 alias brc='brew cleanup'
@@ -66,11 +66,16 @@ alias bri='brew install'
 alias brl='brew list'
 alias brs='brew search'
 alias bru='brew upgrade'
-alias brU='brew update && brew upgrade'
+alias brU='brew update && brew upgrade && brew cleanup --force'
 alias bro='brew update && brew outdated'
 alias brx='brew remove'
 
 # Git
+_git_log_medium_format='%C(bold)Commit:%C(reset) %C(green)%H%C(red)%d%n%C(bold)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)Date:%C(reset)   %C(blue)%ai (%ar)%C(reset)%n%+B'
+_git_log_oneline_format='%C(green)%h%C(reset) %s%C(red)%d%C(reset)'
+_git_log_fullgraph_format='%C(green)%h%C(reset) %<|(50,trunc)%s %C(bold blue)<%an>%C(reset) %C(yellow)(%cd)%C(reset)%C(auto)%d%C(reset)%n'
+_git_log_brief_format='%C(green)%h%C(reset) %s%n%C(blue)(%ar by %an)%C(red)%d%C(reset)%n'
+
 alias g='git'
 
 # Branch (b)
@@ -225,6 +230,20 @@ alias gwx='git rm -r'
 alias gwX='git rm -rf'
 
 # PostgreSQL
-alias runpg='postgres -D /usr/local/var/postgres &'
+alias runpg='nohup postgres -D /usr/local/var/postgres &'
 
+# fuck
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
+
+# alias start-docker
+alias start-docker='docker-machine start dev && eval "$(docker-machine env dev)"'
+
+# Bundler
+alias bi='bundle install'
+alias bu='bundle update'
+alias bx='bundle exec'
+
+# Sufixes
+alias -s rb=e
+alias -s vim=e
+

@@ -1,5 +1,5 @@
 # add in zsh-completions
-fpath=(~/.zsh/completions/src(N) /usr/local/share/zsh/site-functions(N) $fpath)
+fpath=(/usr/local/share/zsh/site-functions(N) $fpath)
 fignore+=.DS_Store
 
 autoload -U compinit && compinit -u
