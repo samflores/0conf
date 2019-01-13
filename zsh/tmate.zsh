@@ -1,6 +1,4 @@
-if (( ! $+commands[tmate] )); then
-  return 1
-fi
+(! [[ $+commands[tmate] && $ITERM_PROFILE = 'tmate' ]] ) && return 1
 
 _tmate_sock='/tmp/tmate.sock'
 alias tm='tmate -S $_tmate_sock'
@@ -17,8 +15,9 @@ if [[ -z "$TMUX" && -z "$EMACS" && -z "$VIM" && -z "$SSH_TTY" ]]; then
     tmux_session='default'
     tmate \
       -S $_tmate_sock \
-      new-session -d -s "$tmux_session" \; &> /dev/null
-      # set-option -t "$tmux_session" destroy-unattached off &> /dev/null
+      new-session -d -s "$tmux_session" \; \
+      set-option -t "$tmux_session" destroy-unattached off &> /dev/null
+    # new-session -d -s "default" \; set-option -t "default" destroy-unattached off &> /dev/null
   fi
 
   exec tmate -S $_tmate_sock $_tmux_iterm_integration attach-session

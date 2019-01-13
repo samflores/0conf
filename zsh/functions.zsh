@@ -49,14 +49,6 @@ function extract {
   fi
 }
 
-function pg_start {
-  /usr/local/bin/pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
-}
-
-function pg_stop {
-  /usr/local/bin/pg_ctl -D /usr/local/var/postgres stop -s -m fast
-}
-
 # Detect empty enter, execute git status if in git dir
 magic-enter () {
         if [[ -z $BUFFER ]]; then

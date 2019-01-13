@@ -24,22 +24,11 @@ precmd() {
   fi
 }
 
-preexec() {
-  if [[ ! -a .nvimsocket ]]; then
-    export VISUAL='nvim'
-    export GIT_EDITOR='nvim'
-  else
-    export VISUAL='nvr --remote'
-    export GIT_EDITOR='nvr -cc split --remote-wait'
-  fi
-  export EDITOR=$VISUAL
-}
-
 function chpwd() {
   [[ -r $PWD/.zsh_config ]] && source $PWD/.zsh_config
-  [[ -f Cargo.toml ]] && source ~/.cargo/env
+  [[ -f Cargo.toml && -f ~/.cargo/env ]] && source ~/.cargo/env
 
-  if [[ -d ./env ]] ; then
+  if [[ -d ./env && -d ./env/bin/activate ]] ; then
     [[ -e $commands[deactivate] ]] && deactivate && echo 'Previous environment deactivated'
     source ./env/bin/activate && echo 'Environment activated'
   fi

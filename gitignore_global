@@ -173,4 +173,6 @@ tmp/
 tramp
 xcuserdata
 .env*
-database.yml
+.tool-versions
+.byebug_history
+.rubocop.yml

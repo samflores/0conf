@@ -4,7 +4,7 @@ origin=`pwd`
 
 [[ ! -a $origin/vim ]] && mkdir $origin/vim
 ln -s $origin/vim ~/.vim
-[[ -d ~/.config && ! -a ~/.config/nvim ]] && ln -s $origin/nvm ~/.config/nvim
+mkdir -p ~/.config/nvim && ln -s $origin/vim ~/.config/nvim && ln -s $origin/vimrc ~/.config/nvim/init.vim
 ln -s $origin/vimrc ~/.vimrc
 
 ln -s $origin/gitconfig ~/.gitconfig

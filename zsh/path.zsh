@@ -5,10 +5,8 @@ fi
 
 typeset -U path
 path=(~/bin(N)
-      /Applications/Kitematic\ \(Beta\).app/Contents/Resources/app/resources
+      ~/.local/bin(N)
       $JAVA_HOME/bin(N)
-      /usr/local/Cellar/llvm/3.6.2/bin
-      /usr/local/share/npm/bin(N)
       /usr/local/sbin 
       /usr/local/bin
       /sbin

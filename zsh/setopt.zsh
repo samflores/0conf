@@ -14,8 +14,22 @@ setopt APPEND_HISTORY
 # Add comamnds as they are typed, don't wait until shell exit
 setopt INC_APPEND_HISTORY
 
+# Reloads the history whenever you use it
+setopt SHARE_HISTORY
+
 # Do not write events to history that are duplicates of previous events
+setopt EXTENDED_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_BEEP
+
+# remove command lines from the history list when the first character on the
+# line is a space
+setopt HIST_IGNORE_SPACE
 
 # When searching history don't display results already cycled through twice
 setopt HIST_FIND_NO_DUPS
@@ -26,7 +40,16 @@ setopt HIST_REDUCE_BLANKS
 # Include more information about when the command was executed, etc
 setopt EXTENDED_HISTORY
 
-# ===== Completion 
+# display PID when suspending processes as well
+setopt LONG_LIST_JOBS
+
+# try to avoid the 'zsh: no matches found...'
+setopt NONOMATCH
+
+# use zsh style word splitting
+setopt NO_SH_WORD_SPLIT
+
+# ===== Completion
 
 # Allow completion from within a word/phrase
 setopt COMPLETE_IN_WORD
