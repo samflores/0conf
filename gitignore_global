@@ -176,3 +176,4 @@ xcuserdata
 .tool-versions
 .byebug_history
 .rubocop.yml
+.projections.json

@@ -44,5 +44,5 @@ MODE_INDICATOR_SEARCH='?'
 MODE_INDICATOR_VISUAL='#'
 MODE_INDICATOR_VLINE='#'
 
-PROMPT='${PR_BOLD_WHITE}${MODE_INDICATOR_PROMPT}%{${reset_color}%} '
+PROMPT='${PR_BOLD_BLACK}${MODE_INDICATOR_PROMPT}%{${reset_color}%} '
 RPROMPT='$(git_prompt_info) %~%<<%{${reset_color}%}'

@@ -1,5 +1,6 @@
 call plug#begin('~/.vim/plugged')
 
+Plug 'pedrohdz/vim-yaml-folds'
 Plug 'othree/html5.vim'
 Plug 'mattn/emmet-vim', { 'for': ['vue', 'html', 'eruby', 'css', 'scss'] }
 Plug 'niquola/vim-pg'
@@ -27,7 +28,7 @@ Plug 'vim-scripts/dbext.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-eunuch', { 'on': ['Mkdir', 'Unlink', 'Move'] }
 Plug 'rbgrouleff/bclose.vim'
-Plug 'justinmk/vim-sneak'
+" Plug 'justinmk/vim-sneak'
 
 Plug 'airblade/vim-gitgutter'
 Plug 'kshenoy/vim-signature'
@@ -42,8 +43,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
-Plug 'sirver/ultisnips'
-Plug 'honza/vim-snippets'
 Plug 'w0rp/ale'
 Plug 'posva/vim-vue'
 Plug 'tpope/vim-fugitive'
@@ -56,8 +55,9 @@ Plug 'tpope/vim-projectionist'
 Plug 'c-brenn/fuzzy-projectionist.vim'
 Plug 'radenling/vim-dispatch-neovim'
 
-Plug 'guns/vim-sexp', { 'for': 'clojure' }
 Plug 'tpope/vim-commentary'
+
+Plug 'guns/vim-sexp', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' }
 Plug 'bhurlow/vim-parinfer'
@@ -76,34 +76,14 @@ Plug 'rhysd/vim-crystal'
 
 " colorscheme
 Plug 'chriskempson/base16-vim'
-Plug 'vheon/vim-cursormode'
-" Plug 'owickstrom/vim-colors-paramount'
 Plug 'samflores/vim-colors-paramount', { 'branch': 'lightline-colorscheme' }
+Plug 'logico-dev/typewriter'
+
 Plug 'itchyny/lightline.vim'
+Plug 'mike-hearn/base16-vim-lightline'
+Plug 'vheon/vim-cursormode'
 
 call plug#end()
-
-let g:sneak#s_next = 1
-let g:LanguageClient_serverCommands = {
-    \ 'ruby': ['tcp://localhost:7658'],
-    \ 'vue': ['vls'],
-    \ 'javascript': ['vls']
-    \ }
-
-let g:LanguageClient_autoStop = 0
-
-autocmd FileType ruby setlocal omnifunc=LanguageClient#complete
-
-
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-" Or map each action separately
-nnoremap <silent> M :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-
-let g:acid_log_messages=1
-let g:sql_type_default='pgsql'
-let b:sql_type_override='pgsql'
 
 set shortmess=atIc
 set shiftwidth=2
@@ -125,6 +105,7 @@ set autowrite
 set autoread
 set shiftround
 set title
+set titlestring=[...%{strpart(expand(\"%:p:h\"),stridx(expand(\"%:p:h\"),\"/\",strlen(expand(\"%:p:h\"))-12))}/%{expand(\"%:t:r\")}]
 set linebreak
 set synmaxcol=800
 set complete=.,w,b,u,t
@@ -133,7 +114,6 @@ set nowrap
 set textwidth=120
 set formatoptions=qrn1j
 set wildmenu
-" set wildmode=list:longest
 set backup                        " enable backups
 set noswapfile                    " it's 2013, Vim.
 set undodir=~/.vim/undos//        " undo files
@@ -142,21 +122,17 @@ set directory=~/.vim/swaps//      " swap files
 set cursorline
 set clipboard=unnamedplus
 set backupcopy=yes
-
 set ignorecase
 set smartcase
 set incsearch
 set showmatch
 set hlsearch
 set gdefault
-
 set scrolloff=3
 set sidescroll=1
 set sidescrolloff=10
-
 set laststatus=2
-" set statusline=%f\ %{fugitive#statusline()}%=%l,%c\ %P
-
+set statusline=%f\ %{fugitive#statusline()}%=%l,%c\ %P
 set virtualedit+=block
 set wildignore+=.hg,.git,.svn                    " Version control
 set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
@@ -169,10 +145,12 @@ set wildignore+=*.orig                           " Merge resolution files
 set wildignore+=classes                          " Clojure/Leiningen
 set wildignore+=lib
 set path+=**
-let g:tmuxline_powerline_separators = 0
 
 " Leader
 let mapleader = ","
+let ruby_fold = 1
+let ruby_foldable_groups = "def begin # <<"
+
 let maplocalleader = "\\"
 
 " Incsearch
@@ -188,7 +166,7 @@ set nospell
 set spelllang=pt_br,en_us
 nnoremap zG 2zg
 
-set fillchars=diff:⣿,vert:│
+set fillchars=diff:⣿,vert:⋮
 
 " rg > ag > grep
 set grepprg=rg\ --vimgrep
@@ -196,8 +174,6 @@ command! -nargs=+ Grep
       \   execute 'silent grep <args>'
       \ | redraw!
       \ | copen
-" nnoremap <leader>G :silent execute "grep! ". shellescape(expand("<cword>")). "."<cr>:copen<cr>
-" set grepprg="rg --color=never --column --no-heading --glob !node_modules/* --vimgrep"
 command! -bang -nargs=*
       \ Find call fzf#vim#grep(
       \ 'rg --vimgrep --column --line-number --no-heading --fixed-strings
@@ -218,6 +194,9 @@ if has('nvim')
   let g:cm_refresh_default_min_word_len=2
   let g:cm_smart_enable=1
 endif
+
+let ruby_fold = 1
+let ruby_foldable_groups = "def begin # <<"
 
 augroup filetype
   au!
@@ -262,8 +241,8 @@ augroup END
 
 augroup edit_vimrc
   au!
-  au BufWritePost .vimrc source %
-  au BufWritePost init.vim source %
+  au BufWritePost .vimrc source ~/.vimrc
+  au BufWritePost init.vim source ~/.config/nvim/init.vim
 augroup END
 
 augroup VimCSS3Syntax
@@ -274,23 +253,18 @@ augroup END
 if !isdirectory(expand(&undodir))
   call mkdir(expand(&undodir), "p")
 endif
+
 if !isdirectory(expand(&backupdir))
   call mkdir(expand(&backupdir), "p")
 endif
+
 if !isdirectory(expand(&directory))
   call mkdir(expand(&directory), "p")
 endif
 
-" UltiSnips
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-let g:UltiSnipsEditSplit="vertical"
-let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
-
 let g:jsx_ext_required = 0
-let g:ale_sign_column_always=0
 
+let g:ale_sign_column_always=0
 let g:ale_fix_on_save=1
 
 nnoremap <silent> <leader>q :call <sid>ToggleBG()<cr>
@@ -306,7 +280,6 @@ nnoremap QQ :wqa
 
 " Man
 nnoremap  M K
-nmap     ,M <Plug>DashSearch
 
 " Toggle line numbers
 nnoremap <leader>n :setlocal number!<cr>
@@ -324,7 +297,6 @@ nnoremap <leader>W :set wrap!<cr>
 
 " Clear trailing whitespace
 nnoremap <silent> <leader>ww mz:silent! %s/\s\+$//<cr>:let @/=''<cr>`zmz
-" :%s/[^\s]\zs\s\+\ze\.//<cr>
 
 " Clear searches
 nnoremap <silent> <leader>k :nohlsearch<cr>
@@ -436,6 +408,9 @@ nnoremap gco :Gread<CR>
 nnoremap gwd :Gvdiff<CR>
 nnoremap gcm :Gcommit<CR>
 nnoremap gca :Gcommit --amend<CR>
+nnoremap grc :Grebase --continue<CR>
+nnoremap gra :Grebase --abort<CR>
+nnoremap grs :Grebase --skip<CR>
 
 " EasyAlign
 vmap <Enter> <Plug>(EasyAlign)
@@ -474,7 +449,7 @@ nnoremap <leader>og :GFiles<cr>
 nnoremap <leader>oh :History<cr>
 nnoremap <leader>ob :Buffers<cr>
 nnoremap <leader>o. :exec "Files ". expand('%:h')<cr>
-nnoremap <leader>o? :call fuzzy_projectionist#choose_projection()<cr>
+nnoremap <leader>o, :call fuzzy_projectionist#choose_projection()<cr>
 nnoremap <leader>oc :call fuzzy_projectionist#projection_for_type('controller')<cr>
 nnoremap <leader>od :call fuzzy_projectionist#projection_for_type('decorator')<cr>
 nnoremap <leader>ov :call fuzzy_projectionist#projection_for_type('view')<cr>
@@ -518,29 +493,7 @@ nnoremap <F10> :echo "hi<". synIDattr(synID(line("."),col("."),1),"name"). '> tr
       \ . synIDattr(synID(line("."),col("."),0),"name"). "> lo<"
       \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name"). ">"<CR>
 
-" dbext profiles
-" let g:dbext_default_profile_adapt_prod  = 'type=pgsql:user=uv73be4b6kij0:dbname=de84slt1iucctv:host=ec2-34-197-121-79.compute-1.amazonaws.com:port=5432'
-" let g:dbext_default_profile_adapt_stag  = 'type=pgsql:user=ua0ggkfa521ijv:dbname=d9rdavk05hh2aq:host=ec2-23-21-48-149.compute-1.amazonaws.com:port=5512'
-" let g:dbext_default_profile_adapt_pbus  = 'type=pgsql:user=oorkwbpbnnioyo:dbname=de2smmai3pniu4:host=ec2-23-21-220-23.compute-1.amazonaws.com:port=5432'
-" let g:dbext_default_profile_adapt_sbus  = 'type=pgsql:host=ec2-54-83-205-71.compute-1.amazonaws.com:port=5432:dbname=d5odu03us86v8r:user=gvkzhnfjcytezz'
-" let g:dbext_default_profile_adapt_local = 'type=pgsql:user=samflores:dbname=adaptativa-elearning_development:host=localhost:port=5432'
-" let g:dbext_default_profile_tuned_prod  = 'type=pgsql:user=root:dbname=modexp:host=modexp-pg.civvlbuhbgn1.sa-east-1.rds.amazonaws.com:port=5432'
-" let g:dbext_default_profile_tuned_pbus  = 'type=pgsql:user=tuneduc:dbname=xpenem_bus:host=modwhite.civvlbuhbgn1.sa-east-1.rds.amazonaws.com:port=5432'
-" let g:dbext_default_profile_tuned_local = 'type=pgsql:user=samflores:dbname=modexp:host=localhost:port=5432'
-" let g:dbext_default_profile_smart_local = 'type=pgsql:user=samflores:dbname=smartnex_dev:host=localhost:port=5432'
-" let g:dbext_default_profile_smart_test = 'type=pgsql:user=samflores:dbname=smartnex_tst:host=localhost:port=5432'
-let g:dbext_default_profile_edvera_local = 'type=pgsql:user=samflores:dbname=edvera_development:host=localhost:port=5432'
-let g:dbext_default_profile_blog_local = 'type=pgsql:user=samflores:dbname=blog_test_dev:host=localhost:port=5432'
-let g:dbext_default_profile_stack_local = 'type=MYSQL:user=stacksocial:passwd=stacksocial:dbname=stacksocial_development:host=mysql:port=3306'
-let g:dbext_default_profile_stack_test_local = 'type=MYSQL:user=stacksocial:passwd=stacksocial:dbname=stacksocial_test:host=mysql:port=3306'
-let g:dbext_default_profile='edvera_local'
-let g:sqlfmt_command = 'sqlfmt'
-let g:sqlfmt_options = '-u'
-
 " Completion and snippets
-let g:UltiSnipsExpandTrigger="<Plug>(ultisnips_expand)"
-let g:UltiSnipsJumpForwardTrigger='<tab>'
-let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#keyword_patterns = {}
 let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
@@ -548,44 +501,43 @@ let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
 vmap <leader>p <Plug>(coc-format-selected)
 nmap <leader>p <Plug>(coc-format-selected)
 
-" inoremap <silent> <c-u> <c-r>=cm#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<cr>
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" imap <expr> <Plug>(expand_or_nl) (has_key(v:completed_item,'snippet')?"\<C-U>":"\<CR>")
-" imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(cm_inject_snippet)\<Plug>(expand_or_nl)" : "\<CR>")
-
-let g:ale_sign_error = '!'
-let g:ale_sign_warning = '?'
-nmap <silent> <leader>J <Plug>(ale_previous_wrap)
-nmap <silent> <leader>K <Plug>(ale_next_wrap)
-
 autocmd FileType scss noremap <buffer> <leader>bc :CSScomb<CR>
 
-" node plugins
-" call remote#host#RegisterPlugin('node', '/Users/samflores/.0conf/vim/plugged/nvim-parinfer.js/rplugin/node/nvim-parinfer.js', [
-"       \ {'sync': v:true, 'name': 'ParinferIndent', 'type': 'function', 'opts': {'eval': '[getpos(''.''), bufnr(''.''), getline(1,line(''$'')), g:parinfer_mode, g:parinfer_preview_cursor_scope, v:operator, -strlen(@-)]'}},
-"       \ {'sync': v:true, 'name': 'ParinferShift', 'type': 'function', 'opts': {'eval': '[getline(1,line(''$''))]'}},
-"      \ ])
-
-" let &t_Cs = "\e[4:3m"
-" let &t_Ce = "\e[4:0m"
 function! s:base16_customize() abort
   " call Base16hi("ALEErrorLine", "", "", "", "", "", "")
   " call Base16hi("ALEWarningLine", "", "", "", "", "", "")
+  hi Folded ctermbg=252
+  hi LineNr ctermbg=252
+  hi CursorLine ctermbg=255
+  hi Normal ctermbg=NONE
+  hi NonText ctermbg=NONE ctermfg=252
+  hi SpecialKey ctermbg=NONE
+  hi ColorColumn ctermbg=252
+  hi VertSplit ctermbg=NONE ctermfg=252
+  hi GitGutterAdd ctermbg=252 ctermfg=11
+  hi GitGutterChange ctermbg=252 ctermfg=11
+  hi GitGutterDelete ctermbg=252 ctermfg=11
+  hi GitGutterChangeDelete ctermbg=252 ctermfg=11
+  hi DiffDelete ctermbg=252 ctermfg=0
+  hi DiffAdd ctermbg=252 ctermfg=11
+  hi DiffChange ctermbg=252
+  hi DiffText ctermbg=252
+
   call Base16hi("ALEError",     "",             "",             "",               "",               "undercurl", "")
   call Base16hi("ALEWarning",   "",             "",             "",               "",               "undercurl", "")
   call Base16hi("ALEErrorSign", "",             "",             "",               "",               "bold",      "")
   call Base16hi("String",       "",             "",             "",               "",               "italic",    "")
   call Base16hi("Number",       "",             "",             "",               "",               "bold",      "")
-  call Base16hi("Comment",      "",             "",             "",               "",               "italic",    "")
-  call Base16hi("NonText",      g:base16_gui02, "",             g:base16_cterm02, "",               "",          "")
-  call Base16hi("SpecialKey",   g:base16_gui02, "",             g:base16_cterm02, "",               "",          "")
-  call Base16hi("ColorColumn",  "",             g:base16_gui01, "",               g:base16_cterm01, "",          "")
-  call Base16hi("VertSplit",    "",             "",             g:base16_cterm02, g:base16_cterm00, "",          "")
+  call Base16hi("Comment",      "",             "",             252,               "",               "italic",    "")
+  " call Base16hi("NonText",      g:base16_gui02, "",             252, "",               "",          "")
+  " call Base16hi("SpecialKey",   g:base16_gui02, "",             252, "",               "",          "")
+  " call Base16hi("ColorColumn",  "",             g:base16_gui01, "",               g:base16_cterm01, "",          "")
+  " call Base16hi("VertSplit",    "",             "",             g:base16_cterm02, g:base16_cterm00, "",          "")
 endfunction
 
 function! s:typewriter_customize() abort
   " General
+  hi Normal ctermbg=NONE
   hi String cterm=italic
   hi Statement cterm=bold
   hi Comment cterm=italic ctermfg=249
@@ -597,9 +549,11 @@ function! s:typewriter_customize() abort
 endfunction
 
 function! s:paramount_customize() abort
+  hi Normal ctermbg=NONE
   hi ColorColumn ctermbg=255
   hi SpecialKey ctermfg=255
-  hi VertSplit ctermfg=255 ctermbg=256
+  hi VertSplit ctermfg=255 ctermbg=NONE
+  hi NonText ctermfg=255
   hi String ctermfg=134 cterm=italic
   hi Comment ctermfg=248 cterm=italic
   hi Error cterm=undercurl ctermbg=NONE ctermfg=9
@@ -628,11 +582,7 @@ syntax on
 set t_Co=256
 set background=light
 hi clear
-" if filereadable(expand("~/.vimrc_background"))
-  " let base16colorspace=256
-  " source ~/.vimrc_background
-" endif
-colorscheme paramount
+colorscheme base16-grayscale-light
 
 function! s:ToggleBG()
   let &background = ( &background == "dark"? "light" : "dark" )
@@ -650,9 +600,10 @@ let g:ale_fixers = {
 let g:ale_sign_error='🔴'
 let g:ale_sign_warning='🔶'
 let g:ale_sign_info='🔵'
+nmap <silent> <leader>J <Plug>(ale_previous_wrap)
+nmap <silent> <leader>K <Plug>(ale_next_wrap)
 
 let g:lightline = {
-      \   'colorscheme': 'paramount',
       \   'active': {
       \     'left': [ [ 'filename' ], [ 'linter' ] ],
       \     'right': [ [ 'fileencoding' ], [ 'filetype' ], [ 'gitbranch' ] ]
@@ -687,11 +638,9 @@ augroup jscinoptions
 augroup end
 
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
+imap <Tab>     <Plug>(neosnippet_expand_or_jump)
+smap <Tab>     <Plug>(neosnippet_expand_or_jump)
+xmap <Tab>     <Plug>(neosnippet_expand_target)
 
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-let g:neosnippet#enable_snipmate_compatibility = 1
