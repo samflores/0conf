@@ -1,0 +1,5 @@
+nvim/backups
+nvim/undos
+nvim/swaps
+nvim/.netrwhist
+nvim/plugin/packer_compiled.lua
