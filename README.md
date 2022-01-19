@@ -3,3 +3,4 @@
 My dotfiles for:
 
 - Neovim
+- Git
