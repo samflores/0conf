@@ -12,3 +12,8 @@ ln -sf $origin/gitconfig $HOME/.gitconfig
 
 [[ -f $HOME/.global_gitignore ]] && mv $HOME/.global_gitignore $HOME/global_gitignore.back
 ln -sf $origin/gitignore_global $HOME/.gitignore_global
+
+[[ -f $HOME/.tmux.conf ]] && mv $HOME/.tmux.conf $HOME/tmux.conf.back
+[[ -f $target/tmux ]] && rm $target/tmux
+[[ -d $target/tmux ]] && mv $target/tmux{,.back}
+ln -sf $origin/tmux $target/tmux
