@@ -4,3 +4,11 @@ nvim/swaps
 nvim/.netrwhist
 nvim/plugin/packer_compiled.lua
 tmux/plugins
+zsh/*.zwc
+zsh/.zshrc
+zsh/.zshenv
+zsh/.zprofile
+zsh/zinit
+zsh/.zinit
+zsh/.zsh_history
+zsh/.zcompdump

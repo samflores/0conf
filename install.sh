@@ -17,3 +17,10 @@ ln -sf $origin/gitignore_global $HOME/.gitignore_global
 [[ -f $target/tmux ]] && rm $target/tmux
 [[ -d $target/tmux ]] && mv $target/tmux{,.back}
 ln -sf $origin/tmux $target/tmux
+
+[[ -f $target/zsh ]] && rm $target/zsh
+[[ -d $target/zsh ]] && mv $target/zsh{,.back}
+ln -sf $origin/zsh $target/zsh
+ln -sf $target/zsh/{,.}zshrc
+ln -sf $target/zsh/{,.}zshenv
+ln -sf $target/zsh/{,.}zprofile

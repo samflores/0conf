@@ -4,3 +4,4 @@ My dotfiles for:
 
 - Neovim
 - Git
+- ZSH
