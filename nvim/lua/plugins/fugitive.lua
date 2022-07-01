@@ -4,7 +4,7 @@ local config = function ()
   local map = vim.api.nvim_set_keymap
   local opt = { noremap = true }
 
-  map('n', 'gws', ':Git |:resize 10<CR>', opt)
+  map('n', 'gws', ':Git<CR>', opt)
   map('n', 'gia', ':Gwrite<CR>', opt)
   map('n', 'gco', ':Gread<CR>', opt)
   map('n', 'gwd', ':vert :Gdiffsplit<CR>', opt)
