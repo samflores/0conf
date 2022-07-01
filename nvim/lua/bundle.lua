@@ -47,6 +47,8 @@ return require('packer').startup(function(use)
     'projectionist',
     'repeat',
     'rhubarb',
+    'session',
+    -- 'shade',
     'surround',
     'test',
     'truezen',
