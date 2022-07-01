@@ -8,55 +8,30 @@ local dependencies = {
   'hrsh7th/cmp-cmdline',
   'hrsh7th/cmp-emoji',
   'petertriho/cmp-git',
+  'onsails/lspkind-nvim',
 }
 
-local t = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-local check_back_space = function()
-  local col = vim.fn.col('.') - 1
-  return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s')
-end
-
 local config = function()
-  local cmp = require'cmp'
+  local lspkind = require('lspkind')
+  lspkind.init({})
+  local cmp = require 'cmp'
 
   cmp.setup({
     snippet = {
       expand = function(args)
-        -- For `vsnip` user.
         vim.fn["vsnip#anonymous"](args.body)
-
-        -- For `luasnip` user.
-        -- require('luasnip').lsp_expand(args.body)
-
-        -- For `ultisnips` user.
-        -- vim.fn["UltiSnips#Anon"](args.body)
       end,
     },
-    mapping = {
-      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.close(),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
-      ['<Tab>'] = function(fallback)
-        if vim.fn.pumvisible() == 1 then
-          return cmp.select_next_item()
-        elseif vim.fn["vsnip#jumpable"](1) then
-          t('<Plug>(vsnip-expand-or-jump)')
-        elseif check_back_space() then
-          print("3")
-          fallback()
-        else
-          print("4")
-          fallback()
-        end
-      end
-      -- , { 'i', 's' }),
-    },
-    sources = {
+    mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<C-e>'] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+      }),
+    }),
+    sources = cmp.config.sources({
       { name = 'nvim_lsp' },
       { name = 'vsnip' },
       { name = 'buffer' },
@@ -64,6 +39,16 @@ local config = function()
       { name = 'path' },
       { name = 'emoji' },
       { name = 'cmp_git' },
+    }, {
+      { name = 'buffer' },
+    }),
+    formatting = {
+      format = lspkind.cmp_format {
+        with_text = true,
+      },
+    },
+    experimental = {
+      ghost_text = true,
     }
   })
   cmp.setup.cmdline(':', {
@@ -76,6 +61,8 @@ local config = function()
       { name = 'buffer' }
     }
   })
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  require('lspconfig')['svelte'].setup { capabilities = capabilities }
 end
 
 local M = {}
