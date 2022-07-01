@@ -1,7 +1,8 @@
 local package = 'nvim-treesitter/nvim-treesitter'
 local dependencies = {
   'nvim-treesitter/playground',
-  'nvim-treesitter/nvim-treesitter-textobjects'
+  'nvim-treesitter/nvim-treesitter-textobjects',
+  'JoosepAlviste/nvim-ts-context-commentstring',
 }
 local run = ':TSUpdate'
 
@@ -36,6 +37,9 @@ local config = function()
       enable = true,
       use_virtual_text = true,
       lint_events = {"BufWrite", "CursorHold"},
+    },
+    matchup = {
+      enable = true
     },
   }
 
@@ -82,6 +86,13 @@ local config = function()
       },
     },
   }
+
+  require'nvim-treesitter.configs'.setup {
+    context_commentstring = {
+      enable = true
+    }
+  }
+
   vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 end
 
