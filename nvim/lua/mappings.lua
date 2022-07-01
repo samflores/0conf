@@ -149,3 +149,11 @@ map('t', '<Esc>', [[<C-\><C-n>]], noremap_opt)
 
 -- Rust-tools
 map("n", "<leader>rr", ":RustRunnables<CR>", silent_noremap_opt)
+
+-- Snippets
+vim.api.nvim_exec([[
+  imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+  smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+  imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+  smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+]], false)
