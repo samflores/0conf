@@ -60,7 +60,7 @@ return require('packer').startup(function(use)
     'markdown',
     'ruby',
 
-    'expressline',
+    'statusline',
   }
 
   for _, plugin in ipairs(plugins) do
