@@ -1,12 +1,12 @@
 local cmd = vim.cmd
 
 local create_augroup = function(name, autocmds)
-    cmd('augroup ' .. name)
-    cmd('autocmd!')
-    for _, autocmd in ipairs(autocmds) do
-        cmd('autocmd ' .. table.concat(autocmd, ' '))
-    end
-    cmd('augroup END')
+  cmd('augroup ' .. name)
+  cmd('autocmd!')
+  for _, autocmd in ipairs(autocmds) do
+    cmd('autocmd ' .. table.concat(autocmd, ' '))
+  end
+  cmd('augroup END')
 end
 
 -- cmd('au BufNewFile,BufRead * if &ft == "" | set ft=text | endif')
@@ -22,8 +22,8 @@ create_augroup('dadbod-completion', {
 })
 
 create_augroup('ftmail', {
-    { 'BufRead,BufNewFile', '/tmp/nail-*', 'setlocal', 'ft=mail' },
-    { 'BufRead,BufNewFile', '*s-nail-*', 'setlocal', 'ft=mail' },
+  { 'BufRead,BufNewFile', '/tmp/nail-*', 'setlocal', 'ft=mail' },
+  { 'BufRead,BufNewFile', '*s-nail-*', 'setlocal', 'ft=mail' },
 })
 
 create_augroup('llvm', {
@@ -65,12 +65,16 @@ create_augroup('trailing', {
 })
 
 create_augroup('line_return', {
-  { 'BufReadPost', '*', [[if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif]]},
+  { 'BufReadPost', '*', [[if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif]] },
 })
 
 create_augroup('edit_vimrc', {
   { 'BufWritePost', '$MYVIMRC', 'luafile $MYVIMRC' },
-  { 'BufWritePost', '$XDG_CONFIG_HOME/nvim/lua/*.lua', 'luafile %' },
+  {
+    'BufWritePost',
+    '$XDG_CONFIG_HOME/nvim/lua/plugins/*.lua',
+    'source <afile> | source $XDG_CONFIG_HOME/nvim/lua/bundle.lua | PackerCompile'
+  },
   { 'BufWritePost', '$XDG_CONFIG_HOME/nvim/lua/bundle.lua', 'PackerSync' },
 })
 

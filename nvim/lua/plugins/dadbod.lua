@@ -14,7 +14,7 @@ local M = {}
 
 function M.init(use)
   use {
-    package ,
+    package,
     requires = dependencies,
     config = config
   }

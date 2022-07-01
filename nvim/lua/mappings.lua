@@ -65,7 +65,7 @@ map('n', 'J', 'mzJ`z', noremap_opt)
 map('n', '<leader>J', 'mzvipJ`z', noremap_opt)
 
 -- Split line (sister to [J]oin lines)
-map('n', 'S', [[i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w]], noremap_opt)
+map('n', '<leader>S', [[i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w]], noremap_opt)
 
 -- Select (charwise) the contents of the current line, excluding indentation.
 map('n', 'vv', '^vg_', noremap_opt)
@@ -98,8 +98,8 @@ map('n', 'g,', 'g,zz', noremap_opt)
 map('n', '<c-o>', '<c-o>zz', noremap_opt)
 
 -- Easier to type, and I never use the default behavior.
-map('',  'H', '^', noremap_opt)
-map('',  'L', '$', noremap_opt)
+map('', 'H', '^', noremap_opt)
+map('', 'L', '$', noremap_opt)
 map('v', 'L', 'g_', noremap_opt)
 
 -- Move around
