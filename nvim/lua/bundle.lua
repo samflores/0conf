@@ -48,7 +48,6 @@ return require('packer').startup(function(use)
     'repeat',
     'rhubarb',
     'session',
-    -- 'shade',
     'surround',
     'test',
     'truezen',

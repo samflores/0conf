@@ -79,10 +79,10 @@ create_augroup('VimCSS3Syntax', {
 })
 
 create_augroup('runNearestTest', {
-  { 'BufNew,BufNewFile,BufReadPost', '*_spec.rb', 'nnoremap <buffer> <Enter> :TestNearest<CR>' },
-  { 'BufNew,BufNewFile,BufReadPost', '*_test.rb', 'nnoremap <buffer> <Enter> :TestNearest<CR>' },
-  { 'BufNew,BufNewFile,BufReadPost', '*.spec.js', 'nnoremap <buffer> <Enter> :TestNearest<CR>' },
-  { 'BufNew,BufNewFile,BufReadPost', '*.spec.ts', 'nnoremap <buffer> <Enter> :TestNearest<CR>' },
+  { 'BufNew,BufNewFile,BufReadPost', '*_spec.rb', 'nnoremap <buffer> <Enter> :lua require("neotest").run.run()<CR>' },
+  { 'BufNew,BufNewFile,BufReadPost', '*_test.rb', 'nnoremap <buffer> <Enter> :lua require("neotest").run.run()<CR>' },
+  { 'BufNew,BufNewFile,BufReadPost', '*.spec.js', 'nnoremap <buffer> <Enter> :lua require("neotest").run.run()<CR>' },
+  { 'BufNew,BufNewFile,BufReadPost', '*.spec.ts', 'nnoremap <buffer> <Enter> :lua require("neotest").run.run()<CR>' },
 })
 
 create_augroup('jscinoptions', {
