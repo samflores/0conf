@@ -1,13 +1,9 @@
 local package = 'voldikss/vim-floaterm'
 
 local config = function()
-  -- vim.api.nvim_exec([[
-  --   let g:floaterm_width = 0.9
-  --   let g:floaterm_height = 0.85
-  -- ]], false)
-
   vim.g.floaterm_width = 0.9
   vim.g.floaterm_height = 0.85
+  vim.g.floaterm_keymap_toggle = '<Leader>ft'
 end
 
 local M = {}
