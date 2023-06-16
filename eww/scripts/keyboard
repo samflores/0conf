@@ -1,0 +1,19 @@
+#!/bin/bash
+
+layout=$(hyprctl getoption input:kb_variant | rg "str:" | cut -f 2 -d' ' | tr -d \")
+icon=""
+
+case "$1" in
+  "--get")
+    jq -n \
+      --arg icon "$icon" \
+      --arg layout "$layout" \
+      '{ icon: $icon, layout: $layout }'
+  ;;
+  "--set")
+    hyprctl keyword input:kb_variant $([ "$layout" == "colemak" ] && echo "altgr-intl" || echo "colemak")
+  ;;
+  *) echo default
+  ;;
+esac
+

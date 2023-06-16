@@ -1,0 +1,16 @@
+#!/bin/bash
+
+status=$(cat /sys/class/net/wlp1s0/operstate)
+
+if [ $status = "up" ] ; then
+  icon=""
+  text=$(wpa_cli list_networks | rg CURRENT | cut -f 2)
+else
+  icon=""
+  text=""
+fi
+
+jq -n \
+  --arg icon "$icon" \
+  --arg essid "$text" \
+  '{ icon: $icon, essid: $essid }'

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+mute=$(pamixer --get-mute)
+
+case "$1" in
+  "--get")
+    volume=$(pamixer --get-volume)
+    if [[ "$mute" == "true" ]]; then
+      icon=""
+    else
+      if [[ "$volume" > 60 ]]; then
+        icon=""
+      else
+        icon=""
+      fi
+    fi
+    jq -n \
+      --arg icon "$icon" \
+      --arg volume $volume \
+      --arg mute $mute \
+      '{ icon: $icon, volume: $volume, mute: $mute }'
+    ;;
+  "--set")
+    pamixer --set-volume $2
+    ;;
+  "--mute")
+    pamixer --toggle-mute
+    ;;
+  *)
+    ;;
+esac

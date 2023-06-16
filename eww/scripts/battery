@@ -1,0 +1,10 @@
+#!/bin/bash
+
+capacity=$(cat /sys/class/power_supply/BAT0/capacity)
+icons=("" "" "" "" "" "" "")
+index=$(( $capacity/15 ))
+
+jq -n \
+  --arg icon "${icons[index]}" \
+  --arg value "$capacity" \
+  '{ icon: $icon, value: $value }'

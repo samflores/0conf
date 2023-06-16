@@ -1,0 +1,14 @@
+#!/bin/bash
+
+ALL_POPUPS="calendar_popup system_popup power_popup"
+EWW_BIN="eww"
+LOCK_FILE="$HOME/.cache/eww-$1.lock"
+
+if [[ ! -f "$LOCK_FILE" ]]; then
+  ${EWW_BIN} close $ALL_POPUPS
+  touch "$LOCK_FILE"
+  ${EWW_BIN} open $1_popup
+else
+  ${EWW_BIN} close $1_popup
+  rm "$LOCK_FILE"
+fi

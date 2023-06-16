@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+get_top (){
+  ps -eo comm,pcpu,pmem,pid --sort -pcpu \
+    | head -11 \
+    | tail -10 \
+    | sed 's/ \+/,/g' \
+    | jq --slurp --raw-input --raw-output \
+         'split("\n") |
+         map(split(",")) |
+         map(select(.[0])) |
+         map({"name": .[0], "pcpu": .[1], "pmem": .[2], "pid": .[3]})'
+}
+
+case "$1" in
+  "--get")
+    get_top
+  ;;
+  "--kill")
+  ;;
+  *) echo default
+  ;;
+esac

@@ -1,0 +1,148 @@
+$bg: #101010;
+$fg: #b9b9b9;
+$shadow: rgba(#000000,0.3);
+$border_col: rgba(#cccccc,0.18);
+$best_so_far: rgba(255,255,255,0.1);
+
+* {
+  all: unset;
+}
+
+.bar1, .bar2, .popup {
+  font-family: monospace;
+	background-color: transparent;
+}
+
+.main-container {
+  background: rgba(#000, 0.5);
+	border-radius: 8px;
+}
+
+.module {
+	background-color: $bg;
+	border-radius: 8px;
+	color: $fg;
+	padding: 6px 12px;
+  font-size: 16px;
+	box-shadow: 2px 2px 2px $shadow;
+  revealer {
+    padding-left: 5px;
+  }
+  scale trough highlight {
+    background-color: $fg;
+    border-radius: 24px;
+  }
+  scale trough {
+    background-color: #232232;
+    background-color: transparentize($fg, 0.9);
+    border-radius: 16px;
+    min-height: 8px;
+    min-width: 100px;
+  }
+}
+
+.icon {
+  font-family: Material Icons;
+}
+
+.btn{
+  font-family: monospace;
+  label { font-size: 16px; }
+  padding: 0px 0px;
+  background-color: transparent;
+  border: none;
+  text-shadow: none;
+  box-shadow: none;
+  background-image: none;
+  &.empty{ color: transparentize($fg, 0.5); }
+  &.occupied{ color: transparentize($fg, 0.5); }
+  &.active{ color: $fg; }
+  &:hover{
+    &.empty{ color: transparentize($fg, 0.2); }
+    &.occupied{ color: $fg; }
+    &.active{ color: $fg; }
+  }
+  &:active{ color: $bg; }
+}
+
+.workspaces .btn {
+  margin: 0px 2px;
+}
+
+.window {
+  color: $fg;
+  text-shadow: 1px 1px $bg;
+  margin: 0px 12px;
+}
+
+@keyframes blink {
+  to {
+    opacity: 0.2;
+  }
+}
+
+.clock_time_sep {
+  animation-name: blink;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+
+calendar {
+  font-family: monospace;
+  &:selected {
+   color: $bg;
+   background-color: $fg;
+   // padding: 6px;
+   border-radius: 3px;
+ }
+ // .day-number {
+ //  padding: 4px 3px;
+ // }
+}
+
+calendar:selected {
+   // padding: 6px;
+}
+
+
+calendar.header {
+  // font-weight: bold;
+}
+
+// calendar.button {
+//   color: cyan;
+// }
+
+calendar.highlight {
+   // color: $bg;
+   // background-color: $fg;
+}
+
+calendar:indeterminate {
+  color: transparentize($fg, 0.5);
+}
+
+.popup {
+  padding: 3px 3px 0;
+
+  .module {
+    margin-bottom: 3px;
+  }
+}
+
+.power {
+  .header {
+    font-weight: bold;
+  }
+}
+
+.process {
+  .close {
+    opacity: 0;
+  }
+  &:hover .close {
+    opacity: 1;
+  }
+}

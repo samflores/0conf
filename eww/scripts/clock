@@ -1,0 +1,23 @@
+#!/bin/bash
+
+parts=($(date "+%H:%M:%S:%d:%m:%a" | tr ":" "\n"))
+
+case "${parts[5],}" in
+  "sun") weekday="🌞" ;;
+  "mon") weekday="😫" ;;
+  "tue") weekday="" ;;
+  "wed") weekday="🐸" ;;
+  "thu") weekday="" ;;
+  "fri") weekday="🍺" ;;
+  "sat") weekday="📚" ;;
+esac
+
+
+jq -n \
+  --arg hour "${parts[0]}" \
+  --arg minute "${parts[1]}" \
+  --arg second "${parts[2]}" \
+  --arg day "${parts[3]}" \
+  --arg month "${parts[4]}" \
+  --arg weekday "${weekday}" \
+  '{ hour: $hour, minute: $minute, second: $second, day: $day, month: $month, weekday: $weekday }'
