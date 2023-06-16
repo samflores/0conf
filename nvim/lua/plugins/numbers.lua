@@ -1,4 +1,4 @@
 return {
-  'tpope/vim-commentary',
+  "sitiom/nvim-numbertoggle",
   event = 'UiEnter',
 }

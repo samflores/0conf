@@ -1,9 +1,4 @@
-local package = 'tpope/vim-repeat'
-
-local M = {}
-
-function M.init(use)
-  use { package }
-end
-
-return M
+return {
+  'tpope/vim-surround',
+  event = 'UiEnter',
+}

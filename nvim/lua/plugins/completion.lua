@@ -1,16 +1,3 @@
-local package = 'hrsh7th/nvim-cmp'
-local dependencies = {
-  'hrsh7th/cmp-nvim-lsp',
-  'hrsh7th/cmp-vsnip',
-  'hrsh7th/cmp-buffer',
-  'hrsh7th/cmp-path',
-  'hrsh7th/cmp-calc',
-  'hrsh7th/cmp-cmdline',
-  'hrsh7th/cmp-emoji',
-  'petertriho/cmp-git',
-  'onsails/lspkind-nvim',
-}
-
 local config = function()
   local lspkind = require('lspkind')
   lspkind.init({})
@@ -42,10 +29,23 @@ local config = function()
     }, {
       { name = 'buffer' },
     }),
-    formatting = {
-      format = lspkind.cmp_format {
-        with_text = true,
+    window = {
+      completion = {
+        winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+        col_offset = -3,
+        side_padding = 0,
       },
+    },
+    formatting = {
+      fields = { "kind", "abbr", "menu" },
+      format = function(entry, vim_item)
+        local kind = require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+        local strings = vim.split(kind.kind, "%s", { trimempty = true })
+        kind.kind = " " .. (strings[1] or "") .. " "
+        kind.menu = "    (" .. (strings[2] or "") .. ")"
+
+        return kind
+      end,
     },
     experimental = {
       ghost_text = true,
@@ -61,18 +61,24 @@ local config = function()
       { name = 'buffer' }
     }
   })
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  require('lspconfig')['svelte'].setup { capabilities = capabilities }
+  -- local capabilities = require('cmp_nvim_lsp').default_capabilities();
+  -- require('lspconfig')['svelte'].setup { capabilities = capabilities }
+  -- require('lspconfig')['clangd'].setup { capabilities = capabilities }
 end
 
-local M = {}
-
-function M.init(use)
-  use {
-    package,
-    requires = dependencies,
-    config = config,
-  }
-end
-
-return M
+return {
+  'hrsh7th/nvim-cmp',
+  dependencies = {
+    'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/cmp-vsnip',
+    'hrsh7th/cmp-buffer',
+    'hrsh7th/cmp-path',
+    'hrsh7th/cmp-calc',
+    'hrsh7th/cmp-cmdline',
+    'hrsh7th/cmp-emoji',
+    'petertriho/cmp-git',
+    'onsails/lspkind.nvim'
+  },
+  config = config,
+  event = "InsertEnter",
+}

@@ -11,19 +11,17 @@ end
 
 -- cmd('au BufNewFile,BufRead * if &ft == "" | set ft=text | endif')
 
--- Save when losing focus
 cmd('au FocusLost <buffer> :silent! wall')
 
--- Resize splits when the window is resized
 cmd('au VimResized <buffer> :wincmd =')
 
-create_augroup('dadbod-completion', {
-  -- { 'FileType', 'sql,mysql,plsql', "lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} }" }
-})
+-- create_augroup('dadbod-completion', {
+--   { 'FileType', 'sql,mysql,plsql', "lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} }" }
+-- })
 
 create_augroup('ftmail', {
   { 'BufRead,BufNewFile', '/tmp/nail-*', 'setlocal', 'ft=mail' },
-  { 'BufRead,BufNewFile', '*s-nail-*', 'setlocal', 'ft=mail' },
+  { 'BufRead,BufNewFile', '*s-nail-*',   'setlocal', 'ft=mail' },
 })
 
 create_augroup('llvm', {
@@ -40,7 +38,7 @@ create_augroup('rustpeg', {
 
 create_augroup('clojure', {
   { 'BufNewFile,BufRead', 'build.boot', 'setf clojure' },
-  { 'FileType', 'clojure', 'setlocal lw+=match,go,go-loop,' },
+  { 'FileType',           'clojure',    'setlocal lw+=match,go,go-loop,' },
 })
 
 create_augroup('firebase', {
@@ -53,11 +51,10 @@ create_augroup('clap_input', {
   -- { 'User', 'ClapOnExit', "echo 'exit' | FocusEnable" },
 })
 
--- augroup cline
---   au!
---   { 'InsertEnter', '*', 'set nocursorline' },
---   { 'InsertLeave', '*', 'set cursorline' },
--- augroup END
+create_augroup('cline', {
+  { 'InsertEnter', '*', 'set nocursorline' },
+  { 'InsertLeave', '*', 'set cursorline' },
+})
 
 create_augroup('trailing', {
   { 'WinLeave,InsertEnter', '*', 'set listchars-=trail:⌴' },
@@ -70,12 +67,6 @@ create_augroup('line_return', {
 
 create_augroup('edit_vimrc', {
   { 'BufWritePost', '$MYVIMRC', 'luafile $MYVIMRC' },
-  {
-    'BufWritePost',
-    '$XDG_CONFIG_HOME/nvim/lua/plugins/*.lua',
-    'source <afile> | source $XDG_CONFIG_HOME/nvim/lua/bundle.lua | PackerCompile'
-  },
-  { 'BufWritePost', '$XDG_CONFIG_HOME/nvim/lua/bundle.lua', 'PackerSync' },
 })
 
 create_augroup('VimCSS3Syntax', {
@@ -95,12 +86,13 @@ create_augroup('jscinoptions', {
 
 create_augroup('suckless', {
   { 'BufWritePost', '$HOME/Code/dwm/config.h', ':silent !cd $HOME/Code/dwm && doas make clean install' },
-  { 'BufWritePost', '$HOME/Code/st/config.h', ':silent !cd $HOME/Code/st && doas make clean install' },
+  { 'BufWritePost', '$HOME/Code/st/config.h',  ':silent !cd $HOME/Code/st && doas make clean install' },
 })
 
-create_augroup('chisel', {
-  { 'BufNewFile,BufRead', '*.chsl', 'set filetype=rust' },
-})
+-- create_augroup('chisel', {
+--   { 'BufNewFile,BufRead', '*.chsl', 'set filetype=rust' },
+-- })
+
 -- create_augroup('present_mode', {
 --   { 'BufNewFile,BufRead', '*.vpm', 'nnoremap <silent> <buffer> <Right> :n<CR>' },
 --   { 'BufNewFile,BufRead', '*.vpm', 'nnoremap <silent> <buffer> <Left> :N<CR>' },

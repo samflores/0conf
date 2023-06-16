@@ -1,12 +1,3 @@
-local package = 'rcarriga/neotest'
-local dependencies = {
-  'vim-test/vim-test',
-  'rcarriga/neotest-vim-test',
-  "nvim-lua/plenary.nvim",
-  "nvim-treesitter/nvim-treesitter",
-  "antoinemadec/FixCursorHold.nvim"
-}
-
 local config = function()
   vim.api.nvim_exec([[
     function! DirenvTransform(cmd) abort
@@ -30,35 +21,49 @@ local config = function()
   -- ]], false)
 
   require('neotest').setup({
+    icons = {
+      running_animated = {
+        "⠋", "⠙", "⠚", "⠒", "⠂", "⠂", "⠒", "⠲", "⠴",
+        "⠦", "⠖", "⠒", "⠐", "⠐", "⠒", "⠓", "⠋"
+      },
+      passed = '',
+      failed = '',
+      running = '',
+      skipped = "",
+      unknown = "",
+    },
     adapters = {
       -- require('neotest-python')({}),
-      -- require('neotest-plenary'),
+      require('neotest-rust'),
+      require('neotest-rspec'),
       require('neotest-vim-test')({ ignore_file_types = {} }),
     },
   })
-
-  local map = vim.api.nvim_set_keymap
-  local opt = { noremap = true }
-
-  map('n', '<leader>tt', ':lua require("neotest").run.run()<CR>', opt)
-  map('n', '<leader>tf', ':lua require("neotest").run.run(vim.fn.expand("%"))<CR>', opt)
-  map('n', '<leader>to', ':lua require("neotest").output.open({ short = true })<CR>', opt)
-  map('n', '<leader>ts', ':lua require("neotest").summary.toggle()<CR>', opt)
-  map('n', '<leader>ta', ':lua require("neotest").run.run("spec")<CR>', opt)
-  map('n', '<leader>tl', ':lua require("neotest").run.run_last()<CR>', opt)
-  -- map('n', '<leader>ta', ':TestSuite<CR>', opt)
-  -- map('n', '<leader>tl', ':TestLast<CR>', opt)
-  -- map('n', '<leader>tg', ':TestVisit<CR>', opt)
 end
 
-local M = {}
+local opt = { noremap = true }
 
-function M.init(use)
-  use {
-    package,
-    config = config,
-    requires = dependencies
+return {
+  'rcarriga/neotest',
+  config = config,
+  keys = {
+    { '<leader>tt', ':lua require("neotest").run.run()<CR>',                     opt },
+    { '<leader>tf', ':lua require("neotest").run.run(vim.fn.expand("%"))<CR>',   opt },
+    { '<leader>to', ':lua require("neotest").output.open({ short = true })<CR>', opt },
+    { '<leader>ts', ':lua require("neotest").summary.toggle()<CR>',              opt },
+    { '<leader>ta', ':lua require("neotest").run.run("spec")<CR>',               opt },
+    { '<leader>tl', ':lua require("neotest").run.run_last()<CR>',                opt },
+    -- map('n', '<leader>ta', ':TestSuite<CR>', opt)
+    -- map('n', '<leader>tl', ':TestLast<CR>', opt)
+    -- map('n', '<leader>tg', ':TestVisit<CR>', opt)
+  },
+  dependencies = {
+    'rouge8/neotest-rust',
+    'olimorris/neotest-rspec',
+    'vim-test/vim-test',
+    'rcarriga/neotest-vim-test',
+    "nvim-lua/plenary.nvim",
+    "nvim-treesitter/nvim-treesitter",
+    "antoinemadec/FixCursorHold.nvim"
   }
-end
-
-return M
+}

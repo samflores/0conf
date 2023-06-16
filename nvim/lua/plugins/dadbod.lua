@@ -1,23 +1,22 @@
-local package = 'kristijanhusak/vim-dadbod-ui'
-local dependencies = {
-  'tpope/vim-dadbod'
-}
-
 local config = function()
-  vim.api.nvim_exec([[
-    let g:dbs = {
-    \ }
-  ]], false)
-end
-
-local M = {}
-
-function M.init(use)
-  use {
-    package,
-    requires = dependencies,
-    config = config
+  vim.g.db_ui_icons = {
+    expanded = '>',
+    collapsed = '',
+    saved_query = '',
+    new_query = '',
+    tables = '',
+    buffers = '',
+    connection_ok = '',
+    connection_error = '',
   }
+  vim.g.dbs = {}
 end
 
-return M
+return {
+  'kristijanhusak/vim-dadbod-ui',
+  dependencies = {
+    'tpope/vim-dadbod'
+  },
+  config = config,
+  -- cmd = 'DBUI'
+}

@@ -1,13 +1,5 @@
-local package = 'nvim-treesitter/nvim-treesitter'
-local dependencies = {
-  'nvim-treesitter/playground',
-  'nvim-treesitter/nvim-treesitter-textobjects',
-  'JoosepAlviste/nvim-ts-context-commentstring',
-}
-local run = ':TSUpdate'
-
 local config = function()
-  require'nvim-treesitter.configs'.setup {
+  require 'nvim-treesitter.configs'.setup {
     ensure_installed = {
       "css",
       "html",
@@ -17,6 +9,7 @@ local config = function()
       "rust",
       "svelte",
       "typescript",
+      "markdown",
     },
     highlight = {
       enable = true
@@ -31,19 +24,20 @@ local config = function()
       },
     },
     indent = {
-      enable = true
+      enable = true,
+      disable = { 'ruby' }
     },
     query_linter = {
       enable = true,
       use_virtual_text = true,
-      lint_events = {"BufWrite", "CursorHold"},
+      lint_events = { "BufWrite", "CursorHold" },
     },
     matchup = {
       enable = true
     },
   }
 
-  require'nvim-treesitter.configs'.setup {
+  require 'nvim-treesitter.configs'.setup {
     textobjects = {
       select = {
         enable = true,
@@ -68,26 +62,26 @@ local config = function()
         enable = true,
         set_jumps = true,
         goto_next_start = {
-          ["]m"] = "@function.outer",
+          ["]f"] = "@function.outer",
           ["]]"] = "@class.outer",
         },
         goto_next_end = {
-          ["]M"] = "@function.outer",
+          ["]F"] = "@function.outer",
           ["]["] = "@class.outer",
         },
         goto_previous_start = {
-          ["[m"] = "@function.outer",
+          ["[f"] = "@function.outer",
           ["[["] = "@class.outer",
         },
         goto_previous_end = {
-          ["[M"] = "@function.outer",
+          ["[F"] = "@function.outer",
           ["[]"] = "@class.outer",
         },
       },
     },
   }
 
-  require'nvim-treesitter.configs'.setup {
+  require 'nvim-treesitter.configs'.setup {
     context_commentstring = {
       enable = true
     }
@@ -96,16 +90,27 @@ local config = function()
   vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 end
 
-local M = {}
-
-function M.init(use)
-  use {
-    package,
-    requires = dependencies,
-    run = run,
-    config = config
+return {
+  'nvim-treesitter/nvim-treesitter',
+  dependencies = {
+    'nvim-treesitter/playground',
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    'JoosepAlviste/nvim-ts-context-commentstring',
+  },
+  config = config,
+  build = function()
+    require('nvim-treesitter.install').update({ with_sync = true })
+  end,
+  event = 'UiEnter',
+  ft = {
+    "css",
+    "html",
+    "javascript",
+    "lua",
+    "ruby",
+    "rust",
+    "svelte",
+    "typescript",
+    "markdown",
   }
-end
-
-return M
-
+}

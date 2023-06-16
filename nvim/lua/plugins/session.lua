@@ -1,8 +1,3 @@
-local package = 'Shatur/neovim-session-manager'
-local dependencies = { 'nvim-lua/plenary.nvim' }
-
-local M = {}
-
 local config = function()
   local Path = require('plenary.path')
   require('session_manager').setup({
@@ -20,11 +15,8 @@ local config = function()
   })
 end
 
-function M.init(use)
-  use {
-    package,
-    config = config
-  }
-end
-
-return M
+return {
+  'Shatur/neovim-session-manager',
+  config = config,
+  dependencies = { 'nvim-lua/plenary.nvim' }
+}

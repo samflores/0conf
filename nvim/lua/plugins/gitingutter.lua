@@ -1,17 +1,10 @@
-local package = 'lewis6991/gitsigns.nvim'
-local dependencies = {
-  'nvim-lua/plenary.nvim'
-}
-
-local M = {}
-
 local config = function()
   require('gitsigns').setup {
-    signcolumn                        = true, -- Toggle with `:Gitsigns toggle_signs`
+    signcolumn                        = true,  -- Toggle with `:Gitsigns toggle_signs`
     numhl                             = false, -- Toggle with `:Gitsigns toggle_numhl`
     linehl                            = false, -- Toggle with `:Gitsigns toggle_linehl`
     word_diff                         = false, -- Toggle with `:Gitsigns toggle_word_diff`
-    watch_index                       = {
+    watch_gitdir                      = {
       interval = 1000,
       follow_files = true
     },
@@ -20,7 +13,7 @@ local config = function()
     current_line_blame_opts           = {
       virt_text = true,
       virt_text_pos = 'right_align', -- 'eol' | 'overlay' | 'right_align'
-      delay = 150,
+      delay = 3000,
     },
     current_line_blame_formatter_opts = {
       relative_time = false
@@ -28,12 +21,11 @@ local config = function()
   }
 end
 
-function M.init(use)
-  use {
-    package,
-    requires = dependencies,
-    config = config
-  }
-end
-
-return M
+return {
+  'lewis6991/gitsigns.nvim',
+  dependencies = {
+    'nvim-lua/plenary.nvim'
+  },
+  event = 'UiEnter',
+  config = config
+}

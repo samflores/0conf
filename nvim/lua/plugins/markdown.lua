@@ -1,19 +1,10 @@
-local package = 'iamcco/markdown-preview.nvim'
+local opt = { silent = true, noremap = true }
 
-local config = function()
-  local map = vim.api.nvim_set_keymap
-  local opt = { silent = true, noremap = true }
-
-  map("n", "<leader>md", ":MarkdownPreview<CR>", opt)
-end
-
-local M = {}
-
-function M.init(use)
-  use {
-    package,
-    config = config
-  }
-end
-
-return M
+return {
+  'iamcco/markdown-preview.nvim',
+  keys = {
+    { "<leader>md", ":MarkdownPreview<CR>", opt }
+  },
+  ft = 'markdown',
+  build = 'cd app && yarn install'
+}

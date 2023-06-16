@@ -10,8 +10,8 @@ set.backupdir = '/home/samflores/.config/nvim/backups/'
 set.clipboard = 'unnamedplus'
 set.completeopt = 'menu,menuone,noselect'
 set.equalalways = false
-set.fillchars = 'eob: ,fold: ,diff:⣿,vert:│'
-set.listchars = 'tab:│ ,eol:¬,trail:~,extends:>,precedes:<,nbsp:•'
+set.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:,diff:⣿,vert:│]]
+set.listchars = 'tab:│ ,eol:↵,trail:~,extends:>,precedes:<,nbsp:•'
 set.gdefault = true
 set.grepprg = 'rg --vimgrep'
 set.hidden = true
@@ -55,16 +55,21 @@ set.undofile = true
 set.undofile = true
 
 set.cursorline = false
-set.foldlevel = 2
-set.foldmethod = 'expr'
+set.foldcolumn = '1'
+set.foldlevel = 99
+set.foldlevelstart = 99
+set.foldenable = true
 set.linebreak = true
 set.list = true
-set.number = false
-set.relativenumber = false
+set.number = true
+set.relativenumber = true
 set.signcolumn = 'yes'
 set.spell = false
 set.winfixheight = true
 set.wrap = false
+
+g.mapleader = ","
+g.maplocalleader = [[\]]
 
 g.netrw_special_syntax = 1
 

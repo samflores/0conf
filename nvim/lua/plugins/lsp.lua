@@ -1,104 +1,122 @@
-local packagename = 'neovim/nvim-lspconfig'
-local dependencies = {
-  'glepnir/lspsaga.nvim',
-  'williamboman/nvim-lsp-installer',
-  'simrat39/rust-tools.nvim',
-  'folke/trouble.nvim'
-}
-
 local config = function()
-  require("nvim-lsp-installer").setup({ automatic_installation = true })
-  require("lspsaga").init_lsp_saga({
-    border_style = "bold"
+  require("mason").setup()
+  require("mason-lspconfig").setup()
+  require("lspsaga").setup({
+    ui = {
+      border = "rounded"
+    },
+    rename = {
+      in_select = false,
+    },
   })
-  require("rust-tools").setup {}
-  require("trouble").setup {}
+  require("trouble").setup()
+  require("fidget").setup({
+    text = {
+      spinner = "dots_snake"
+    },
+    window = {
+      blend = 0
+    }
+  })
+  local rt = require("rust-tools")
 
   local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- Mappings.
-    local map = vim.keymap.set
+    local keymap = vim.keymap.set
     local opts = { noremap = true, silent = true, buffer = bufnr }
+    keymap("n", "gh", "<cmd>Lspsaga lsp_finder<CR>")
+    keymap({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>")
+    keymap("n", "gr", "<cmd>Lspsaga rename<CR>")
+    keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>")
+    keymap("n", "gD", "<cmd>Lspsaga goto_definition<CR>")
+    keymap("n", "<leader>sl", "<cmd>Lspsaga show_line_diagnostics<CR>")
+    keymap("n", "<leader>sc", "<cmd>Lspsaga show_cursor_diagnostics<CR>")
+    keymap("n", "<leader>sb", "<cmd>Lspsaga show_buf_diagnostics<CR>")
+    keymap("n", "[e", "<cmd>Lspsaga diagnostic_jump_prev<CR>")
+    keymap("n", "]e", "<cmd>Lspsaga diagnostic_jump_next<CR>")
+    keymap("n", "[E", function()
+      require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })
+    end)
+    keymap("n", "]E", function()
+      require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
+    end)
+    keymap("n", "<leader>O", "<cmd>Lspsaga outline<CR>")
+    keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>")
+    keymap("n", "<Leader>ci", "<cmd>Lspsaga incoming_calls<CR>")
+    keymap("n", "<Leader>co", "<cmd>Lspsaga outgoing_calls<CR>")
+    keymap({ "n", "t" }, "<A-d>", "<cmd>Lspsaga term_toggle<CR>")
 
-    map('n', 'gD', vim.lsp.buf.declaration, opts)
-    -- map('n', 'gd', vim.lsp.buf.definition, opts)
-    -- map('n', 'M', vim.lsp.buf.hover, opts)
-    map('n', 'gi', vim.lsp.buf.implementation, opts)
-    -- map('n', '<C-s>', vim.lsp.buf.signature_help, opts)
-    map('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-    map('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
-    map('n', '<space>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, opts)
-    map('n', '<space>D', vim.lsp.buf.type_definition, opts)
-    -- map('n', '<space>rn', vim.lsp.buf.rename, opts)
-    map('n', 'gr', vim.lsp.buf.references, opts)
-    -- map('n', '<space>e', vim.lsp.diagnostic.show_line_diagnostics, opts)
-    -- map('n', '[d', vim.lsp.diagnostic.goto_prev, opts)
-    -- map('n', ']d', vim.lsp.diagnostic.goto_next, opts)
-    map('n', '<space>q', vim.lsp.diagnostic.set_loclist, opts)
-    -- map('n', '<space>ca', vim.lsp.buf.code_action, opts)
-
-    map('n', 'gd', require 'lspsaga.definition'.preview_definition, opts)
-    map('n', 'gh', require 'lspsaga.finder'.lsp_finder, opts)
-    map('n', 'gs', require('lspsaga.signaturehelp').signature_help, opts)
-    map('n', '<space>rn', require('lspsaga.rename').lsp_rename, opts)
-    map('n', '<space>ca', require('lspsaga.codeaction').code_action, opts)
-    map('v', '<space>ca', function()
-      vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-U>", true, false, true))
-      require('lspsaga.codeaction').range_code_action()
-    end, opts)
-    map('n', 'M', require('lspsaga.hover').render_hover_doc, opts)
-    local action = require("lspsaga.action")
-    map('n', '<C-f>', function() action.smart_scroll_with_saga(1) end, opts)
-    map('n', '<C-b>', function() action.smart_scroll_with_saga(-1) end, opts)
-    map('n', '<space>dd', require 'lspsaga.diagnostic'.show_line_diagnostics, opts)
-    map('n', '[d', require 'lspsaga.diagnostic'.goto_prev, opts)
-    map('n', ']d', require 'lspsaga.diagnostic'.goto_next, opts)
-
-    if client.resolved_capabilities.document_formatting then
-      map("n", "<space>f", vim.lsp.buf.formatting, opts)
+    -- print(vim.inspect(client.server_capabilities));
+    if client.server_capabilities.documentFormattingProvider then
+      keymap("n", "<space>f", vim.lsp.buf.format, opts)
       vim.api.nvim_exec([[
         augroup lsp_document_formatting
         autocmd! * <buffer>
-        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
+        autocmd BufWritePre <buffer> lua vim.lsp.buf.format()
         augroup END
       ]], false)
     end
 
-    if client.resolved_capabilities.document_range_formatting then
-      map("n", "<space>f", vim.lsp.buf.range_formatting, opts)
+    if client.server_capabilities.documentRangeFormattingProvider then
+      -- keymap("n", "<space>f", vim.lsp.buf.range_formatting, opts)
     end
 
-    -- Set autocommands conditional on server_capabilities
-    if client.resolved_capabilities.document_highlight then
-      vim.api.nvim_exec([[
-        augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-        augroup END
-      ]], false)
+    if client.server_capabilities.documentHighlightProvider then
+      -- vim.api.nvim_exec([[
+      --   augroup lsp_document_highlight
+      --   autocmd! * <buffer>
+      --   autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+      --   autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+      --   augroup END
+      -- ]], false)
     end
   end
 
+  rt.setup {
+    tools = {
+      inlay_hints = {
+        auto = false
+      }
+    },
+    server = { on_attach = on_attach }
+  }
+
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true
+  }
   local lsp_config = require('lspconfig')
-  lsp_config['clangd'].setup { on_attach = on_attach }
-  lsp_config['clojure_lsp'].setup { on_attach = on_attach }
-  lsp_config['cssls'].setup { on_attach = on_attach }
-  lsp_config['dartls'].setup { on_attach = on_attach }
+  lsp_config['bashls'].setup { on_attach = on_attach, capabilities = capabilities }
+  lsp_config['clangd'].setup { on_attach = on_attach, capabilities = capabilities }
+  lsp_config['clojure_lsp'].setup { on_attach = on_attach, capabilities = capabilities }
+  lsp_config['cssls'].setup { on_attach = on_attach, capabilities = capabilities }
+  -- lsp_config['dartls'].setup { on_attach = on_attach, capabilities = capabilities }
   lsp_config['denols'].setup {
     on_attach = on_attach,
+    capabilities = capabilities,
     root_dir = lsp_config.util.root_pattern("deno.json", "deno.jsonc"),
   }
-  -- lsp_config['ember'].setup { on_attach = on_attach }
-  lsp_config['emmet_ls'].setup { on_attach = on_attach }
-  lsp_config['graphql'].setup { on_attach = on_attach }
-  lsp_config['html'].setup { on_attach = on_attach }
-  lsp_config['jsonls'].setup { on_attach = on_attach }
-  lsp_config['solargraph'].setup { on_attach = on_attach }
-  lsp_config['sqlls'].setup { on_attach = on_attach }
-  lsp_config['sumneko_lua'].setup {
+  -- lsp_config['ember'].setup { on_attach = on_attach, capabilities = capabilities }
+  lsp_config['emmet_ls'].setup { on_attach = on_attach, capabilities = capabilities }
+  lsp_config['graphql'].setup { on_attach = on_attach, capabilities = capabilities }
+  lsp_config['html'].setup { on_attach = on_attach, capabilities = capabilities }
+  lsp_config['jsonls'].setup { on_attach = on_attach, capabilities = capabilities }
+  lsp_config['jdtls'].setup { on_attach = on_attach, capabilities = capabilities }
+  -- lsp_config['rust_analyzer'].setup { on_attach = on_attach, capabilities = capabilities }
+
+  -- lsp_config['sorbet'].setup { on_attach = on_attach, capabilities = capabilities }
+  -- lsp_config['solargraph'].setup { on_attach = on_attach, capabilities = capabilities }
+  -- lsp_config['typeprof'].setup { on_attach = on_attach, capabilities = capabilities }
+  lsp_config['steep'].setup { on_attach = on_attach, capabilities = capabilities }
+  -- lsp_config['ruby_ls'].setup { on_attach = on_attach, capabilities = capabilities }
+
+  lsp_config['sqlls'].setup { on_attach = on_attach, capabilities = capabilities }
+  lsp_config['lua_ls'].setup {
     on_attach = on_attach,
+    capabilities = capabilities,
     settings = {
       Lua = {
         runtime = {
@@ -117,21 +135,55 @@ local config = function()
       }
     }
   }
-  lsp_config['svelte'].setup { on_attach = on_attach }
+  lsp_config['svelte'].setup { on_attach = on_attach, capabilities = capabilities }
   lsp_config['tsserver'].setup {
     on_attach = on_attach,
+    capabilities = capabilities,
     root_dir = lsp_config.util.root_pattern("package.json"),
   }
+
+  local handler = function(virtText, lnum, endLnum, width, truncate)
+    local newVirtText = {}
+    local suffix = ('  %d '):format(endLnum - lnum)
+    local sufWidth = vim.fn.strdisplaywidth(suffix)
+    local targetWidth = width - sufWidth
+    local curWidth = 0
+    for _, chunk in ipairs(virtText) do
+      local chunkText = chunk[1]
+      local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+      if targetWidth > curWidth + chunkWidth then
+        table.insert(newVirtText, chunk)
+      else
+        chunkText = truncate(chunkText, targetWidth - curWidth)
+        local hlGroup = chunk[2]
+        table.insert(newVirtText, { chunkText, hlGroup })
+        chunkWidth = vim.fn.strdisplaywidth(chunkText)
+        -- str width returned from truncate() may less than 2nd argument, need padding
+        if curWidth + chunkWidth < targetWidth then
+          suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
+        end
+        break
+      end
+      curWidth = curWidth + chunkWidth
+    end
+    table.insert(newVirtText, { suffix, 'MoreMsg' })
+    return newVirtText
+  end
+  require('ufo').setup({ fold_virt_text_handler = handler })
 end
 
-local M = {}
-
-function M.init(use)
-  use {
-    packagename,
-    requires = dependencies,
-    config = config,
-  }
-end
-
-return M
+return {
+  'neovim/nvim-lspconfig',
+  dependencies = {
+    'glepnir/lspsaga.nvim',
+    { dir = '~/Code/mason.nvim' },
+    { dir = '~/Code/mason-lspconfig.nvim' },
+    'mattfbacon/rust-tools.nvim',
+    'folke/trouble.nvim',
+    'j-hui/fidget.nvim',
+    'kevinhwang91/nvim-ufo',
+    'kevinhwang91/promise-async'
+  },
+  config = config,
+  event = 'UiEnter',
+}

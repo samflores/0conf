@@ -3,14 +3,9 @@ local map = vim.api.nvim_set_keymap
 local noremap_opt = { noremap = true }
 local silent_noremap_opt = { silent = true, noremap = true }
 
--- Leader
-vim.g.mapleader = ","
-vim.g.maplocalleader = [[\]]
-
 map('n', 'zG', '2zg', noremap_opt)
 
 -- Kill window
-map('n', '<leader>k', ':Bclose<cr>', noremap_opt)
 map('n', '<leader>x', ':wq<cr>', noremap_opt)
 map('n', '<leader>X', ':on<cr>', noremap_opt)
 
@@ -31,6 +26,8 @@ map('n', '<leader>N', ':setlocal relativenumber!<cr>', noremap_opt)
 -- Sort lines
 map('n', '<leader>s', 'vip:!sort<cr>', noremap_opt)
 map('v', '<leader>s', ':!sort<cr>', noremap_opt)
+
+map('v', '<leader>y', 'J:s/\\ \\././<cr>$^vg_yu:noh<cr>', noremap_opt)
 
 -- Tabs
 map('n', '<leader>(', ':tabprev<cr>', noremap_opt)
@@ -74,7 +71,7 @@ map('n', 'vv', '^vg_', noremap_opt)
 map('n', '<leader>i', ':set list!<cr>', noremap_opt)
 
 -- Toggle spell
-map('n', '<leader>z', ':set spell!<cr>', noremap_opt)
+map('n', '<leader>Z', ':set spell!<cr>', noremap_opt)
 
 -- [U]nfuck my screen
 map('n', 'U', ':syntax sync fromstart<cr>:redraw!<cr>', noremap_opt)
@@ -149,11 +146,3 @@ map('t', '<Esc>', [[<C-\><C-n>]], noremap_opt)
 
 -- Rust-tools
 map("n", "<leader>rr", ":RustRunnables<CR>", silent_noremap_opt)
-
--- Snippets
-vim.api.nvim_exec([[
-  imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-  smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-  imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-  smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-]], false)

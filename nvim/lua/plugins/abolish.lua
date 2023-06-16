@@ -1,9 +1,8 @@
-local package = 'tpope/vim-abolish'
-
-local M = {}
-
-function M.init(use)
-  use { package }
-end
-
-return M
+return {
+  'tpope/vim-abolish',
+  cmd = {
+    'Abolish',
+    'Subvert',
+    'S'
+  }
+}

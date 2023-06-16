@@ -1,9 +1,14 @@
-local package = 'andymass/vim-matchup'
-
-local M = {}
-
-function M.init(use)
-  use { package }
-end
-
-return M
+return {
+  'andymass/vim-matchup',
+  ft = {
+    "css",
+    "html",
+    "javascript",
+    "lua",
+    "ruby",
+    "rust",
+    "svelte",
+    "typescript",
+    "markdown",
+  }
+}
