@@ -7,6 +7,22 @@ target=$XDG_CONFIG_HOME
 [[ -d $target/nvim ]] && mv $target/nvim{,.back}
 ln -sf $origin/nvim $target/nvim
 
+[[ -f $target/hypr ]] && rm $target/hypr
+[[ -d $target/hypr ]] && mv $target/hypr{,.back}
+ln -sf $origin/hypr $target/hypr
+
+[[ -f $target/eww ]] && rm $target/eww
+[[ -d $target/eww ]] && mv $target/eww{,.back}
+ln -sf $origin/eww $target/eww
+
+[[ -f $$target/rofi ]] && rm $target/rofi
+[[ -d $target/rofi ]] && mv $target/rofi{,.back}
+ln -sf $origin/rofi $target/rofi
+
+[[ -f $target/kitty ]] && rm $target/kitty
+[[ -d $target/kitty ]] && mv $target/kitty{,.back}
+ln -sf $origin/kitty $target/kitty
+
 [[ -f $HOME/.gitconfig ]] && mv $HOME/.gitconfig $HOME/gitconfig.back
 ln -sf $origin/gitconfig $HOME/.gitconfig
 
