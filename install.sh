@@ -23,6 +23,14 @@ ln -sf $origin/rofi $target/rofi
 [[ -d $target/kitty ]] && mv $target/kitty{,.back}
 ln -sf $origin/kitty $target/kitty
 
+[[ -f $target/qutebrowser ]] && rm $target/qutebrowser
+[[ -d $target/qutebrowser ]] && mv $target/qutebrowser{,.back}
+ln -sf $origin/qutebrowser $target/qutebrowser
+
+[[ -f $target/fontconfig ]] && rm $target/fontconfig
+[[ -d $target/fontconfig ]] && mv $target/fontconfig{,.back}
+ln -sf $origin/fontconfig $target/fontconfig
+
 [[ -f $HOME/.gitconfig ]] && mv $HOME/.gitconfig $HOME/gitconfig.back
 ln -sf $origin/gitconfig $HOME/.gitconfig
 
