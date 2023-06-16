@@ -1,0 +1,2 @@
+// git clone git clone https://github.com/lr-tech/rofi-themes-collection.git ~/.local/share/rofi
+@theme "/home/samflores/.local/share/rofi/themes/rounded-nord-dark.rasi"
