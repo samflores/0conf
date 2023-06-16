@@ -14,4 +14,4 @@ bindkey -M vicmd v edit-command-line
 autoload edit-command-line
 zle -N edit-command-line
 
-export KEYTIMEOUT=1
+export KEYTIMEOUT=50

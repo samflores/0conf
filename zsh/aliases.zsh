@@ -4,6 +4,7 @@ alias rb='ruby'
 alias top='top -ocpu -R -F -s 2 -n30'
 alias mx='tmux -2 new-session -A -s work'
 alias e.='e $(fd --type file --color=always | sk -m --ansi)'
+alias o='rifle'
 
 alias ls='ls -GFh'
 alias l='ls -1A'         # Lists in one column, hidden files.
@@ -71,3 +72,5 @@ alias -s ts=e
 alias -s svelte=e
 
 alias ifconfig='ip address show'
+
+alias tree='erdtree'

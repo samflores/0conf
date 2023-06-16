@@ -26,20 +26,22 @@ zinit snippet https://gist.githubusercontent.com/hightemp/5071909/raw/
 zinit wait lucid for \
   atinit"zicompinit; zicdreplay" \
     zdharma-continuum/fast-syntax-highlighting \
+  atload"_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions \
   atload"bindkey '^[[A' history-substring-search-up" \
   atload"bindkey '^[[B' history-substring-search-down" \
   atload"bindkey -M vicmd k history-substring-search-up" \
   atload"bindkey -M vicmd j history-substring-search-down" \
     zsh-users/zsh-history-substring-search \
-  atload"_zsh_autosuggest_start" \
-    zsh-users/zsh-autosuggestions \
   blockf atpull'zinit creinstall -q .' \
     zsh-users/zsh-completions \
-  softmoth/zsh-vim-mode \
   mdumitru/fancy-ctrl-z \
   atload"bindkey '^ ' fuck-command-line" \
     laggardkernel/zsh-thefuck \
   samflores/docker-aliases \
   samflores/git-aliases \
   samflores/rails-aliases \
-  MichaelAquilina/zsh-you-should-use \
+  MichaelAquilina/zsh-you-should-use
+
+zinit ice depth=1
+zinit light jeffreytse/zsh-vi-mode

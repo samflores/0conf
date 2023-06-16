@@ -52,3 +52,6 @@ export BAT_THEME="Monokai Extended Light"
 export HOST_IP=172.17.0.1
 
 export DENO_INSTALL="/home/samflores/.deno"
+
+export BUNDLE_PATH=$HOME/.gem/ruby/3.1.0
+export BUNDLE_CACHE_PATH=$HOME/.bundle/cache

@@ -1,4 +1,4 @@
-(cat ~/.config/wpg/sequences &)
+# (cat ~/.config/wpg/sequences &)
 
 source $ZDOTDIR/path.zsh
 source $ZDOTDIR/exports.zsh
@@ -13,3 +13,5 @@ source $ZDOTDIR/bindkeys.zsh
 source $ZDOTDIR/hashs.zsh
 
 eval "$(direnv hook zsh)"
+
+source /home/samflores/.config/broot/launcher/bash/br
