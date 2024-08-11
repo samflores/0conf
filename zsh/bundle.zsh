@@ -1,13 +1,13 @@
 ### Added by Zinit's installer
-if [[ ! -f $ZDOTDIR/zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/zinit" && command chmod g-rwX "$ZDOTDIR/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$ZDOTDIR/zinit/bin" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
 fi
 
-source "$ZDOTDIR/zinit/bin/zinit.zsh"
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
@@ -17,13 +17,12 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-rust
+    zdharma-continuum/zinit-annex-rust \
+    jeffreytse/zsh-vi-mode
 
 ### End of Zinit's installer chunk
 
-zinit snippet https://gist.githubusercontent.com/hightemp/5071909/raw/
-
-zinit wait lucid for \
+zinit depth"1" wait lucid for \
   atinit"zicompinit; zicdreplay" \
     zdharma-continuum/fast-syntax-highlighting \
   atload"_zsh_autosuggest_start" \
@@ -38,10 +37,7 @@ zinit wait lucid for \
   mdumitru/fancy-ctrl-z \
   atload"bindkey '^ ' fuck-command-line" \
     laggardkernel/zsh-thefuck \
+  MichaelAquilina/zsh-you-should-use \
   samflores/docker-aliases \
   samflores/git-aliases \
-  samflores/rails-aliases \
-  MichaelAquilina/zsh-you-should-use
-
-zinit ice depth=1
-zinit light jeffreytse/zsh-vi-mode
+  samflores/rails-aliases
