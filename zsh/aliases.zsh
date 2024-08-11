@@ -6,9 +6,9 @@ alias mx='tmux -2 new-session -A -s work'
 alias e.='e $(fd --type file --color=always | sk -m --ansi)'
 alias o='rifle'
 
-alias ls='ls -GFh'
-alias l='ls -1A'         # Lists in one column, hidden files.
-alias ll='ls -lh'        # Lists human readable sizes.
+alias ls='eza --color=auto'
+alias l='eza -1A'         # Lists in one column, hidden files.
+alias ll='eza -lh'        # Lists human readable sizes.
 alias lr='ll -R'         # Lists human readable sizes, recursively.
 alias la='ll -A'         # Lists human readable sizes, hidden files.
 alias lm='la | "$PAGER"' # Lists human readable sizes, hidden files through pager.
@@ -60,6 +60,9 @@ alias pu='pushd'
 alias rm="${aliases[rm]:-rm} -i"
 alias type='type -a'
 
+# btop
+alias top='btop'
+
 # fuck
 alias fck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 
@@ -73,4 +76,4 @@ alias -s svelte=e
 
 alias ifconfig='ip address show'
 
-alias tree='erdtree'
+alias tree='erd'
