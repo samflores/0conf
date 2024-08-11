@@ -1,24 +1,7 @@
 local config = function()
-  vim.api.nvim_exec([[
-    function! DirenvTransform(cmd) abort
-      if filereadable(".envrc")
-        return 'direnv exec . '.a:cmd
-      endif
-      return a:cmd
-    endfunction
-
-    let g:test#custom_transformations = {'direnv': function('DirenvTransform')}
-    let g:test#transformation = 'direnv'
-  ]], false)
-
-  vim.api.nvim_exec([[
+  vim.api.nvim_exec2([[
     let test#strategy = 'floaterm'
-  ]], false)
-
-  -- vim.api.nvim_exec([[
-  --   let test#ruby#use_binstubs = 0
-  --   let test#ruby#minitest#file_pattern = '_spec\.rb' "
-  -- ]], false)
+  ]], {})
 
   require('neotest').setup({
     icons = {
@@ -33,9 +16,37 @@ local config = function()
       unknown = "",
     },
     adapters = {
-      -- require('neotest-python')({}),
+      require('neotest-python'),
       require('neotest-rust'),
-      require('neotest-rspec'),
+      require('neotest-rspec')({
+        rspec_cmd = function()
+          local path = vim.fn.expand('./scripts/run')
+          if vim.fn.filereadable(path) ~= 0 or vim.fn.filereadable('Gemfile') ~= 0 then
+            return vim.tbl_flatten({
+              "bundle",
+              "exec",
+              "rspec"
+            })
+          else
+            return vim.tbl_flatten({ "rspec" })
+          end
+        end,
+        transform_spec_path = function(path)
+          if vim.fn.filereadable(vim.fn.expand('./scripts/run')) ~= 0 then
+            local pattern = string.gsub(vim.fn.getcwd() .. "/", "%-", "%%-")
+            local new_path = string.gsub(path, pattern, "")
+            return new_path
+          else
+            return path
+          end
+        end,
+        results_path = function()
+          return 'tmp/rspec.out'
+        end
+      }),
+      -- require('neotest-minitest'),
+      require('neotest-jest'),
+      require('neotest-vitest'),
       require('neotest-vim-test')({ ignore_file_types = {} }),
     },
   })
@@ -44,23 +55,24 @@ end
 local opt = { noremap = true }
 
 return {
-  'rcarriga/neotest',
+  'nvim-neotest/neotest',
   config = config,
   keys = {
-    { '<leader>tt', ':lua require("neotest").run.run()<CR>',                     opt },
-    { '<leader>tf', ':lua require("neotest").run.run(vim.fn.expand("%"))<CR>',   opt },
-    { '<leader>to', ':lua require("neotest").output.open({ short = true })<CR>', opt },
-    { '<leader>ts', ':lua require("neotest").summary.toggle()<CR>',              opt },
-    { '<leader>ta', ':lua require("neotest").run.run("spec")<CR>',               opt },
-    { '<leader>tl', ':lua require("neotest").run.run_last()<CR>',                opt },
-    -- map('n', '<leader>ta', ':TestSuite<CR>', opt)
-    -- map('n', '<leader>tl', ':TestLast<CR>', opt)
-    -- map('n', '<leader>tg', ':TestVisit<CR>', opt)
+    { '<leader>tt', function() require("neotest").run.run() end,                     opt },
+    { '<leader>tf', function() require("neotest").run.run(vim.fn.expand("%")) end,   opt },
+    { '<leader>to', function() require("neotest").output.open({ short = true }) end, opt },
+    { '<leader>ts', function() require("neotest").summary.toggle() end,              opt },
+    { '<leader>ta', function() require("neotest").run.run("spec") end,               opt },
+    { '<leader>tl', function() require("neotest").run.run_last() end,                opt },
   },
   dependencies = {
+    'nvim-neotest/neotest-python',
     'rouge8/neotest-rust',
     'olimorris/neotest-rspec',
+    'zidhuss/neotest-minitest',
     'vim-test/vim-test',
+    'haydenmeade/neotest-jest',
+    'marilari88/neotest-vitest',
     'rcarriga/neotest-vim-test',
     "nvim-lua/plenary.nvim",
     "nvim-treesitter/nvim-treesitter",
