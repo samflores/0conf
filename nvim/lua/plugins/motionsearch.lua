@@ -1,10 +1,11 @@
 return {
-  'ggandor/leap.nvim',
-  dependencies = {
-    'tpope/vim-repeat',
-  },
+  "folke/flash.nvim",
+  event = "VeryLazy",
+  ---@type Flash.Config
+  opts = {},
   keys = {
-    { '\'', '<Plug>(leap-forward)' },
-    { '"',  '<Plug>(leap-backward)' },
+    { "'",  mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash", },
+    { "\"", mode = { "n", "o", "x" }, function() require("flash").treesitter() end, desc = "Flash Treesitter", },
+    { "r",  mode = "o",               function() require("flash").remote() end,     desc = "Remote Flash", },
   },
 }
