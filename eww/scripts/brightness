@@ -2,15 +2,15 @@
 
 case "$1" in
   "--get")
-    max=$(cat /sys/class/backlight/amdgpu_bl0/max_brightness)
-    value=$(cat /sys/class/backlight/amdgpu_bl0/brightness)
+    max=$(cat /sys/class/backlight/amdgpu_bl1/max_brightness)
+    value=$(cat /sys/class/backlight/amdgpu_bl1/brightness)
     jq -n \
       --arg max "$max" \
       --arg value $value \
       '{ max: $max, value: $value }'
     ;;
   "--set")
-    echo $2 > /sys/class/backlight/amdgpu_bl0/brightness
+    echo $2 > /sys/class/backlight/amdgpu_bl1/brightness
     ;;
   *)
     ;;

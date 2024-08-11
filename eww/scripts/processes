@@ -4,7 +4,7 @@ get_top (){
   ps -eo comm,pcpu,pmem,pid --sort -pcpu \
     | head -11 \
     | tail -10 \
-    | sed 's/ \+/,/g' \
+    | sed -E 's/(\w+)\s{2,}([0-9.]+)\s{2,}([0-9.]+)\s+([0-9]+)/\1,\2,\3,\4/' \
     | jq --slurp --raw-input --raw-output \
          'split("\n") |
          map(split(",")) |

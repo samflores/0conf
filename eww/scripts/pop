@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ALL_POPUPS="calendar_popup system_popup power_popup"
+ALL_POPUPS="calendar_popup energy_popup power_popup"
 EWW_BIN="eww"
 LOCK_FILE="$HOME/.cache/eww-$1.lock"
 

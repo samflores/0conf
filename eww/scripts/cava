@@ -7,14 +7,14 @@ dict="s/;//g;"
 i=0
 while [ $i -lt ${#bar} ]
 do
-    dict="${dict}s/$i/${bar:$i:1}/g;"
-    i=$((i=i+1))
+  dict="${dict}s/$i/${bar:$i:1}/g;"
+  i=$((i=i+1))
 done
 
 # make sure to clean pipe
 pipe="/tmp/cava.fifo"
 if [ -p $pipe ]; then
-    unlink $pipe
+  unlink $pipe
 fi
 mkfifo $pipe
 
@@ -36,5 +36,5 @@ cava -p $config_file &
 
 # reading data from fifo
 while read -r cmd; do
-    echo $cmd | sed $dict
+  echo $cmd | sed $dict
 done < $pipe

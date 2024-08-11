@@ -9,12 +9,12 @@
   "playerctl --follow metadata --format '{ \"artist\": \"{{ artist }}\", \"title\": \"{{ title }}\" }'")
 
 (deflisten music_status "playerctl --follow status")
-(deflisten music_virualizer "scripts/cava")
+(deflisten music_visualizer "scripts/cava")
 
-(defpoll   battery              :interval "5s" `scripts/battery`)
+(defpoll   battery              :interval "10s" `scripts/battery`)
 (defpoll   network              :interval "5s" `scripts/wifi`)
 (defpoll   clock                :interval "1s" `scripts/clock`)
-(defpoll   keyboard             :interval "1s" `scripts/keyboard --get`)
+(defpoll   keyboard             :interval "30s" `scripts/keyboard --get`)
 (defpoll   sound                :interval "1s" `scripts/sound --get`)
 (defpoll   brightness           :interval "1s" :initial "{ \"max\": 255, \"value\": 255 }" `scripts/brightness --get`)
 (defpoll   processes            :interval "3s" `scripts/processes --get`)
@@ -26,15 +26,12 @@
 (defvar    keyb_rev             false)
 (defvar    snd_rev              false)
 (defvar    music_rev            false)
-(defvar    memory_used_mb       102)
-(defvar    memory_free_mb       102)
-(defvar    memory_total_mb      102)
 
 (defwindow bar1
   :class "bar"
   :monitor 0
   :windowtype "dock"
-  :geometry (geometry :y "3px" :width "1914px" :height "0px" :anchor "top center")
+  :geometry (geometry :y "3px" :width "3834px" :height "0px" :anchor "top center")
   :exclusive true
 
   (centerbox :class "main-container"
@@ -49,10 +46,11 @@
          :space-evenly false
       (music_module)
       (sound_module)
-      (keyboard_module)
+      ; (keyboard_module)
       (network_module)
       (battery_module)
-      (clock_module))))
+      (clock_module)
+      (power_module))))
 
 (defwindow bar2
   :class "bar"
@@ -63,8 +61,10 @@
 
   (centerbox :class "main-container"
     (box
+      :spacing 3
       :space-evenly false
-      (clock_module))
+      (clock_module)
+      (sound_module))
     (box)
     (box
       :halign "end"
@@ -99,16 +99,16 @@
 (defwidget window_module [start]
   (eventbox :onhover "eww update window_rev=true"
             :onhoverlost "eww update window_rev=false"
-   (label
-    :class "window"
-    :visible {active_workspace >= start && active_workspace <= start + 4 && window != "null" ? true : false}
-    :text {
+    (label
+      :class "window"
+      :visible {active_workspace >= start && active_workspace <= start + 4 && window != "null" ? true : false}
+      :text {
       window_rev ?
-        window :
-        strlength(window) > 40 ?
-          captures(window, "(.{40})")[0][0] :
-          window
-    })))
+      window :
+      strlength(window) > 40 ?
+      captures(window, "(.{40})")[0][0] :
+      window
+      })))
 
 (defwidget music_module []
   (eventbox :onhover "eww update music_rev=true"
@@ -118,21 +118,21 @@
             :onmiddleclick "playerctl next"
     (box
       :space-evenly false
-      ; (label :class "icon"
-      ;        :text {music_status == 'Playing' ? "" : ""})
+      (label :class "icon"
+             :text {music_status == 'Playing' ? "" : ""})
       (label
         :class "window"
         :visible {music_status == 'Playing'}
-        :text music_virualizer)
+        :text music_visualizer)
       (label
         :class "window"
         :visible {music.artist != "null"}
         :text {
-          music_rev ?
-            "[${music.artist}] ${music.title}" :
-            strlength(music.title) > 40 ?
-              captures(music.title, "(.{40})")[0][0] :
-              music.title
+        music_rev ?
+        "[${music.artist}] ${music.title}" :
+        strlength(music.title) > 40 ?
+        captures(music.title, "(.{40})")[0][0] :
+        music.title
         }))))
 
 (defwidget sound_module []
@@ -194,16 +194,16 @@
   (eventbox :onhover "eww update batt_rev=true"
             :onhoverlost "eww update batt_rev=false"
             :cursor "pointer"
-    (box :class "module" :space-evenly "false" :orientation "h" ;:spacing "3"
+    (box :class "module ${battery.value <= 30 ? 'warn' : battery.value <= 15 ? 'critical' : ''}" :space-evenly "false" :orientation "h" ;:spacing "3"
       (button :class "btn active"
-              :onclick "scripts/pop power"
+              :onclick "scripts/pop energy"
         (label :text {battery.icon}
                :class "icon"))
       (revealer :transition "slideleft"
-                :reveal batt_rev
+                :reveal {batt_rev || battery.value < 15}
                 :duration "350ms"
         (button :class "btn active"
-                :onclick "scripts/pop power"
+                :onclick "scripts/pop energy"
           (label :text "${battery.value}%"
                  :orientation "h"))))))
 
@@ -225,108 +225,73 @@
                 :onclick "scripts/pop calendar"
           "${clock.day}/${clock.month}")))))
 
+(defwidget power_module []
+  (eventbox :onhover "eww update power_rev=true"
+            :onhoverlost "eww update power_rev=false"
+            :cursor "pointer"
+    (box :class "module" :space-evenly "false" :orientation "h" ;:spacing "3"
+      (button :class "icon active"
+              :onclick "scripts/pop power"
+        "" ))))
+
 (defwidget calendar_w []
-  (box :class "module cal" :orientation "v"
-    (box :class "cal-in"
-      (calendar :class "cal"))))
+  (eventbox :onhoverlost "scripts/pop calendar"
+    (box :class "module cal" :orientation "v"
+      (box :class "cal-in"
+        (calendar :class "cal")))))
 
 (defwindow calendar_popup
   :monitor 0
   :geometry (geometry :x "3px" :y "3px" :anchor "top right" :width "270px" :height "60px")
   (calendar_w))
 
-(defwidget system []
-  (box :class "module sys_win" :orientation "v" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
-    (box :class "sys_bat_box" :orientation "h" :space-evenly "false"
-      (circular-progress :value {battery.value}
-                         :class "sys_bat"
-                         :thickness 9
-        (label :text ""
-               :class "sys_icon_bat"
-               :limit-width 2
-               :show_truncated false
-               :wrap false))
-      (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
-        (label :text "battery"
-               :halign "start"
-               :class "sys_text_bat"
-               :limit-width 9
-               :show_truncated false
-               :wrap false)
-        (label :text "${battery.value}%"
-               :halign "start"
-               :class "sys_text_bat_sub"
-               :limit-width 22
-               :show_truncated false
-               :wrap false)
-        (label :text "${battery.value}"
-               :halign "start"
-               :class "sys_text_bat_sub"
-               :limit-width 22
-               :show_truncated false
-               :wrap false)))
-    (label :text "" :class "sys_sep" :halign "center")
-    (box :class "sys_mem_box" :orientation "h" :space-evenly "false" :halign "start"
-      (circular-progress :value 50
-                         :class "sys_mem"
-                         :thickness 9
-        (label :text ""
-               :class "sys_icon_mem"
-               :limit-width 2
-               :show_truncated false
-               :wrap false
-               :angle 0.0))
-      (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
-        (label :text "memory"
-               :halign "start"
-               :class "sys_text_mem"
-               :limit-width 9
-               :show_truncated false
-               :wrap false)
-        (label :text "${memory_used_mb} | ${memory_total_mb}mb "
-               :halign "start"
-               :class "sys_text_mem_sub"
-               :limit-width 22
-               :show_truncated false
-               :wrap false)
-        (label :text "${memory_free_mb}mb free"
-               :halign "start"
-               :class "sys_text_mem_sub"
-               :limit-width 22
-               :show_truncated false
-               :wrap false)))))
-
-(defwindow system_popup
-  :monitor 0
-  :geometry (geometry :x "3px" :y "3px" :anchor "top right" :width "290px" :height "120px")
-  (system))
+(defwidget energy []
+  (eventbox :onhoverlost "scripts/pop energy"
+    (box :class "main-container popup" :orientation "v" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
+      (box  :class "energy module" :orientation "h" :space-evenly "false" :spacing 5 :hexpand "false" :vexpand "false"
+        (label :text "" :class "icon")
+        (scale :onchange "scripts/brightness --set {}"
+               :min 0
+               :max {brightness.max}
+               :width 250
+               :value {brightness.value}
+               :active true))
+      (box  :class "module" :orientation "v" :space-evenly "false" :spacing 6 :hexpand "false" :vexpand "false"
+        (box  :class "header" :orientation "h" :space-evenly "false" :spacing 3 :hexpand "false" :vexpand "false"
+          (label :text "" :style "opacity: 0" :class "icon")
+          (label :text "command" :width 210 :xalign 0)
+          (label :text "CPU" :width 70)
+          (label :text "MEM" :width 70))
+        (for process in processes
+          (eventbox :class "process"
+                    :onclick "doas kill ${process.pid}"
+                    :onmiddleclick "doas kill -SIGKILL ${process.pid}"
+                    :cursor "pointer"
+            (box :orientation "h" :space-evenly "false" :spacing 3 :hexpand "false" :vexpand "false"
+              (label :text "" :class "close icon")
+              (label :text {process.name} :width 210 :xalign 0)
+              (label :text "${process.pcpu}%" :width 70)
+              (label :text "${process.pmem}%" :width 70))))))))
 
 (defwidget power []
-  (box :class "main-container popup" :orientation "v" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
-    (box  :class "power module" :orientation "h" :space-evenly "false" :spacing 5 :hexpand "false" :vexpand "false"
-      (label :text "" :class "icon")
-      (scale :onchange "scripts/brightness --set {}"
-             :min 0
-             :max {brightness.max}
-             :width 250
-             :value {brightness.value}
-             :active true))
-    (box  :class "module" :orientation "v" :space-evenly "false" :spacing 6 :hexpand "false" :vexpand "false"
-      (box  :class "header" :orientation "h" :space-evenly "false" :spacing 3 :hexpand "false" :vexpand "false"
-        (label :text "" :style "opacity: 0" :class "icon")
-        (label :text "command" :width 150 :xalign 0)
-        (label :text "CPU" :width 50)
-        (label :text "MEM" :width 50))
-      (for process in processes
-        (eventbox :class "process"
-                  :onclick "doas kill ${process.pid}"
-                  :onmiddleclick "doas kill -SIGKILL ${process.pid}"
-                  :cursor "pointer"
-          (box :orientation "h" :space-evenly "false" :spacing 3 :hexpand "false" :vexpand "false"
-            (label :text "" :class "close icon")
-            (label :text {process.name} :width 150 :xalign 0)
-            (label :text "${process.pcpu}%" :width 50)
-            (label :text "${process.pmem}%" :width 50)))))))
+  (eventbox :onhoverlost "scripts/pop power"
+    (box :class "main-container popup" :orientation "h" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
+      (eventbox :cursor "pointer"
+        (box  :class "energy" :orientation "h" :space-evenly "false" :spacing 5 :hexpand "false" :vexpand "false"
+          (button :class "icon"
+                  :onclick "loginctl suspend"
+            "" )
+          (button :class "icon"
+                  :onclick "loginctl reboot"
+            "" )
+          (button :class "icon"
+                  :onclick "loginctl poweroff"
+            "" ))))))
+
+(defwindow energy_popup
+  :monitor 0
+  :geometry (geometry :x "3px" :y "3px" :anchor "top right")
+  (energy))
 
 (defwindow power_popup
   :monitor 0

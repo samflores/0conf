@@ -1,39 +1,42 @@
-$bg: #101010;
-$fg: #b9b9b9;
-$shadow: rgba(#000000,0.3);
-$border_col: rgba(#cccccc,0.18);
-$best_so_far: rgba(255,255,255,0.1);
+$bg: #191919;
+$fg: #BBBBBB;
+$shadow: rgba($bg, 0.3);
 
 * {
   all: unset;
 }
 
-.bar1, .bar2, .popup {
+.bar1,
+.bar2,
+.popup {
   font-family: monospace;
-	background-color: transparent;
+  background-color: transparent;
 }
 
 .main-container {
-  background: rgba(#000, 0.5);
-	border-radius: 8px;
+  background: rgba($bg, 0.5);
+  border-radius: 8px;
 }
 
 .module {
-	background-color: $bg;
-	border-radius: 8px;
-	color: $fg;
-	padding: 6px 12px;
-  font-size: 16px;
-	box-shadow: 2px 2px 2px $shadow;
+  background-color: $bg;
+  border-radius: 12px;
+  color: $fg;
+  padding: 6px 12px;
+  font-size: 20px;
+  box-shadow: 2px 2px 2px $shadow;
+
   revealer {
     padding-left: 5px;
   }
+
   scale trough highlight {
     background-color: $fg;
     border-radius: 24px;
   }
+
   scale trough {
-    background-color: #232232;
+    background-color: $bg;
     background-color: transparentize($fg, 0.9);
     border-radius: 16px;
     min-height: 8px;
@@ -41,28 +44,74 @@ $best_so_far: rgba(255,255,255,0.1);
   }
 }
 
+.warn .icon {
+  color: #ea9d34;
+}
+
+.critical .icon {
+  color: #eb6f92;
+}
+
 .icon {
   font-family: Material Icons;
 }
 
-.btn{
+.btn {
   font-family: monospace;
-  label { font-size: 16px; }
+
+  label {
+    font-size: 20px;
+  }
+
   padding: 0px 0px;
   background-color: transparent;
   border: none;
   text-shadow: none;
   box-shadow: none;
   background-image: none;
-  &.empty{ color: transparentize($fg, 0.5); }
-  &.occupied{ color: transparentize($fg, 0.5); }
-  &.active{ color: $fg; }
-  &:hover{
-    &.empty{ color: transparentize($fg, 0.2); }
-    &.occupied{ color: $fg; }
-    &.active{ color: $fg; }
+
+  &.empty {
+    color: transparentize($fg, 0.5);
   }
-  &:active{ color: $bg; }
+
+  &.occupied {
+    color: transparentize($fg, 0.5);
+  }
+
+  &.active {
+    color: $fg;
+  }
+
+  &:hover {
+    &.empty {
+      color: transparentize($fg, 0.2);
+    }
+
+    &.occupied {
+      color: $fg;
+    }
+
+    &.active {
+      color: $fg;
+    }
+  }
+
+  &:active {
+    color: $bg;
+  }
+}
+
+.energy {
+  padding: 5px;
+
+  .icon {
+    label {
+      font-size: 96px;
+    }
+
+    padding: 1.5rem 3rem;
+    background-color: $bg;
+  }
 }
 
 .workspaces .btn {
@@ -73,6 +122,7 @@ $best_so_far: rgba(255,255,255,0.1);
   color: $fg;
   text-shadow: 1px 1px $bg;
   margin: 0px 12px;
+  font-size: 20px;
 }
 
 @keyframes blink {
@@ -91,19 +141,21 @@ $best_so_far: rgba(255,255,255,0.1);
 
 calendar {
   font-family: monospace;
+
   &:selected {
-   color: $bg;
-   background-color: $fg;
-   // padding: 6px;
-   border-radius: 3px;
- }
- // .day-number {
- //  padding: 4px 3px;
- // }
+    color: $bg;
+    background-color: $fg;
+    // padding: 6px;
+    border-radius: 3px;
+  }
+
+  // .day-number {
+  //  padding: 4px 3px;
+  // }
 }
 
 calendar:selected {
-   // padding: 6px;
+  // padding: 6px;
 }
 
 
@@ -116,8 +168,8 @@ calendar.header {
 // }
 
 calendar.highlight {
-   // color: $bg;
-   // background-color: $fg;
+  // color: $bg;
+  // background-color: $fg;
 }
 
 calendar:indeterminate {
@@ -132,7 +184,7 @@ calendar:indeterminate {
   }
 }
 
-.power {
+.energy {
   .header {
     font-weight: bold;
   }
@@ -142,6 +194,7 @@ calendar:indeterminate {
   .close {
     opacity: 0;
   }
+
   &:hover .close {
     opacity: 1;
   }

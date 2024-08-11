@@ -5,9 +5,9 @@ parts=($(date "+%H:%M:%S:%d:%m:%a" | tr ":" "\n"))
 case "${parts[5],}" in
   "sun") weekday="🌞" ;;
   "mon") weekday="😫" ;;
-  "tue") weekday="" ;;
+  "tue") weekday="🎲" ;;
   "wed") weekday="🐸" ;;
-  "thu") weekday="" ;;
+  "thu") weekday="♟️" ;;
   "fri") weekday="🍺" ;;
   "sat") weekday="📚" ;;
 esac
