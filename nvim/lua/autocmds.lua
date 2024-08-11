@@ -1,100 +1,194 @@
 local cmd = vim.cmd
+local set = vim.opt
 
-local create_augroup = function(name, autocmds)
-  cmd('augroup ' .. name)
-  cmd('autocmd!')
-  for _, autocmd in ipairs(autocmds) do
-    cmd('autocmd ' .. table.concat(autocmd, ' '))
+local M = {}
+M.create_augroup = function(group_name, autocmds_defs)
+  local group = vim.api.nvim_create_augroup(group_name, { clear = true })
+  for _, autocmd_def in ipairs(autocmds_defs) do
+    local pattern = autocmd_def.pattern
+    local opts = {
+      group = group,
+      callback = autocmd_def.callback
+    }
+    if pattern ~= nil then
+      opts.pattern = pattern
+    end
+    local buffer = autocmd_def.buffer
+    if buffer ~= nil then
+      opts.buffer = buffer
+    end
+    vim.api.nvim_create_autocmd(autocmd_def.event, opts)
   end
   cmd('augroup END')
 end
 
--- cmd('au BufNewFile,BufRead * if &ft == "" | set ft=text | endif')
+local create_augroup = M.create_augroup
 
-cmd('au FocusLost <buffer> :silent! wall')
-
-cmd('au VimResized <buffer> :wincmd =')
-
--- create_augroup('dadbod-completion', {
---   { 'FileType', 'sql,mysql,plsql', "lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} }" }
--- })
-
-create_augroup('ftmail', {
-  { 'BufRead,BufNewFile', '/tmp/nail-*', 'setlocal', 'ft=mail' },
-  { 'BufRead,BufNewFile', '*s-nail-*',   'setlocal', 'ft=mail' },
+create_augroup('Focus', {
+  {
+    event = 'FocusLost',
+    pattern = '<buffer>',
+    callback = function()
+      local buf = vim.api.nvim_get_current_buf()
+      vim.api.nvim_buf_call(buf, function()
+        cmd("silent! write")
+      end)
+    end
+  }
 })
 
-create_augroup('llvm', {
-  { 'BufRead,BufNewFile', '*.ll', 'setf llvm' },
+create_augroup('Resize', {
+  {
+    event = 'VimResized',
+    pattern = '<buffer>',
+    callback = function()
+      local buf = vim.api.nvim_get_current_buf()
+      vim.api.nvim_buf_call(buf, function()
+        cmd("wincmd =")
+      end)
+    end
+  }
 })
 
 create_augroup('term', {
-  { 'BufNew,BufNewFile,BufRead', 'term://*', 'set nospell nolist' },
-})
-
-create_augroup('rustpeg', {
-  { 'BufNewFile,BufRead', '*.rustpeg', 'setf rust' },
+  {
+    event = { 'BufNew', 'BufNewFile', 'BufRead' },
+    pattern = 'term://*',
+    callback = function()
+      set.spell = false
+      set.list = false
+    end
+  },
 })
 
 create_augroup('clojure', {
-  { 'BufNewFile,BufRead', 'build.boot', 'setf clojure' },
-  { 'FileType',           'clojure',    'setlocal lw+=match,go,go-loop,' },
-})
-
-create_augroup('firebase', {
-  { 'BufNewFile,BufRead', 'storage.rules', 'set filetype=firestore' },
-})
-
-create_augroup('clap_input', {
-  { 'Filetype', 'clap_input', "call compe#setup({'enabled': v:false}, 0)" },
-  -- { 'User', 'ClapOnEnter', "echo 'enter' | FocusDisable" },
-  -- { 'User', 'ClapOnExit', "echo 'exit' | FocusEnable" },
-})
-
-create_augroup('cline', {
-  { 'InsertEnter', '*', 'set nocursorline' },
-  { 'InsertLeave', '*', 'set cursorline' },
+  {
+    event = 'FileType',
+    pattern = 'clojure',
+    callback = 'setlocal lw+=match,go,go-loop,'
+  },
 })
 
 create_augroup('trailing', {
-  { 'WinLeave,InsertEnter', '*', 'set listchars-=trail:⌴' },
-  { 'WinEnter,InsertLeave', '*', 'set listchars+=trail:⌴' },
-})
-
-create_augroup('line_return', {
-  { 'BufReadPost', '*', [[if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif]] },
+  {
+    event = { 'WinLeave', 'InsertEnter' },
+    pattern = '*',
+    callback = function() set.list = false end
+  },
+  {
+    event = { 'WinEnter', 'InsertLeave' },
+    pattern = '*',
+    callback = function() set.list = true end
+  },
 })
 
 create_augroup('edit_vimrc', {
-  { 'BufWritePost', '$MYVIMRC', 'luafile $MYVIMRC' },
-})
-
-create_augroup('VimCSS3Syntax', {
-  { 'FileType', 'css,vue', 'setlocal iskeyword+=-' },
+  {
+    event = 'BufWritePost',
+    pattern = vim.fn.expand('$MYVIMRC'),
+    callback = 'luafile $MYVIMRC'
+  },
 })
 
 create_augroup('runNearestTest', {
-  { 'BufNew,BufNewFile,BufReadPost', '*_spec.rb', 'nnoremap <buffer> <Enter> :lua require("neotest").run.run()<CR>' },
-  { 'BufNew,BufNewFile,BufReadPost', '*_test.rb', 'nnoremap <buffer> <Enter> :lua require("neotest").run.run()<CR>' },
-  { 'BufNew,BufNewFile,BufReadPost', '*.spec.js', 'nnoremap <buffer> <Enter> :lua require("neotest").run.run()<CR>' },
-  { 'BufNew,BufNewFile,BufReadPost', '*.spec.ts', 'nnoremap <buffer> <Enter> :lua require("neotest").run.run()<CR>' },
+  {
+    event = { 'BufNew', 'BufNewFile', 'BufReadPost' },
+    pattern = { '*_spec.rb', '*_test.rb', '*.spec.js', '*.spec.ts' },
+    callback = function()
+      vim.keymap.set('n', '<Enter>', require('neotest').run.run, { noremap = true })
+    end
+  }
 })
 
 create_augroup('jscinoptions', {
-  { 'BufRead,BufNewFile', '*.js', 'set cino=(1s' },
+  {
+    event = { 'BufRead', 'BufNewFile' },
+    pattern = '*.js',
+    callback = function() set.cino = '(1s' end
+  },
 })
 
-create_augroup('suckless', {
-  { 'BufWritePost', '$HOME/Code/dwm/config.h', ':silent !cd $HOME/Code/dwm && doas make clean install' },
-  { 'BufWritePost', '$HOME/Code/st/config.h',  ':silent !cd $HOME/Code/st && doas make clean install' },
+create_augroup('Neovim configs', {
+  {
+    event = { 'BufReadPost' },
+    pattern = vim.env.HOME .. '/.config/nvim/**/*.lua',
+    callback = function()
+      vim.bo[0].bufhidden = 'wipe'
+    end
+  }
 })
 
--- create_augroup('chisel', {
---   { 'BufNewFile,BufRead', '*.chsl', 'set filetype=rust' },
--- })
+create_augroup('UserLspConfig', {
+  {
+    event = 'LspAttach',
+    callback = function(ev)
+      local bufnr = ev.buf
+      if ev.data.client_id == nil then
+        return
+      end
 
--- create_augroup('present_mode', {
---   { 'BufNewFile,BufRead', '*.vpm', 'nnoremap <silent> <buffer> <Right> :n<CR>' },
---   { 'BufNewFile,BufRead', '*.vpm', 'nnoremap <silent> <buffer> <Left> :N<CR>' },
---   { 'BufNewFile,BufRead', '*.vpm', 'Goyo' },
--- })
+      local map = vim.keymap.set
+      local opts = { noremap = true, buffer = ev.buf }
+
+      local client = vim.lsp.get_client_by_id(ev.data.client_id)
+      if client == nil then
+        return
+      end
+
+      local navic = require("nvim-navic")
+      if client.server_capabilities.documentSymbolProvider then
+        navic.attach(client, bufnr)
+      end
+
+      local capabilities = client.server_capabilities;
+      if capabilities then
+        if capabilities.completionProvider then
+          vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+        end
+
+        if capabilities.definitionProvider then
+          vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
+        end
+
+        if capabilities.documentFormattingProvider then
+          map("n", "<space>f", vim.lsp.buf.format, opts)
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            callback = function() vim.lsp.buf.format() end
+          })
+        end
+
+        if capabilities.inlayHintProvider then
+          map("n", "<leader>ih", function()
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(), { bufnr = ev.buf })
+          end, opts)
+          vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+        end
+
+        if capabilities.documentRangeFormattingProvider then
+          map("v", "<space>f", function() vim.lsp.buf.range_formatting() end, opts)
+        end
+
+        if capabilities.documentHighlightProvider then
+          create_augroup('lsp_document_highlight', {
+            { event = 'CursorHold',  buffer = bufnr, callback = vim.lsp.buf.document_highlight },
+            { event = 'CursorMoved', buffer = bufnr, callback = vim.lsp.buf.clear_references },
+          })
+        end
+      end
+
+      map('n', 'gD', vim.lsp.buf.declaration)
+      map('n', 'gd', vim.lsp.buf.definition)
+      map('n', 'K', vim.lsp.buf.hover)
+      map('n', 'gs', vim.lsp.buf.signature_help)
+      map('n', 'gi', vim.lsp.buf.implementation)
+      map('n', 'gt', vim.lsp.buf.type_definition)
+      map('n', '<leader>gw', vim.lsp.buf.document_symbol)
+      map('n', '<leader>gW', vim.lsp.buf.workspace_symbol)
+      map('n', '<leader>ee', vim.lsp.util.show_line_diagnostics)
+      map('n', '<leader>ai', vim.lsp.buf.incoming_calls)
+      map('n', '<leader>ao', vim.lsp.buf.outgoing_calls)
+    end
+  }
+})
+
+return M

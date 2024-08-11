@@ -2,14 +2,17 @@ local config = function()
   require 'nvim-treesitter.configs'.setup {
     ensure_installed = {
       "css",
+      "haskell",
       "html",
       "javascript",
       "lua",
+      "markdown",
       "ruby",
       "rust",
+      "scss",
+      "sql",
       "svelte",
       "typescript",
-      "markdown",
     },
     highlight = {
       enable = true
@@ -25,7 +28,7 @@ local config = function()
     },
     indent = {
       enable = true,
-      disable = { 'ruby' }
+      -- disable = { 'ruby' }
     },
     query_linter = {
       enable = true,
@@ -35,9 +38,6 @@ local config = function()
     matchup = {
       enable = true
     },
-  }
-
-  require 'nvim-treesitter.configs'.setup {
     textobjects = {
       select = {
         enable = true,
@@ -47,15 +47,22 @@ local config = function()
           ["if"] = "@function.inner",
           ["ac"] = "@class.outer",
           ["ic"] = "@class.inner",
+          ["ia"] = "@parameter.inner",
+          ["aa"] = "@parameter.outer",
+          ["ib"] = "@block.inner",
+          ["ab"] = "@block.outer",
+          ["ae"] = "@element",
         },
       },
       swap = {
         enable = true,
         swap_next = {
-          ["<leader>a"] = "@parameter.inner",
+          [">a"] = "@parameter.inner",
+          [">e"] = "@element",
         },
         swap_previous = {
-          ["<leader>A"] = "@parameter.inner",
+          ["<a"] = "@parameter.inner",
+          ["<e"] = "@element",
         },
       },
       move = {
@@ -63,31 +70,31 @@ local config = function()
         set_jumps = true,
         goto_next_start = {
           ["]f"] = "@function.outer",
-          ["]]"] = "@class.outer",
+          ["]c"] = "@class.outer",
+          ["]a"] = "@parameter.inner",
         },
         goto_next_end = {
+
           ["]F"] = "@function.outer",
-          ["]["] = "@class.outer",
+          ["]C"] = "@class.outer",
+          ["]A"] = "@parameter.outer",
         },
         goto_previous_start = {
           ["[f"] = "@function.outer",
-          ["[["] = "@class.outer",
+          ["[c"] = "@class.outer",
+          ["[a"] = "@parameter.inner",
         },
         goto_previous_end = {
           ["[F"] = "@function.outer",
-          ["[]"] = "@class.outer",
+          ["[C"] = "@class.outer",
+          ["[A"] = "@parameter.outer",
         },
       },
     },
   }
 
-  require 'nvim-treesitter.configs'.setup {
-    context_commentstring = {
-      enable = true
-    }
-  }
-
   vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+  require('ts_context_commentstring').setup {}
 end
 
 return {
@@ -112,5 +119,6 @@ return {
     "svelte",
     "typescript",
     "markdown",
+    "sql",
   }
 }

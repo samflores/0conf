@@ -1,4 +1,4 @@
 return {
-  'tpope/vim-jdaddy',
-  ft = { 'json' }
+	'tpope/vim-jdaddy',
+	ft = { 'json' }
 }

@@ -1,124 +1,48 @@
-local config = function()
-  require("mason").setup()
-  require("mason-lspconfig").setup()
-  require("lspsaga").setup({
-    ui = {
-      border = "rounded"
-    },
-    rename = {
-      in_select = false,
-    },
-  })
-  require("trouble").setup()
-  require("fidget").setup({
-    text = {
-      spinner = "dots_snake"
-    },
-    window = {
-      blend = 0
-    }
-  })
-  local rt = require("rust-tools")
+local config_lsp = function()
+  local config = require('lspconfig')
+  local snippet_capabilities = vim.lsp.protocol.make_client_capabilities()
+  snippet_capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-  local on_attach = function(client, bufnr)
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-    -- Mappings.
-    local keymap = vim.keymap.set
-    local opts = { noremap = true, silent = true, buffer = bufnr }
-    keymap("n", "gh", "<cmd>Lspsaga lsp_finder<CR>")
-    keymap({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>")
-    keymap("n", "gr", "<cmd>Lspsaga rename<CR>")
-    keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>")
-    keymap("n", "gD", "<cmd>Lspsaga goto_definition<CR>")
-    keymap("n", "<leader>sl", "<cmd>Lspsaga show_line_diagnostics<CR>")
-    keymap("n", "<leader>sc", "<cmd>Lspsaga show_cursor_diagnostics<CR>")
-    keymap("n", "<leader>sb", "<cmd>Lspsaga show_buf_diagnostics<CR>")
-    keymap("n", "[e", "<cmd>Lspsaga diagnostic_jump_prev<CR>")
-    keymap("n", "]e", "<cmd>Lspsaga diagnostic_jump_next<CR>")
-    keymap("n", "[E", function()
-      require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })
-    end)
-    keymap("n", "]E", function()
-      require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
-    end)
-    keymap("n", "<leader>O", "<cmd>Lspsaga outline<CR>")
-    keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>")
-    keymap("n", "<Leader>ci", "<cmd>Lspsaga incoming_calls<CR>")
-    keymap("n", "<Leader>co", "<cmd>Lspsaga outgoing_calls<CR>")
-    keymap({ "n", "t" }, "<A-d>", "<cmd>Lspsaga term_toggle<CR>")
-
-    -- print(vim.inspect(client.server_capabilities));
-    if client.server_capabilities.documentFormattingProvider then
-      keymap("n", "<space>f", vim.lsp.buf.format, opts)
-      vim.api.nvim_exec([[
-        augroup lsp_document_formatting
-        autocmd! * <buffer>
-        autocmd BufWritePre <buffer> lua vim.lsp.buf.format()
-        augroup END
-      ]], false)
-    end
-
-    if client.server_capabilities.documentRangeFormattingProvider then
-      -- keymap("n", "<space>f", vim.lsp.buf.range_formatting, opts)
-    end
-
-    if client.server_capabilities.documentHighlightProvider then
-      -- vim.api.nvim_exec([[
-      --   augroup lsp_document_highlight
-      --   autocmd! * <buffer>
-      --   autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-      --   autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      --   augroup END
-      -- ]], false)
-    end
-  end
-
-  rt.setup {
-    tools = {
-      inlay_hints = {
-        auto = false
-      }
-    },
-    server = { on_attach = on_attach }
+  config.lemminx.setup {}
+  config.steep.setup {}
+  config.arduino_language_server.setup {}
+  config.yamlls.setup {}
+  config.dockerls.setup {}
+  config.docker_compose_language_service.setup {}
+  config.pylsp.setup {}
+  config.bashls.setup {}
+  config.clangd.setup {}
+  config.clojure_lsp.setup {}
+  config.cssls.setup {
+    capabilities = snippet_capabilities
   }
-
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities.textDocument.foldingRange = {
-    dynamicRegistration = false,
-    lineFoldingOnly = true
+  config.denols.setup {
+    root_dir = config.util.root_pattern("deno.json", "deno.jsonc"),
   }
-  local lsp_config = require('lspconfig')
-  lsp_config['bashls'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['clangd'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['clojure_lsp'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['cssls'].setup { on_attach = on_attach, capabilities = capabilities }
-  -- lsp_config['dartls'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['denols'].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    root_dir = lsp_config.util.root_pattern("deno.json", "deno.jsonc"),
-  }
-  -- lsp_config['ember'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['emmet_ls'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['graphql'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['html'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['jsonls'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['jdtls'].setup { on_attach = on_attach, capabilities = capabilities }
-  -- lsp_config['rust_analyzer'].setup { on_attach = on_attach, capabilities = capabilities }
-
-  -- lsp_config['sorbet'].setup { on_attach = on_attach, capabilities = capabilities }
-  -- lsp_config['solargraph'].setup { on_attach = on_attach, capabilities = capabilities }
-  -- lsp_config['typeprof'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['steep'].setup { on_attach = on_attach, capabilities = capabilities }
-  -- lsp_config['ruby_ls'].setup { on_attach = on_attach, capabilities = capabilities }
-
-  lsp_config['sqlls'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['lua_ls'].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
+  -- config.emmet_ls.setup({
+  --   capabilities = snippet_capabilities,
+  --   filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue" },
+  --   init_options = {
+  --     html = {
+  --       options = {
+  --         -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
+  --         ["bem.enabled"] = true,
+  --       },
+  --     },
+  --   }
+  -- })
+  config.graphql.setup {}
+  config.html.setup {}
+  config.jsonls.setup {}
+  config.jdtls.setup {}
+  config.lua_ls.setup {
     settings = {
       Lua = {
+        hint = {
+          enable = true,
+          arrayIndex = 'Disable',
+          setType = true,
+        },
         runtime = {
           version = 'LuaJIT',
           path = vim.split(package.path, ';'),
@@ -135,55 +59,94 @@ local config = function()
       }
     }
   }
-  lsp_config['svelte'].setup { on_attach = on_attach, capabilities = capabilities }
-  lsp_config['tsserver'].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    root_dir = lsp_config.util.root_pattern("package.json"),
+  config.ruby_lsp.setup {}
+  -- config.standardrb.setup {}
+  config.sqlls.setup {
+    root_dir = function() return vim.fn.getcwd() end,
   }
-
-  local handler = function(virtText, lnum, endLnum, width, truncate)
-    local newVirtText = {}
-    local suffix = ('  %d '):format(endLnum - lnum)
-    local sufWidth = vim.fn.strdisplaywidth(suffix)
-    local targetWidth = width - sufWidth
-    local curWidth = 0
-    for _, chunk in ipairs(virtText) do
-      local chunkText = chunk[1]
-      local chunkWidth = vim.fn.strdisplaywidth(chunkText)
-      if targetWidth > curWidth + chunkWidth then
-        table.insert(newVirtText, chunk)
-      else
-        chunkText = truncate(chunkText, targetWidth - curWidth)
-        local hlGroup = chunk[2]
-        table.insert(newVirtText, { chunkText, hlGroup })
-        chunkWidth = vim.fn.strdisplaywidth(chunkText)
-        -- str width returned from truncate() may less than 2nd argument, need padding
-        if curWidth + chunkWidth < targetWidth then
-          suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
-        end
-        break
-      end
-      curWidth = curWidth + chunkWidth
-    end
-    table.insert(newVirtText, { suffix, 'MoreMsg' })
-    return newVirtText
-  end
-  require('ufo').setup({ fold_virt_text_handler = handler })
+  config.svelte.setup {}
+  config.taplo.setup {}
+  config.tsserver.setup {
+    root_dir = config.util.root_pattern("package.json"),
+    settings = {
+      javascript = {
+        inlayHints = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
+      },
+      typescript = {
+        inlayHints = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
+      },
+    },
+  }
 end
 
 return {
-  'neovim/nvim-lspconfig',
-  dependencies = {
-    'glepnir/lspsaga.nvim',
-    { dir = '~/Code/mason.nvim' },
-    { dir = '~/Code/mason-lspconfig.nvim' },
-    'mattfbacon/rust-tools.nvim',
-    'folke/trouble.nvim',
-    'j-hui/fidget.nvim',
-    'kevinhwang91/nvim-ufo',
-    'kevinhwang91/promise-async'
+  {
+    'williamboman/mason.nvim',
+    priority = 50,
+    event = 'UiEnter',
+    opts = {
+      ui = {
+        icons = {
+          package_installed = "",
+          package_pending = "",
+          package_uninstalled = "",
+        },
+      }
+    }
   },
-  config = config,
-  event = 'UiEnter',
+  {
+    'williamboman/mason-lspconfig.nvim',
+    priority = 60,
+    event = 'UiEnter',
+    config = true,
+    dependencies = {
+      'hrsh7th/cmp-nvim-lsp',
+    },
+  },
+  {
+    'neovim/nvim-lspconfig',
+    priority = 70,
+    config = config_lsp,
+    lazy = false,
+    event = 'UiEnter',
+    opts = {
+      inlay_hints = true
+    },
+  },
+  {
+    'folke/trouble.nvim',
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {},
+    keys = {
+      { "<leader>xx", function() require("trouble").toggle("diagnostics") end },
+      { "<leader>xw", function() require("trouble").toggle("workspace_diagnostics") end },
+      { "<leader>xd", function() require("trouble").toggle("document_diagnostics") end },
+      { "<leader>xq", function() require("trouble").toggle("quickfix") end },
+      { "<leader>xl", function() require("trouble").toggle("loclist") end },
+      { "gR",         function() require("trouble").toggle("lsp_references") end },
+    }
+  },
+  {
+    "smjonas/inc-rename.nvim",
+    config = true,
+    keys = {
+      { "<leader>rn", ":IncRename " }
+    }
+  },
 }
