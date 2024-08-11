@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ -n "$(pidof tmux)" ]; then
+  tmux popup -E -w '80%' -h '80%' ranger
+else
+  kitty --detach ranger
+fi
