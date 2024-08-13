@@ -165,7 +165,7 @@ create_augroup('UserLspConfig', {
         end
 
         if capabilities.documentRangeFormattingProvider then
-          map("v", "<space>f", function() vim.lsp.buf.range_formatting() end, opts)
+          map("v", "<space>f", vim.lsp.buf.range_formatting, opts)
         end
 
         if capabilities.documentHighlightProvider then
@@ -184,7 +184,7 @@ create_augroup('UserLspConfig', {
       map('n', 'gt', vim.lsp.buf.type_definition)
       map('n', '<leader>gw', vim.lsp.buf.document_symbol)
       map('n', '<leader>gW', vim.lsp.buf.workspace_symbol)
-      map('n', '<leader>ee', vim.lsp.util.show_line_diagnostics)
+      map('n', '<leader>ee', vim.diagnostic.open_float)
       map('n', '<leader>ai', vim.lsp.buf.incoming_calls)
       map('n', '<leader>ao', vim.lsp.buf.outgoing_calls)
     end
