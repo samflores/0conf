@@ -2,6 +2,10 @@ local set              = vim.opt
 local g                = vim.g
 local api              = vim.api
 
+set.winwidth           = 10
+set.winminwidth        = 10
+set.equalalways        = false
+
 set.autoread           = true
 set.autowrite          = true
 set.backup             = true
@@ -9,7 +13,7 @@ set.backupdir          = '/home/samflores/.config/nvim/backups/'
 set.clipboard          = 'unnamedplus'
 set.completeopt        = 'menu,menuone,noselect'
 set.conceallevel       = 3
-set.cmdheight          = 2
+set.cmdheight          = 1
 set.cursorline         = false
 set.equalalways        = false
 set.expandtab          = true
@@ -79,7 +83,7 @@ set.wrap               = false
 set.writebackup        = true
 
 g.mapleader            = ','
-g.maplocalleader       = '\\'
+g.maplocalleader       = ' '
 g.netrw_special_syntax = 1
 g.netrw_banner         = false
 g.sessionoptions       = 'blank,buffers,curdir,folds,help,tabpages'

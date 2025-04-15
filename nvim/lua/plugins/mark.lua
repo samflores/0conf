@@ -15,6 +15,6 @@ return {
     'dm=',
   },
   opts = {
-    builtin_marks = { ".", "<", ">", "^" },
+    builtin_marks = { '.', '<', '>', '^' },
   }
 }

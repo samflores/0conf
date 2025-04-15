@@ -1,6 +1,7 @@
 return {
   'gbprod/yanky.nvim',
   config = true,
+  event = 'VeryLazy',
   keys = {
     { 'p',     '<Plug>(YankyPutAfter)',      desc = 'Put after',     mode = { 'n', 'x' } },
     { 'P',     '<Plug>(YankyPutBefore)',     desc = 'Put before',    mode = { 'n', 'x' } },

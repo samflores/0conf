@@ -4,7 +4,21 @@ capacity=$(cat /sys/class/power_supply/BAT0/capacity)
 icons=("" "" "" "" "" "" "")
 index=$(( $capacity/15 ))
 
+status=$(cat /sys/class/power_supply/BAT0/status)
+case "$status" in
+  "Discharging")
+    status="b"
+    ;;
+  "Charging")
+    status="a"
+    ;;
+  *)
+    "" 
+    ;;
+esac
+
 jq -n \
   --arg icon "${icons[index]}" \
   --arg value "$capacity" \
-  '{ icon: $icon, value: $value }'
+  --arg status "$status" \
+  '{ icon: $icon, value: $value, status: $status }'

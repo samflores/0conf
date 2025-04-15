@@ -1,5 +1,6 @@
 return {
   'echasnovski/mini.align',
   version = '*',
-  config = true
+  config = true,
+  event = 'BufReadPost'
 }

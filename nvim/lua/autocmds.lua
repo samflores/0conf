@@ -31,7 +31,7 @@ create_augroup('Focus', {
     callback = function()
       local buf = vim.api.nvim_get_current_buf()
       vim.api.nvim_buf_call(buf, function()
-        cmd("silent! write")
+        cmd('silent! write')
       end)
     end
   }
@@ -44,7 +44,7 @@ create_augroup('Resize', {
     callback = function()
       local buf = vim.api.nvim_get_current_buf()
       vim.api.nvim_buf_call(buf, function()
-        cmd("wincmd =")
+        cmd('wincmd =')
       end)
     end
   }
@@ -90,16 +90,6 @@ create_augroup('edit_vimrc', {
   },
 })
 
-create_augroup('runNearestTest', {
-  {
-    event = { 'BufNew', 'BufNewFile', 'BufReadPost' },
-    pattern = { '*_spec.rb', '*_test.rb', '*.spec.js', '*.spec.ts' },
-    callback = function()
-      vim.keymap.set('n', '<Enter>', require('neotest').run.run, { noremap = true })
-    end
-  }
-})
-
 create_augroup('jscinoptions', {
   {
     event = { 'BufRead', 'BufNewFile' },
@@ -127,6 +117,18 @@ create_augroup('UserLspConfig', {
         return
       end
 
+      local signs = {
+        Error = ' ',
+        Warn = ' ',
+        Hint = ' ',
+        Info = ' '
+      }
+
+      for type, icon in pairs(signs) do
+        local hl = 'DiagnosticSign' .. type
+        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
+      end
+
       local map = vim.keymap.set
       local opts = { noremap = true, buffer = ev.buf }
 
@@ -135,7 +137,7 @@ create_augroup('UserLspConfig', {
         return
       end
 
-      local navic = require("nvim-navic")
+      local navic = require('nvim-navic')
       if client.server_capabilities.documentSymbolProvider then
         navic.attach(client, bufnr)
       end
@@ -143,29 +145,43 @@ create_augroup('UserLspConfig', {
       local capabilities = client.server_capabilities;
       if capabilities then
         if capabilities.completionProvider then
-          vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+          vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
         end
 
         if capabilities.definitionProvider then
-          vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
+          vim.bo[bufnr].tagfunc = 'v:lua.vim.lsp.tagfunc'
+        end
+
+        if capabilities.codeActionProvider then
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            pattern = { '*.ts', '*.tsx', '*.js', '*.jsx' },
+            callback = function()
+              local params = {
+                command = '_typescript.organizeImports',
+                arguments = { vim.api.nvim_buf_get_name(0) },
+                title = '',
+              }
+              -- vim.lsp.buf.execute_command(params)
+            end
+          })
         end
 
         if capabilities.documentFormattingProvider then
-          map("n", "<space>f", vim.lsp.buf.format, opts)
+          map('n', '<space>f', vim.lsp.buf.format, opts)
           vim.api.nvim_create_autocmd('BufWritePre', {
             callback = function() vim.lsp.buf.format() end
           })
         end
 
         if capabilities.inlayHintProvider then
-          map("n", "<leader>ih", function()
+          map('n', '<leader>ih', function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(), { bufnr = ev.buf })
           end, opts)
           vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
         end
 
         if capabilities.documentRangeFormattingProvider then
-          map("v", "<space>f", vim.lsp.buf.range_formatting, opts)
+          map('v', '<space>f', vim.lsp.buf.format, opts)
         end
 
         if capabilities.documentHighlightProvider then
@@ -175,7 +191,7 @@ create_augroup('UserLspConfig', {
           })
         end
       end
-
+      map('n', '<leader>li', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end)
       map('n', 'gD', vim.lsp.buf.declaration)
       map('n', 'gd', vim.lsp.buf.definition)
       map('n', 'K', vim.lsp.buf.hover)

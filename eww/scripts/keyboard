@@ -1,7 +1,7 @@
 #!/bin/bash
 
 layout=$(hyprctl getoption input:kb_variant | rg "str:" | cut -f 2 -d' ' | tr -d \")
-icon=""
+icon=""
 
 case "$1" in
   "--get")

@@ -1,7 +1,15 @@
 return {
   {
     'levouh/tint.nvim',
-    event = 'UiEnter',
+    event = 'VeryLazy',
     config = true,
   },
+  {
+    'anuvyklack/windows.nvim',
+    dependencies = {
+      'anuvyklack/middleclass',
+      'anuvyklack/animation.nvim'
+    },
+    config = true
+  }
 }

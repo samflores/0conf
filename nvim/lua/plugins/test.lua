@@ -6,35 +6,35 @@ local config = function()
   require('neotest').setup({
     icons = {
       running_animated = {
-        "⠋", "⠙", "⠚", "⠒", "⠂", "⠂", "⠒", "⠲", "⠴",
-        "⠦", "⠖", "⠒", "⠐", "⠐", "⠒", "⠓", "⠋"
+        '⠋', '⠙', '⠚', '⠒', '⠂', '⠂', '⠒', '⠲', '⠴',
+        '⠦', '⠖', '⠒', '⠐', '⠐', '⠒', '⠓', '⠋'
       },
       passed = '',
       failed = '',
       running = '',
-      skipped = "",
-      unknown = "",
+      skipped = '',
+      unknown = '',
     },
     adapters = {
       require('neotest-python'),
-      require('neotest-rust'),
+      require('rustaceanvim.neotest'),
       require('neotest-rspec')({
         rspec_cmd = function()
           local path = vim.fn.expand('./scripts/run')
           if vim.fn.filereadable(path) ~= 0 or vim.fn.filereadable('Gemfile') ~= 0 then
-            return vim.tbl_flatten({
-              "bundle",
-              "exec",
-              "rspec"
-            })
+            return vim.iter({
+              'bundle',
+              'exec',
+              'rspec'
+            }):flatten():totable()
           else
-            return vim.tbl_flatten({ "rspec" })
+            return vim.iter({ 'rspec' }):flatten():totable()
           end
         end,
         transform_spec_path = function(path)
           if vim.fn.filereadable(vim.fn.expand('./scripts/run')) ~= 0 then
-            local pattern = string.gsub(vim.fn.getcwd() .. "/", "%-", "%%-")
-            local new_path = string.gsub(path, pattern, "")
+            local pattern = string.gsub(vim.fn.getcwd() .. '/', '%-', '%%-')
+            local new_path = string.gsub(path, pattern, '')
             return new_path
           else
             return path
@@ -58,12 +58,12 @@ return {
   'nvim-neotest/neotest',
   config = config,
   keys = {
-    { '<leader>tt', function() require("neotest").run.run() end,                     opt },
-    { '<leader>tf', function() require("neotest").run.run(vim.fn.expand("%")) end,   opt },
-    { '<leader>to', function() require("neotest").output.open({ short = true }) end, opt },
-    { '<leader>ts', function() require("neotest").summary.toggle() end,              opt },
-    { '<leader>ta', function() require("neotest").run.run("spec") end,               opt },
-    { '<leader>tl', function() require("neotest").run.run_last() end,                opt },
+    { '<leader>tt', function() require('neotest').run.run() end,                     opt },
+    { '<leader>tf', function() require('neotest').run.run(vim.fn.expand('%')) end,   opt },
+    { '<leader>to', function() require('neotest').output.open({ short = true }) end, opt },
+    { '<leader>ts', function() require('neotest').summary.toggle() end,              opt },
+    { '<leader>ta', function() require('neotest').run.run('spec') end,               opt },
+    { '<leader>tl', function() require('neotest').run.run_last() end,                opt },
   },
   dependencies = {
     'nvim-neotest/neotest-python',
@@ -74,8 +74,8 @@ return {
     'haydenmeade/neotest-jest',
     'marilari88/neotest-vitest',
     'rcarriga/neotest-vim-test',
-    "nvim-lua/plenary.nvim",
-    "nvim-treesitter/nvim-treesitter",
-    "antoinemadec/FixCursorHold.nvim"
+    'nvim-lua/plenary.nvim',
+    'nvim-treesitter/nvim-treesitter',
+    'antoinemadec/FixCursorHold.nvim'
   }
 }

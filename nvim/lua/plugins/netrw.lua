@@ -1,4 +1,5 @@
 return {
   'prichrd/netrw.nvim',
-  config = true
+  config = true,
+  ft = 'netrw'
 }

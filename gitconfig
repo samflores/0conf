@@ -1,6 +1,6 @@
-; [core]
-;   pager = delta
-; 	excludesFile = ~/.global_gitignore
+[core]
+  ; pager = delta
+	excludesFile = ~/.gitignore_global
 
 ; [delta]
 ;   plus-color = "#012800"
@@ -15,3 +15,13 @@
 
 [user]
 	name = Samuel Flores
+	email = me@samflor.es
+
+[safe]
+	directory = /home/samflores/Code/OpenTabletDriver
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential

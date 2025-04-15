@@ -1,3 +1,4 @@
 return {
-    'projectfluent/fluent.vim'
+  'samflores/fluent.vim',
+  ft = 'ftl'
 }

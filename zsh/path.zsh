@@ -6,8 +6,8 @@ fi
 # export PATH=""
 typeset -U path
 path=(
-      $HOME/.gem/ruby/3.2.0/bin/
       $HOME/.gem/ruby/3.3.0/bin/
+      $HOME/.gem/ruby/3.2.0/bin/
       $HOME/.gem/ruby/3.1.0/bin/
       $HOME/.yarn/bin
       $HOME/.config/yarn/global/node_modules/.bin

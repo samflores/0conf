@@ -74,3 +74,17 @@ function wttr() {
   [ "$(tput cols)" -lt 125 ] && request+='n'
   curl -H "Accept-Language: ${LANG%_*}" --compressed "$request"
 }
+
+_e() {
+    local config_home="/home/samflores/.config"
+    local data_home="/home/samflores/.local/share"
+    doas sh -c "XDG_CONFIG_HOME='$config_home' XDG_DATA_HOME='$data_home' nvim '$*'"
+}
+
+compdef _e=nvim
+
+function resize_sprites() {
+	convert "${1}.png -crop 32x32 +repage -gravity center -crop 12x12+0+0 +repage frame_%02d.png"
+	convert "+append frame_*.png ${1}2.png"
+  rm -f "frame_*.png"
+}

@@ -2,6 +2,7 @@
 
 (deflisten workspaces           :initial  "[]" `scripts/workspaces --get`)
 (deflisten active_workspace     :initial  "1"  `scripts/workspaces --active`)
+(deflisten active_submap        :initial  ""  `scripts/submap --active`)
 (deflisten window               :initial  "-"  `scripts/window     title`)
 (deflisten music
   :initial "{}"
@@ -31,7 +32,7 @@
   :class "bar"
   :monitor 0
   :windowtype "dock"
-  :geometry (geometry :y "3px" :width "3834px" :height "0px" :anchor "top center")
+  :geometry (geometry :y "3px" :width "2554px" :height "0px" :anchor "top center")
   :exclusive true
 
   (centerbox :class "main-container"
@@ -44,6 +45,7 @@
     (box :halign "end"
          :spacing 3
          :space-evenly false
+      (submap_module)
       (music_module)
       (sound_module)
       ; (keyboard_module)
@@ -56,7 +58,9 @@
   :class "bar"
   :monitor 1
   :windowtype "dock"
-  :geometry (geometry :y "3px" :width "1914px" :height "0px" :anchor "top center")
+  ; :geometry (geometry :y "3px" :width "1914px" :height "0px" :anchor "top center")
+  ; :geometry (geometry :y "3px" :width "1074px" :height "0px" :anchor "top center")
+  :geometry (geometry :y "3px" :width "3434px" :height "0px" :anchor "top center")
   :exclusive true
 
   (centerbox :class "main-container"
@@ -64,7 +68,9 @@
       :spacing 3
       :space-evenly false
       (clock_module)
-      (sound_module))
+      (sound_module)
+      (submap_module)
+    )
     (box)
     (box
       :halign "end"
@@ -72,6 +78,29 @@
       (window_module :start 6)
       (workspaces_module :start 6)
       (label :visible false :text active_workspace))))
+
+; (defwindow bar3
+;   :class "bar"
+;   :monitor 2
+;   :windowtype "dock"
+;   :geometry (geometry :y "1047px" :width "1914px" :height "0px" :anchor "top center")
+;   :exclusive true
+;
+;   (centerbox :class "main-container"
+;     (box
+;       :spacing 3
+;       :space-evenly false
+;       (clock_module)
+;       (sound_module)
+;       (submap_module)
+;     )
+;     (box)
+;     (box
+;       :halign "end"
+;       :space-evenly false
+;       (window_module :start 6)
+;       (workspaces_module :start 6)
+;       (label :visible false :text active_workspace))))
 
 (defwidget workspaces_module [start]
   (box :class "module"
@@ -88,13 +117,22 @@
 
 (defwidget workspace_button [workspace start]
   (button
-    :class "btn ${workspace.id == active_workspace ? "active" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
+    :class "btn  ${workspace.id == active_workspace ? "active" : ""} ${arraylength(workspace.windows) > 0 ? "occupied" : "empty"}"
     :onclick "hyprctl dispatch workspace ${workspace.id}"
     :valign "center"
     :visible {workspace.id >= start && workspace.id <= start + 4}
+    (box :class "${workspace.fullscreen ? "fullscreen" : ""}" :style "min-width: ${16 + (8 * max(arraylength(workspace.windows)-1, 0))}px;")))
+; (label
+;   :class "icon"
+;   :text {arraylength(workspace.windows) > 0 ? "${workspace.id == active_workspace ? "" : ""}" : ""}))
+
+(defwidget submap_module []
+  (eventbox :onhover "eww update window_rev=true"
+            :onhoverlost "eww update window_rev=false"
     (label
-      :class "icon"
-      :text {workspace.windows > 0 ? "${workspace.id == active_workspace ? "" : ""}" : ""})))
+      :class "window"
+      :visible {active_submap != ''}
+      :text {"[${keyboard.icon}  ${active_submap}]"})))
 
 (defwidget window_module [start]
   (eventbox :onhover "eww update window_rev=true"
@@ -197,7 +235,7 @@
     (box :class "module ${battery.value <= 30 ? 'warn' : battery.value <= 15 ? 'critical' : ''}" :space-evenly "false" :orientation "h" ;:spacing "3"
       (button :class "btn active"
               :onclick "scripts/pop energy"
-        (label :text {battery.icon}
+        (label :text "${battery.icon}"
                :class "icon"))
       (revealer :transition "slideleft"
                 :reveal {batt_rev || battery.value < 15}
@@ -278,6 +316,9 @@
     (box :class "main-container popup" :orientation "h" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
       (eventbox :cursor "pointer"
         (box  :class "energy" :orientation "h" :space-evenly "false" :spacing 5 :hexpand "false" :vexpand "false"
+          (button :class "icon"
+                  :onclick "loginctl lock-session"
+            "" )
           (button :class "icon"
                   :onclick "loginctl suspend"
             "" )

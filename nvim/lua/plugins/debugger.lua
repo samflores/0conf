@@ -1,8 +1,8 @@
 local config = function()
   local dap = require('dap')
-  local dapui = require("dapui")
-  local dap_vt = require("nvim-dap-virtual-text")
-  local dap_vsc_js = require("dap-vscode-js")
+  local dapui = require('dapui')
+  local dap_vt = require('nvim-dap-virtual-text')
+  local dap_vsc_js = require('dap-vscode-js')
   local dap_ruby = require('dap-ruby')
 
   vim.api.nvim_set_hl(0, 'DapBreakpoint', { link = 'DiffAdd' })
@@ -27,50 +27,50 @@ local config = function()
   dap_ruby.setup()
   dap_vt.setup()
   dap_vsc_js.setup({
-    debugger_path = vim.fn.stdpath("data") .. "/lazy/vscode-js-debug",
+    debugger_path = vim.fn.stdpath('data') .. '/lazy/vscode-js-debug',
     adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' },
   })
 
   dap.adapters.codelldb = {
     type = 'server',
-    port = "${port}",
+    port = '${port}',
     executable = {
-      command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
-      args = { "--port", "${port}" },
+      command = vim.fn.stdpath('data') .. '/mason/packages/codelldb/extension/adapter/codelldb',
+      args = { '--port', '${port}' },
     }
   }
 
-  for _, language in ipairs({ "typescript", "javascript", "svelte" }) do
+  for _, language in ipairs({ 'typescript', 'javascript', 'svelte' }) do
     dap.configurations[language] = {
       {
-        type = "pwa-node",
-        request = "attach",
+        type = 'pwa-node',
+        request = 'attach',
         processId = require 'dap.utils'.pick_process,
-        name = "Attach debugger to existing `node --inspect` process",
+        name = 'Attach debugger to existing `node --inspect` process',
         sourceMaps = true,
         resolveSourceMapLocations = {
-          "${workspaceFolder}/**",
-          "!**/node_modules/**" },
-        cwd = "${workspaceFolder}/src",
-        skipFiles = { "${workspaceFolder}/node_modules/**/*.js" },
+          '${workspaceFolder}/**',
+          '!**/node_modules/**' },
+        cwd = '${workspaceFolder}/src',
+        skipFiles = { '${workspaceFolder}/node_modules/**/*.js' },
       },
       {
-        type = "pwa-chrome",
-        name = "Launch Chrome to debug client",
-        request = "launch",
-        url = "http://localhost:5173",
+        type = 'pwa-chrome',
+        name = 'Launch Chrome to debug client',
+        request = 'launch',
+        url = 'http://localhost:5173',
         sourceMaps = true,
-        protocol = "inspector",
+        protocol = 'inspector',
         port = 9222,
-        webRoot = "${workspaceFolder}/src",
-        skipFiles = { "**/node_modules/**/*", "**/@vite/*", "**/src/client/*", "**/src/*" },
+        webRoot = '${workspaceFolder}/src',
+        skipFiles = { '**/node_modules/**/*', '**/@vite/*', '**/src/client/*', '**/src/*' },
       },
-      language == "javascript" and {
-        type = "pwa-node",
-        request = "launch",
-        name = "Launch file in new node process",
-        program = "${file}",
-        cwd = "${workspaceFolder}",
+      language == 'javascript' and {
+        type = 'pwa-node',
+        request = 'launch',
+        name = 'Launch file in new node process',
+        program = '${file}',
+        cwd = '${workspaceFolder}',
       } or nil,
     }
   end
@@ -83,15 +83,15 @@ local config = function()
       program = function()
         return coroutine.create(function(dap_run_co)
           local cwd = vim.fn.getcwd()
-          local globs = vim.fn.globpath(cwd, "../target/debug/*")
-          local files = vim.split(globs, "\n");
+          local globs = vim.fn.globpath(cwd, 'target/debug/*')
+          local files = vim.split(globs, '\n');
           files = vim.tbl_filter(
             function(path) return vim.fn.executable(path) == 1 end,
             files
           )
           files = vim.tbl_map(
             function(path)
-              local pattern = string.gsub(cwd .. "/", "%-", "%%-")
+              local pattern = string.gsub(cwd .. '/', '%-', '%%-')
               return path:gsub(pattern, '')
             end,
             files
@@ -102,17 +102,18 @@ local config = function()
           end)
         end)
       end,
-      cwd = '${workspaceFolder}',
+      -- cwd = '${workspaceFolder}',
+      cwd = 'target/debug',
       stopOnEntry = false,
       args = {},
     }
   }
 
-  dap.listeners.after.event_initialized["dapui_config"] = function()
+  dap.listeners.after.event_initialized['dapui_config'] = function()
     dapui.open({ reset = true })
   end
-  dap.listeners.before.event_terminated["dapui_config"] = dapui.close
-  dap.listeners.before.event_exited["dapui_config"] = dapui.close
+  dap.listeners.before.event_terminated['dapui_config'] = dapui.close
+  dap.listeners.before.event_exited['dapui_config'] = dapui.close
 end
 
 return {
@@ -125,12 +126,11 @@ return {
     'mxsdev/nvim-dap-vscode-js',
     {
       'microsoft/vscode-js-debug',
-      version = "1.x",
-      build = "npm i && npm run compile vsDebugServerBundle && mv dist out"
+      version = '1.x',
+      build = 'npm i && npm run compile vsDebugServerBundle && mv dist out'
     }
   },
-  lazy = false,
-  -- event = 'UiEnter',
+  -- lazy = false,
   config = config,
   keys = {
     { '<leader>db', function() require 'dap'.toggle_breakpoint() end },
@@ -144,8 +144,8 @@ return {
     { '<leader>di', function() require 'dap'.step_into() end },
     { '<leader>dO', function() require 'dap'.step_out() end },
     { '<leader>dd', function() require 'dapui'.toggle() end },
-    { "<Leader>dw", function() require('dapui').float_element('watches', { enter = true }) end },
-    { "<Leader>ds", function() require('dapui').float_element('scopes', { enter = true }) end },
-    { "<Leader>dr", function() require('dapui').float_element('repl', { enter = true }) end },
+    { '<Leader>dw', function() require('dapui').float_element('watches', { enter = true }) end },
+    { '<Leader>ds', function() require('dapui').float_element('scopes', { enter = true }) end },
+    { '<Leader>dr', function() require('dapui').float_element('repl', { enter = true }) end },
   }
 }

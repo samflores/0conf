@@ -1,4 +1,4 @@
-local map = vim.api.nvim_set_keymap
+local map = vim.keymap.set
 
 local noremap_opt = { noremap = true }
 local silent_noremap_opt = { silent = true, noremap = true }
@@ -73,8 +73,8 @@ map('n', '<leader>i', ':set list!<cr>', silent_noremap_opt)
 -- Toggle spell
 map('n', '<leader>Z', ':set spell!<cr>', silent_noremap_opt)
 
--- [U]nfuck my screen
 map('n', 'U', ':syntax sync fromstart<cr>:redraw!<cr>', silent_noremap_opt)
+-- [U]nfuck my screen
 
 -- Keep search matches in the middle of the window.
 map('n', 'n', 'nzzzv', silent_noremap_opt)
@@ -97,10 +97,10 @@ map('', '<silent>gj', 'j', silent_noremap_opt)
 map('', '<silent>gk', 'k', silent_noremap_opt)
 
 -- Easy buffer navigation
-map('', '<C-h>', '<C-w>h', silent_noremap_opt)
-map('', '<C-j>', '<C-w>j', silent_noremap_opt)
-map('', '<C-k>', '<C-w>k', silent_noremap_opt)
-map('', '<C-l>', '<C-w>l', silent_noremap_opt)
+-- map('', '<C-h>', '<C-w>h', silent_noremap_opt)
+-- map('', '<C-j>', '<C-w>j', silent_noremap_opt)
+-- map('', '<C-k>', '<C-w>k', silent_noremap_opt)
+-- map('', '<C-l>', '<C-w>l', silent_noremap_opt)
 
 map('n', '<leader>bo', ':%bdelete|edit #|bdelete #<cr>|\'"', silent_noremap_opt)
 
@@ -135,7 +135,14 @@ map('n', '<Leader>0', '0', silent_noremap_opt)
 -- Leave insert mode on Terminals easily
 map('t', '<Esc>', [[<C-\><C-n>]], silent_noremap_opt)
 
-
 -- RestartLsp
 map('n', '<leader>ll', ':LspRestart<cr>', silent_noremap_opt)
 map('n', '<leader>li', ':LspInfo<cr>', silent_noremap_opt)
+
+
+map('n', '<A-j>', ':m .+1<CR>==', silent_noremap_opt)
+map('n', '<A-k>', ':m .-2<CR>==', silent_noremap_opt)
+map('v', '<A-j>', ":m '>+1<CR>gv=gv", silent_noremap_opt)
+map('v', '<A-k>', ":m '<-2<CR>gv=gv", silent_noremap_opt)
+
+map('n', '<leader>yy', function() vim.fn.setreg('+', vim.fn.expand('%')) end, silent_noremap_opt)

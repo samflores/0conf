@@ -1,4 +1,4 @@
 return {
   'tpope/vim-repeat',
-  event = 'UiEnter',
+  event = 'VeryLazy',
 }

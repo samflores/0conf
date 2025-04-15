@@ -70,16 +70,36 @@ $shadow: rgba($bg, 0.3);
   box-shadow: none;
   background-image: none;
 
-  &.empty {
-    color: transparentize($fg, 0.5);
+  box {
+    margin-right: 4px;
+    min-height: 16px;
+    border-radius: 10px;
+    border: 1px solid transparentize($fg, 0.7);
+    background-color: transparent;
+  }
+
+  .fullscreen {
+    border-radius: 2px;
+  }
+
+  &.empty.active {
+    box {
+      background-color: transparent;
+    }
   }
 
   &.occupied {
-    color: transparentize($fg, 0.5);
+    box {
+      border: 1px solid transparent;
+      background-color: transparentize($fg, 0.7);
+    }
   }
 
   &.active {
-    color: $fg;
+    box {
+      border: 2px solid $fg;
+      background-color: $fg;
+    }
   }
 
   &:hover {
@@ -100,6 +120,7 @@ $shadow: rgba($bg, 0.3);
     color: $bg;
   }
 }
+
 
 .energy {
   padding: 5px;

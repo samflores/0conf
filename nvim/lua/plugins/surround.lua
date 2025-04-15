@@ -1,4 +1,6 @@
 return {
-  'tpope/vim-surround',
-  event = 'UiEnter',
+  'echasnovski/mini.surround',
+  version = '*',
+  event = 'VeryLazy',
+  opts = {}
 }

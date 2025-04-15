@@ -1,28 +1,38 @@
 local config = function()
-  local actions = require("telescope.actions")
+  local actions = require('telescope.actions')
   -- local trouble = require("trouble.providers.telescope")
-  local trouble = require("trouble.sources.telescope")
-  local action_layout = require("telescope.actions.layout")
-  require("telescope").setup {
+  local trouble = require('trouble.sources.telescope')
+  local action_layout = require('telescope.actions.layout')
+  require('telescope').setup {
     defaults = {
       mappings = {
         n = {
-          ["<M-S-p>"] = action_layout.toggle_preview,
-          ["<M-t>"] = trouble.open,
-          ["<C-S-q>"] = actions.send_to_qflist + actions.open_qflist,
-          ["<M-S-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+          ['p'] = action_layout.toggle_preview,
+          ['x'] = trouble.open,
+          ['f'] = actions.send_to_qflist + actions.open_qflist,
+          ['<S-f>'] = actions.send_selected_to_qflist + actions.open_qflist,
         },
         i = {
-          ["<M-S-p>"] = action_layout.toggle_preview,
-          ["<esc>"] = actions.close,
-          ["<M-t>"] = trouble.open,
+          ['<M-S-p>'] = action_layout.toggle_preview,
+          ['<C-y>'] = actions.select_default,
+          ['<esc>'] = actions.close,
+          ['<C-x>'] = trouble.open,
+          ['<C-f>'] = actions.send_to_qflist + actions.open_qflist,
+          ['<C-S-f>'] = actions.send_selected_to_qflist + actions.open_qflist,
+          ['<Up>'] = function() end,
+          ['<Down>'] = function() end,
         },
       },
     },
     border = {
-      prompt = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+      prompt = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
     },
     pickers = {
+      help_tags = {
+        previewer = true,
+        theme = 'ivy',
+        prompt_prefix = '󰮥 ',
+      },
       find_files = {
         previewer = false,
         theme = 'ivy',
@@ -89,21 +99,20 @@ local config = function()
           preview_width = 0.7,
         },
       },
-      ["ui-select"] = {
-        require("telescope.themes").get_ivy {}
+      ['ui-select'] = {
+        require('telescope.themes').get_ivy {}
       }
     }
   }
   require('telescope').load_extension('dap')
   require('telescope').load_extension('file_browser')
   require('telescope').load_extension('fzy_native')
-  require("telescope").load_extension('ui-select')
+  require('telescope').load_extension('ui-select')
   require('telescope').load_extension('lazy')
 end
 
 return {
   'nvim-telescope/telescope.nvim',
-  event = { "VeryLazy" },
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-telescope/telescope-dap.nvim',
@@ -115,6 +124,16 @@ return {
     'axkirillov/easypick.nvim',
   },
   keys = {
+    {
+      '<leader>o?',
+      function()
+        require('telescope.builtin')
+            .help_tags()
+      end,
+      noremap = true,
+      silent = true,
+      desc = 'Search help',
+    },
     {
       'z=',
       function()
@@ -132,7 +151,17 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Find files"
+      desc = 'Find files'
+    },
+    {
+      '<leader>oO',
+      function()
+        require('telescope.builtin')
+            .find_files({ hidden = true })
+      end,
+      noremap = true,
+      silent = true,
+      desc = 'Find files'
     },
     {
       '<leader>o.',
@@ -148,11 +177,11 @@ return {
       '<leader>ov',
       function()
         require('telescope.builtin')
-            .find_files({ cwd = '~/.config/nvim/', prompt_prefix = ' ' })
+            .find_files({ cwd = vim.fn.stdpath('config'), prompt_prefix = ' ' })
       end,
       noremap = true,
       silent = true,
-      desc = "Find vim config files"
+      desc = 'Find vim config files'
     },
     {
       '<leader>og',
@@ -162,7 +191,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Find Git files"
+      desc = 'Find Git files'
     },
     {
       '<leader>ob',
@@ -186,7 +215,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Find open buffer"
+      desc = 'Find open buffer'
     },
     {
       '<leader>oh',
@@ -196,7 +225,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Find in project history"
+      desc = 'Find in project history'
     },
     {
       '<leader>oH',
@@ -206,7 +235,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Find in all history"
+      desc = 'Find in all history'
     },
     {
       '<leader>ss',
@@ -216,7 +245,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Live grep"
+      desc = 'Live grep'
     },
     {
       '<leader>s.',
@@ -226,7 +255,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Grep word under cursor"
+      desc = 'Grep word under cursor'
     },
     {
       '<leader>lr',
@@ -236,7 +265,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Find LSP references"
+      desc = 'Find LSP references'
     },
     {
       '<leader>ld',
@@ -246,7 +275,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Find LSP definitions"
+      desc = 'Find LSP definitions'
     },
     {
       '<leader>le',
@@ -256,7 +285,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Find LSP diagnostics"
+      desc = 'Find LSP diagnostics'
     },
     {
       '<leader>ls',
@@ -266,7 +295,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Find LSP document symbols"
+      desc = 'Find LSP document symbols'
     },
     {
       '<leader>lS',
@@ -276,7 +305,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Find LSP workspace symbols"
+      desc = 'Find LSP workspace symbols'
     },
     {
       '<leader>gs',
@@ -286,7 +315,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Git status"
+      desc = 'Git status'
     },
     {
       '<leader>gb',
@@ -296,7 +325,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Git brances"
+      desc = 'Git brances'
     },
     {
       '<leader>tS',
@@ -306,7 +335,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Find treesitter symbols"
+      desc = 'Find treesitter symbols'
     },
     {
       '<leader>BB',
@@ -317,7 +346,7 @@ return {
       end,
       noremap = true,
       silent = true,
-      desc = "Browse project"
+      desc = 'Browse project'
     },
     {
       '<leader>B.',
@@ -332,5 +361,6 @@ return {
     },
   },
   config = config,
-  cmd = 'Telescope',
+  event = 'UiEnter',
+  -- cmd = 'Telescope',
 }

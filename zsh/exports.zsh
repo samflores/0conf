@@ -31,7 +31,7 @@ export LANG='en_US.UTF-8'
 export LC_ALL='en_US.UTF-8'
 export CLICOLOR='yes'
 export PAGER='less'
-[[ -e $commands[nvr] ]] && 
+[[ -e $commands[nvr] ]] &&
   alias e='open-vim-with-nvr' &&
   export VISUAL='nvr -s --servername "$(pwd)/.nvim" --remote' &&
   export GIT_EDITOR='nvr -s -cc split --servername "$(pwd)/.nvim" --remote-wait'
@@ -55,3 +55,6 @@ export DENO_INSTALL="/home/samflores/.deno"
 
 export BUNDLE_PATH=$HOME/.gem/ruby/3.3.0
 export BUNDLE_CACHE_PATH=$HOME/.bundle/cache
+
+export ANDROID_NDK_ROOT=/home/samflores/Android/Sdk/ndk/27.0.12077973/
+export ANDROID_HOME=/home/samflores/Android/Sdk/

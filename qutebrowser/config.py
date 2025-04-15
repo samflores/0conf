@@ -1151,14 +1151,14 @@ c.editor.command = ['kitty', '-e', 'nvim', '-f', '{file}', '-c', 'normal {line}G
 ## font setting, it's replaced with the fonts listed here. If set to an
 ## empty value, a system-specific monospace default is used.
 ## Type: List of Font, or Font
-c.fonts.default_family = ['Rec Mono Semicasual']
+c.fonts.default_family = ['monospace']
 
 ## Default font size to use. Whenever "default_size" is used in a font
 ## setting, it's replaced with the size listed here. Valid values are
 ## either a float value with a "pt" suffix, or an integer value with a
 ## "px" suffix.
 ## Type: String
-# c.fonts.default_size = '10pt'
+c.fonts.default_size = '16pt'
 
 ## Font used for the downloadbar.
 ## Type: Font
@@ -1585,7 +1585,7 @@ c.hints.chars = 'arstdhneio'
 
 ## Load a restored tab as soon as it takes focus.
 ## Type: Bool
-c.session.lazy_restore = True
+c.session.lazy_restore = False
 
 ## Languages to use for spell checking. You can check for available
 ## languages and install dictionaries using scripts/dictcli.py. Run the

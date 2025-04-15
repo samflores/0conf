@@ -1,18 +1,38 @@
 return {
   {
-    "NeogitOrg/neogit",
+    'NeogitOrg/neogit',
     dependencies = {
-      "nvim-lua/plenary.nvim",         -- required
-      "nvim-telescope/telescope.nvim", -- optional
-      "sindrets/diffview.nvim"         -- optional
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      {
+        'sindrets/diffview.nvim',
+        opts = {
+          hooks = {
+            view_opened = function()
+              require('diffview.actions').toggle_files()
+            end,
+          },
+        }
+      }
     },
+
     keys = {
-      { 'gia', function() vim.cmd "silent !git add %:p" end,                           noremap = true, silent = true, desc = "Add file to index" },
-      { 'gws', function() require 'neogit'.open({ kind = 'auto' }) end,                noremap = true, silent = true, desc = "Git status" },
-      { 'gpp', function() require 'neogit'.open({ 'push' }) end,                       noremap = true, silent = true, desc = "Git status" },
-      { 'gpf', function() require 'neogit'.open({ 'push', '--force-with-lease' }) end, noremap = true, silent = true, desc = "Git status" },
-      { 'gwd', ':DiffviewOpen<CR>',                                                    noremap = true, silent = true, desc = "Open Git diff" },
-      { 'gwD', ':DiffviewClose<CR>',                                                   noremap = true, silent = true, desc = "Close Git diff" },
+      { 'gia', function() vim.cmd 'silent !git add %:p' end,                           noremap = true, silent = true, desc = 'Add file to index' },
+      { 'gws', function() require 'neogit'.open({ kind = 'auto' }) end,                noremap = true, silent = true, desc = 'Git status' },
+      { 'gpp', function() require 'neogit'.open({ 'push' }) end,                       noremap = true, silent = true, desc = 'Git status' },
+      { 'gpf', function() require 'neogit'.open({ 'push', '--force-with-lease' }) end, noremap = true, silent = true, desc = 'Git status' },
+      { 'gwd', ':DiffviewOpen<CR>',                                                    noremap = true, silent = true, desc = 'Open Git diff' },
+      { 'gwD', ':DiffviewClose<CR>',                                                   noremap = true, silent = true, desc = 'Close Git diff' },
+    },
+    config = true
+  },
+
+  {
+    'pwntester/octo.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      'nvim-tree/nvim-web-devicons',
     },
     config = true
   },
@@ -20,45 +40,18 @@ return {
   {
     'almo7aya/openingh.nvim',
     keys = {
-      { 'gbb', ':OpenInGHFile<CR>',       mode = "n", noremap = true, silent = true, desc = "Open file in hosting provider" },
-      { 'gbb', ':OpenInGHFileLines<CR>',  mode = "v", noremap = true, silent = true, desc = "Open file in hosting provider with lines selected" },
-      { 'gbc', ':OpenInGHFile+<CR>',      mode = "n", noremap = true, silent = true, desc = "Copy link to file in hosting provider" },
-      { 'gbc', ':OpenInGHFileLines+<CR>', mode = "v", noremap = true, silent = true, desc = "Copy link to file in hosting provider with lines selected" },
+      { 'gbb', ':OpenInGHFile<CR>',       mode = 'n', noremap = true, silent = true, desc = 'Open file in hosting provider' },
+      { 'gbb', ':OpenInGHFileLines<CR>',  mode = 'v', noremap = true, silent = true, desc = 'Open file in hosting provider with lines selected' },
+      { 'gbc', ':OpenInGHFile+<CR>',      mode = 'n', noremap = true, silent = true, desc = 'Copy link to file in hosting provider' },
+      { 'gbc', ':OpenInGHFileLines+<CR>', mode = 'v', noremap = true, silent = true, desc = 'Copy link to file in hosting provider with lines selected' },
     }
   },
 
-  -- {
-  --   'tpope/vim-fugitive',
-  --   dependencies = {
-  --     'tpope/vim-rhubarb'
-  --   },
-  --   keys = {
-  --     { 'gws', ':Git<CR>',                         noremap = true, silent = true, desc = "Git status" },
-  --     { 'gia', ':Gwrite<CR>',                      noremap = true, silent = true, desc = "Add file to index" },
-  --     { 'gco', ':Gread<CR>',                       noremap = true, silent = true, desc = "Checkout file" },
-  --     { 'gwd', ':vert :Gdiffsplit<CR>',            noremap = true, silent = true, desc = "Git diff" },
-  --     { 'gcm', ':Git commit<CR>',                  noremap = true, silent = true, desc = "Git commit" },
-  --     { 'gpf', ':Git push --force-with-lease<CR>', noremap = true, silent = true, desc = "Force push changes to origin" },
-  --     { 'gpp', ':Git push<CR>',                    noremap = true, silent = true, desc = "Push changes to origin" },
-  --     { 'grc', ':Git rebase --continue<CR>',       noremap = true, silent = true, desc = "Continue rebase operation" },
-  --     { 'gra', ':Git rebase --abobrt<CR>',         noremap = true, silent = true, desc = "Cancel rebase operation" },
-  --     { 'gbb', ':GBrowse<CR>',                     noremap = true, silent = true, desc = "Open file in hosting provider" },
-  --     {
-  --       'gbc',
-  --       ':GBrowse!<CR>',
-  --       noremap = true,
-  --       silent = true,
-  --       desc =
-  --       "Copy link to file in hosting provider"
-  --     },
-  --   },
-  --   cmd = { 'Git', 'GBrowse' },
-  -- },
-
   {
     'akinsho/git-conflict.nvim',
-    version = "*",
-    config = true
+    version = '*',
+    config = true,
+    event = 'VeryLazy'
   },
 
   {
@@ -66,7 +59,7 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim'
     },
-    event = 'UiEnter',
+    event = 'VeryLazy',
     config = function()
       require('gitsigns').setup {
         signcolumn              = true,
