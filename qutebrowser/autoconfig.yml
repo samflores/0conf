@@ -8,25 +8,43 @@ config_version: 2
 settings:
   colors.webpage.bg:
     global: white
+  colors.webpage.darkmode.algorithm:
+    global: lightness-cielab
   colors.webpage.darkmode.enabled:
-    global: true
+    global: false
   content.autoplay:
     global: false
   content.blocking.enabled:
     global: true
   content.desktop_capture:
+    https://app.slack.com: true
     https://meet.google.com: true
   content.geolocation:
+    http://localhost:8123: true
+    https://g1.globo.com: false
+    https://planoscelular.claro.com.br: true
     https://www.sexlog.com: true
+    https://www.smiles.com.br: true
+    https://www.speedtest.net: true
     https://www.strava.com: true
   content.headers.user_agent:
     global: Mozilla/5.0 ({os_info}) AppleWebKit/{webkit_version} (KHTML, like Gecko)
       {qt_key}/{qt_version} {upstream_browser_key}/{upstream_browser_version} Safari/{webkit_version}O
   content.javascript.clipboard:
+    http://localhost:6052: access-paste
+    http://localhost:8123: access-paste
     https://chatgpt.com: access-paste
+    https://claude.ai: access-paste
+    https://freesvgicons.com: access-paste
     https://github.com: access-paste
+    https://mail.google.com: access-paste
+    https://pi.equatorialenergia.com.br: access-paste
+    https://share.1password.com: access-paste
+    https://us-east-1.console.aws.amazon.com: access-paste
+    https://www.urlencoder.org: access-paste
   content.media.audio_capture:
     https://app.slack.com: true
+    https://chatgpt.com: true
     https://discord.com: true
     https://meet.google.com: true
     https://zoom.us: true
@@ -36,8 +54,10 @@ settings:
     https://us02web.zoom.us: true
     https://us06web.zoom.us: true
   content.media.video_capture:
+    https://app.slack.com: true
     https://discord.com: true
     https://greencam.netlify.app: true
+    https://liveness.mercadolivre.com.br: true
     https://meet.google.com: true
     https://zoom.us: true
   content.mouse_lock:
@@ -45,10 +65,19 @@ settings:
   content.notifications.enabled:
     https://app.slack.com: true
     https://calendar.google.com: false
+    https://discord.com: true
+    https://mail.google.com: true
     https://meet.google.com: false
+    https://thesportsgrail.com: false
+    https://www.buscape.com.br: false
     https://www.facebook.com: false
     https://www.hamiltonbeach.com.br: false
+    https://www.kabum.com.br: false
     https://www.netflix.com: false
+    https://www.pichau.com.br: false
+    https://www.puravida.com.br: false
+    https://www.shopclub.com.br: false
+    https://www.tecmundo.com.br: false
     https://www.tiktok.com: false
     https://www.vivadecora.com.br: false
     https://www.youtube.com: false
@@ -57,6 +86,8 @@ settings:
     https://mail.google.com?extsrc=mailto&url=%25s: false
   content.webgl:
     global: true
+  content.webrtc_ip_handling_policy:
+    global: all-interfaces
   editor.command:
     global:
     - nvim
@@ -71,7 +102,7 @@ settings:
   session.lazy_restore:
     global: false
   statusbar.show:
-    global: never
+    global: in-mode
   tabs.position:
     global: bottom
   tabs.show:
@@ -79,7 +110,7 @@ settings:
   tabs.show_switching_delay:
     global: 1500
   zoom.default:
-    global: 150%
+    global: 100%
   zoom.levels:
     global:
     - 25%

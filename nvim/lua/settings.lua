@@ -78,6 +78,7 @@ set.undofile           = true
 set.undoreload         = 10000
 set.wildmenu           = true
 set.wildmode           = 'full:list:longest'
+set.winborder          = 'rounded'
 set.winfixheight       = true
 set.wrap               = false
 set.writebackup        = true

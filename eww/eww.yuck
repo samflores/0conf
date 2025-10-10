@@ -1,4 +1,4 @@
-(defvar    number_of_workspaces 10)
+(defvar    number_of_workspaces 6)
 
 (deflisten workspaces           :initial  "[]" `scripts/workspaces --get`)
 (deflisten active_workspace     :initial  "1"  `scripts/workspaces --active`)
@@ -28,19 +28,19 @@
 (defvar    snd_rev              false)
 (defvar    music_rev            false)
 
-(defwindow bar1
+(defwindow bar2
   :class "bar"
-  :monitor 0
+  :monitor 1
   :windowtype "dock"
-  :geometry (geometry :y "3px" :width "2554px" :height "0px" :anchor "top center")
+  :geometry (geometry :y "3px" :width "3434px" :height "0px" :anchor "top center")
   :exclusive true
 
   (centerbox :class "main-container"
     (box
       :space-evenly false
       (label :visible false :text active_workspace)
-      (workspaces_module :start 1)
-      (window_module :start 1))
+      (workspaces_module :start 4)
+      (window_module :start 4))
     (box)
     (box :halign "end"
          :spacing 3
@@ -54,13 +54,13 @@
       (clock_module)
       (power_module))))
 
-(defwindow bar2
+(defwindow bar1
   :class "bar"
-  :monitor 1
+  :monitor 0
   :windowtype "dock"
   ; :geometry (geometry :y "3px" :width "1914px" :height "0px" :anchor "top center")
   ; :geometry (geometry :y "3px" :width "1074px" :height "0px" :anchor "top center")
-  :geometry (geometry :y "3px" :width "3434px" :height "0px" :anchor "top center")
+  :geometry (geometry :y "3px" :width "1914px" :height "0px" :anchor "top center")
   :exclusive true
 
   (centerbox :class "main-container"
@@ -75,8 +75,8 @@
     (box
       :halign "end"
       :space-evenly false
-      (window_module :start 6)
-      (workspaces_module :start 6)
+      (window_module :start 1)
+      (workspaces_module :start 1)
       (label :visible false :text active_workspace))))
 
 ; (defwindow bar3
@@ -120,11 +120,8 @@
     :class "btn  ${workspace.id == active_workspace ? "active" : ""} ${arraylength(workspace.windows) > 0 ? "occupied" : "empty"}"
     :onclick "hyprctl dispatch workspace ${workspace.id}"
     :valign "center"
-    :visible {workspace.id >= start && workspace.id <= start + 4}
+    :visible {workspace.id >= start && workspace.id <= start + 2}
     (box :class "${workspace.fullscreen ? "fullscreen" : ""}" :style "min-width: ${16 + (8 * max(arraylength(workspace.windows)-1, 0))}px;")))
-; (label
-;   :class "icon"
-;   :text {arraylength(workspace.windows) > 0 ? "${workspace.id == active_workspace ? "" : ""}" : ""}))
 
 (defwidget submap_module []
   (eventbox :onhover "eww update window_rev=true"
@@ -320,13 +317,13 @@
                   :onclick "loginctl lock-session"
             "" )
           (button :class "icon"
-                  :onclick "loginctl suspend"
+                  :onclick "sudo suspend"
             "" )
           (button :class "icon"
-                  :onclick "loginctl reboot"
+                  :onclick "sudo reboot"
             "" )
           (button :class "icon"
-                  :onclick "loginctl poweroff"
+                  :onclick "sudo poweroff"
             "" ))))))
 
 (defwindow energy_popup

@@ -24,6 +24,14 @@ end
 
 local create_augroup = M.create_augroup
 
+create_augroup('Highlight', {
+  {
+    event = 'FileType',
+    pattern = '<filetype>',
+    callback = vim.treesitter.start
+  }
+})
+
 create_augroup('Focus', {
   {
     event = 'FocusLost',
@@ -90,6 +98,16 @@ create_augroup('edit_vimrc', {
   },
 })
 
+
+create_augroup('reload_wallpaper', {
+  {
+    event = 'BufWritePost',
+    pattern = '/home/samflores/Code/0conf/hypr/hyprpaper.conf',
+    callback = function() os.execute('killall hyprpaper; setsid -f hyprpaper > /dev/null 2>&1') end
+  },
+})
+
+
 create_augroup('jscinoptions', {
   {
     event = { 'BufRead', 'BufNewFile' },
@@ -112,22 +130,33 @@ create_augroup('UserLspConfig', {
   {
     event = 'LspAttach',
     callback = function(ev)
-      local bufnr = ev.buf
+      local buffer = ev.buf
       if ev.data.client_id == nil then
         return
       end
 
-      local signs = {
-        Error = ' ',
-        Warn = ' ',
-        Hint = ' ',
-        Info = ' '
-      }
-
-      for type, icon in pairs(signs) do
-        local hl = 'DiagnosticSign' .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
-      end
+      vim.diagnostic.config({
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = ' ',
+            [vim.diagnostic.severity.WARN] = ' ',
+            [vim.diagnostic.severity.HINT] = ' ',
+            [vim.diagnostic.severity.INFO] = ' ',
+          },
+          linehl = {
+            [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
+            [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
+            [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
+            [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
+          },
+          numhl = {
+            [vim.diagnostic.severity.ERROR] = '',
+            [vim.diagnostic.severity.WARN] = '',
+            [vim.diagnostic.severity.HINT] = '',
+            [vim.diagnostic.severity.INFO] = '',
+          },
+        },
+      })
 
       local map = vim.keymap.set
       local opts = { noremap = true, buffer = ev.buf }
@@ -137,72 +166,140 @@ create_augroup('UserLspConfig', {
         return
       end
 
-      local navic = require('nvim-navic')
-      if client.server_capabilities.documentSymbolProvider then
-        navic.attach(client, bufnr)
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_documentSymbol) then
+        -- local navic = require('nvim-navic')
+        -- navic.attach(client, buffer)
+        map('n', '<leader>gw', vim.lsp.buf.document_symbol)
+        map('n', '<leader>gW', vim.lsp.buf.workspace_symbol)
       end
 
-      local capabilities = client.server_capabilities;
-      if capabilities then
-        if capabilities.completionProvider then
-          vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
-        end
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_completion) then
+        -- vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+        vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'fuzzy', 'popup' }
+        vim.lsp.completion.enable(true, client.id, buffer, { autotrigger = true })
+        map('i', '<C-Space>',
+          function()
+            vim.lsp.completion.get()
+          end,
+          { desc = 'Trigger lsp completion' }
+        )
+      end
 
-        if capabilities.definitionProvider then
-          vim.bo[bufnr].tagfunc = 'v:lua.vim.lsp.tagfunc'
-        end
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_hover) then
+        map('n', 'K', function() vim.lsp.buf.hover { max_width = 100 } end)
+      end
 
-        if capabilities.codeActionProvider then
-          vim.api.nvim_create_autocmd('BufWritePre', {
-            pattern = { '*.ts', '*.tsx', '*.js', '*.jsx' },
-            callback = function()
-              local params = {
-                command = '_typescript.organizeImports',
-                arguments = { vim.api.nvim_buf_get_name(0) },
-                title = '',
-              }
-              -- vim.lsp.buf.execute_command(params)
+      if false and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
+        vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'fuzzy', 'popup' }
+        vim.lsp.inline_completion.enable(true)
+        map('i', '<Tab>',
+          function()
+            if not vim.lsp.inline_completion.get() then
+              return '<Tab>'
             end
-          })
-        end
-
-        if capabilities.documentFormattingProvider then
-          map('n', '<space>f', vim.lsp.buf.format, opts)
-          vim.api.nvim_create_autocmd('BufWritePre', {
-            callback = function() vim.lsp.buf.format() end
-          })
-        end
-
-        if capabilities.inlayHintProvider then
-          map('n', '<leader>ih', function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(), { bufnr = ev.buf })
-          end, opts)
-          vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
-        end
-
-        if capabilities.documentRangeFormattingProvider then
-          map('v', '<space>f', vim.lsp.buf.format, opts)
-        end
-
-        if capabilities.documentHighlightProvider then
-          create_augroup('lsp_document_highlight', {
-            { event = 'CursorHold',  buffer = bufnr, callback = vim.lsp.buf.document_highlight },
-            { event = 'CursorMoved', buffer = bufnr, callback = vim.lsp.buf.clear_references },
-          })
-        end
+          end,
+          { expr = true, replace_keycodes = true, desc = 'Apply the currently displayed completion suggestion' }
+        )
+        map('i', '<M-n>',
+          function()
+            vim.lsp.inline_completion.select({})
+          end,
+          { desc = 'Show next inline completion suggestion', }
+        )
+        map('i', '<M-p>',
+          function()
+            vim.lsp.inline_completion.select({ count = -1 })
+          end,
+          { desc = 'Show previous inline completion suggestion', }
+        )
       end
-      map('n', '<leader>li', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end)
-      map('n', 'gD', vim.lsp.buf.declaration)
-      map('n', 'gd', vim.lsp.buf.definition)
-      map('n', 'K', vim.lsp.buf.hover)
-      map('n', 'gs', vim.lsp.buf.signature_help)
-      map('n', 'gi', vim.lsp.buf.implementation)
-      map('n', 'gt', vim.lsp.buf.type_definition)
-      map('n', '<leader>gw', vim.lsp.buf.document_symbol)
-      map('n', '<leader>gW', vim.lsp.buf.workspace_symbol)
-      map('n', '<leader>ee', vim.diagnostic.open_float)
-      map('n', '<leader>ai', vim.lsp.buf.incoming_calls)
-      map('n', '<leader>ao', vim.lsp.buf.outgoing_calls)
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_definition) then
+        vim.bo[buffer].tagfunc = 'v:lua.vim.lsp.tagfunc'
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_codeAction) then
+        vim.api.nvim_create_autocmd('BufWritePre', {
+          pattern = { '*.ts', '*.tsx', '*.js', '*.jsx' },
+          callback = function()
+            local params = {
+              command = '_typescript.organizeImports',
+              arguments = { vim.api.nvim_buf_get_name(0) },
+              title = '',
+            }
+            -- vim.lsp.buf.execute_command(params)
+          end
+        })
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+        map('n', '<leader>ih', function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(), { bufnr = ev.buf })
+        end, opts)
+        vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_formatting) then
+        map('n', '<space>f', vim.lsp.buf.format, opts)
+        vim.api.nvim_create_autocmd('BufWritePre', {
+          callback = function() vim.lsp.buf.format() end
+        })
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_rangeFormatting) then
+        map('v', '<space>f', vim.lsp.buf.format, opts)
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+        create_augroup('lsp_document_highlight', {
+          { event = 'CursorHold',  buffer = buffer, callback = vim.lsp.buf.document_highlight },
+          { event = 'CursorMoved', buffer = buffer, callback = vim.lsp.buf.clear_references },
+        })
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_signatureHelp) then
+        map('n', 'gs',
+          vim.lsp.buf.signature_help,
+          { desc = 'Trigger lsp signature help' }
+        )
+      end
+
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_declaration) then
+        map('n', 'gD', vim.lsp.buf.declaration)
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_definition) then
+        map('n', 'gd', vim.lsp.buf.definition)
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_implementation) then
+        map('n', 'gi', vim.lsp.buf.implementation)
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_typeDefinition) then
+        map('n', 'gt', vim.lsp.buf.type_definition)
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_diagnostic) then
+        map('n', '<leader>ee', vim.diagnostic.open_float)
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.callHierarchy_incomingCalls) then
+        map('n', '<leader>ai', vim.lsp.buf.incoming_calls)
+      end
+
+      if client:supports_method(vim.lsp.protocol.Methods.callHierarchy_outgoingCalls) then
+        map('n', '<leader>ao', vim.lsp.buf.outgoing_calls)
+      end
+    end
+  },
+  {
+    event = 'LspNotify',
+    callback = function(args)
+      if args.data.method == 'textDocument/didOpen' then
+        vim.lsp.foldclose('imports', vim.fn.bufwinid(args.buf))
+      end
     end
   }
 })

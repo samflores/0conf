@@ -26,10 +26,28 @@ local config = function()
   dapui.setup()
   dap_ruby.setup()
   dap_vt.setup()
-  dap_vsc_js.setup({
-    debugger_path = vim.fn.stdpath('data') .. '/lazy/vscode-js-debug',
-    adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' },
-  })
+
+  -- dap.adapters["pwa-node"] = {
+  --   type = "server",
+  --   host = "localhost",
+  --   port = "${port}",
+  --   executable = {
+  --     command = "node",
+  --     args = {
+  --       "/path/to/js-debug/src/dapDebugServer.js", "${port}"
+  --     },
+  --   }
+  -- }
+  --
+  --require("dap").configurations.javascript = {
+  --   {
+  --     type = "pwa-node",
+  --     request = "launch",
+  --     name = "Launch file",
+  --     program = "${file}",
+  --     cwd = "${workspaceFolder}",
+  --   },
+  -- }
 
   dap.adapters.codelldb = {
     type = 'server',
@@ -123,12 +141,11 @@ return {
     'mfussenegger/nvim-dap',
     'suketa/nvim-dap-ruby',
     'theHamsta/nvim-dap-virtual-text',
-    'mxsdev/nvim-dap-vscode-js',
-    {
-      'microsoft/vscode-js-debug',
-      version = '1.x',
-      build = 'npm i && npm run compile vsDebugServerBundle && mv dist out'
-    }
+    -- {
+    --   'microsoft/vscode-js-debug',
+    --   version = '1.x',
+    --   build = 'npm i && npm run compile vsDebugServerBundle && mv dist out'
+    -- }
   },
   -- lazy = false,
   config = config,

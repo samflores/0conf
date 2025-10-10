@@ -4,7 +4,7 @@ ml https://www.mercadolivre.com.br/
 ali https://pt.aliexpress.com/?gatewayAdapt=glo2bra
 yt https://www.youtube.com/
 twttr https://tweetdeck.twitter.com/
-code-meet https://meet.google.com/mxe-vmbm-jfx
+code-meet https://meet.google.com/mxe-vmbm-jfx?pli=1&authuser=2
 gt https://translate.google.com/
 amz https://www.amazon.com.br/
 g1 https://g1.globo.com/
@@ -39,3 +39,6 @@ uel http://localhost:3000/profiles/sign_in
 bevy https://bevyengine.org/
 gpt https://chatgpt.com/
 eetle https://www.name.com/domain/search/recurring.ly
+cj https://www.comparajogos.com.br/
+be https://github.com/adrien-bon/bevy_ecs_tiled/blob/dcc6122762671a948cbd6eae0789000c7093263b/src/tiled/reader.rs#L4
+zfs-gentoo https://wiki.gentoo.org/wiki/User:Ali3nx/Installing_Gentoo_Linux_EFISTUB_On_ZFS

@@ -35,9 +35,9 @@ zinit depth"1" wait lucid for \
   blockf atpull'zinit creinstall -q .' \
     zsh-users/zsh-completions \
   mdumitru/fancy-ctrl-z \
-  atload"bindkey '^ ' fuck-command-line" \
-    laggardkernel/zsh-thefuck \
   MichaelAquilina/zsh-you-should-use \
   samflores/docker-aliases \
   samflores/git-aliases \
   samflores/rails-aliases
+  # atload"bindkey '^ ' fuck-command-line" \
+  #   laggardkernel/zsh-thefuck \

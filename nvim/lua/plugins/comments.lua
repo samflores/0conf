@@ -32,7 +32,7 @@ return {
       },
       {
         '<leader>TT',
-        function() require('telescope').extensions['todo-comments'].todo() end,
+        function() require('todo-comments.fzf').todo() end,
         noremap = true,
         silent = true,
       },

@@ -9,16 +9,15 @@ paths=( \
   ["hyprpaper"]="$HOME/.config/hypr/hyprpaper.conf" \
   ["neovim"]="$HOME/.config/nvim/init.lua" \
   ["qutebrowser"]="$HOME/.config/qutebrowser/config.py" \
-  ["rofi"]="$HOME/.config/rofi/config.rasi" \
   ["tmux"]="$HOME/.config/tmux/tmux.conf" \
   ["zsh"]="$HOME/.config/zsh/zshrc" \
 )
 
-selection=$(echo "${!paths[@]}" | tr ' ' "\n" | sort | rofi -dmenu -p 'config> ')
+selection=$(echo "${!paths[@]}" | tr ' ' "\n" | sort | /home/samflores/.cargo/bin/drmenu)
 if [ -n "$selection" ]; then
   if [ -n "$(pidof tmux)" ]; then
     tmux popup -E -w '80%' -h '80%' nvim "${paths[$selection]}"
   else
-    kitty --detach nvim "${paths[$selection]}"
+    ghostty --command="zsh -c 'nvim ${paths[$selection]}'"
   fi
 fi

@@ -56,7 +56,8 @@ map('v', 'Q', 'gq', silent_noremap_opt)
 map('n', 'ql', 'gqq', silent_noremap_opt)
 
 -- Keep the cursor in place while joining lines
-map('n', 'J', 'mzJ`z', silent_noremap_opt)
+-- map('n', 'J', 'mz$gJ`z', silent_noremap_opt)
+-- map('n', 'gJ', 'mz$J`z', silent_noremap_opt)
 
 -- Join an entire paragraph.
 map('n', '<leader>J', 'mzvipJ`z', silent_noremap_opt)

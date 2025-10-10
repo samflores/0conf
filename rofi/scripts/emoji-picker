@@ -1,9 +1,9 @@
 #!/bin/bash
 if [ $? -eq 0 ]
 then
-    sed '1,/^### DATA ###$/d' $0 | rofi -dmenu -p 'emoji> ' | cut -d ' ' -f 1 | tr -d '\n' | wtype -
+    sed '1,/^### DATA ###$/d' $0 | /home/samflores/.cargo/bin/drmenu | cut -d ' ' -f 1 | tr -d '\n' | wtype -
 else
-    sed '1,/^### DATA ###$/d' $0 | rofi -dmenu -p 'emoji> ' | cut -d ' ' -f 1 | tr -d '\n' | wl-copy
+    sed '1,/^### DATA ###$/d' $0 | /home/samflores/.cargo/bin/drmenu | cut -d ' ' -f 1 | tr -d '\n' | wl-copy
 fi
 exit
 ### DATA ###

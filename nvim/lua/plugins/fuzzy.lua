@@ -1,366 +1,157 @@
 local config = function()
-  local actions = require('telescope.actions')
-  -- local trouble = require("trouble.providers.telescope")
-  local trouble = require('trouble.sources.telescope')
-  local action_layout = require('telescope.actions.layout')
-  require('telescope').setup {
-    defaults = {
-      mappings = {
-        n = {
-          ['p'] = action_layout.toggle_preview,
-          ['x'] = trouble.open,
-          ['f'] = actions.send_to_qflist + actions.open_qflist,
-          ['<S-f>'] = actions.send_selected_to_qflist + actions.open_qflist,
-        },
-        i = {
-          ['<M-S-p>'] = action_layout.toggle_preview,
-          ['<C-y>'] = actions.select_default,
-          ['<esc>'] = actions.close,
-          ['<C-x>'] = trouble.open,
-          ['<C-f>'] = actions.send_to_qflist + actions.open_qflist,
-          ['<C-S-f>'] = actions.send_selected_to_qflist + actions.open_qflist,
-          ['<Up>'] = function() end,
-          ['<Down>'] = function() end,
-        },
-      },
-    },
-    border = {
-      prompt = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
-    },
-    pickers = {
-      help_tags = {
-        previewer = true,
-        theme = 'ivy',
-        prompt_prefix = '󰮥 ',
-      },
-      find_files = {
-        previewer = false,
-        theme = 'ivy',
-        prompt_prefix = ' ',
-      },
-      git_files = {
-        previewer = false,
-        theme = 'ivy',
-        prompt_prefix = ' ',
-      },
-      git_status = {
-        previewer = false,
-        theme = 'ivy',
-        prompt_prefix = ' ',
-      },
-      git_branches = {
-        previewer = false,
-        theme = 'ivy',
-        prompt_prefix = ' ',
-      },
-      buffers = {
-        previewer = false,
-        theme = 'ivy',
-        prompt_prefix = ' ',
-      },
-      oldfiles = {
-        previewer = false,
-        theme = 'ivy',
-        prompt_prefix = '󰪺 ',
-      },
-      live_grep = {
-        theme = 'ivy',
-        prompt_prefix = '󰍉 ',
-      },
-      grep_string = {
-        theme = 'ivy',
-        prompt_prefix = '󰍉 ',
-      },
-      lsp_references = {
-        theme = 'ivy',
-        prompt_prefix = '󰈇 ',
-      },
-      lsp_definitions = {
-        theme = 'ivy',
-        prompt_prefix = '󰈇 ',
-      },
-      lsp_document_symbols = {
-        theme = 'ivy',
-        prompt_prefix = '󰈇 ',
-      },
-      lsp_dynamic_workspace_symbols = {
-        theme = 'ivy',
-        prompt_prefix = '󰈇 ',
-      },
-      spell_suggest = {
-        theme = 'ivy',
-        prompt_prefix = '󰓆 ',
+  require('fzf-lua').setup({
+    'ivy',
+    winopts = {
+      height = 0.35,
+      border = { '', '─', '', '', '', '', '', '' },
+      preview = {
+        border = { '', '─', '', '', '', '', '', '' },
+        layout = 'horizontal',
+        horizontal = 'right:60%',
       }
     },
-    extensions = {
-      file_browser = {
-        theme = 'ivy',
-        layout_config = {
-          preview_width = 0.7,
+    previewers = {
+      builtin = {
+        extensions = {
+          ['png'] = { 'chafa', '--fit-width' },
+          ['svg'] = { 'chafa', '--fit-width' },
+          ['jpg'] = { 'chafa', '--fit-width' },
         },
-      },
-      ['ui-select'] = {
-        require('telescope.themes').get_ivy {}
       }
     }
-  }
-  require('telescope').load_extension('dap')
-  require('telescope').load_extension('file_browser')
-  require('telescope').load_extension('fzy_native')
-  require('telescope').load_extension('ui-select')
-  require('telescope').load_extension('lazy')
+  })
 end
 
 return {
-  'nvim-telescope/telescope.nvim',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-    'nvim-telescope/telescope-dap.nvim',
-    'nvim-telescope/telescope-file-browser.nvim',
-    'BurntSushi/ripgrep',
-    'nvim-telescope/telescope-fzy-native.nvim',
-    'nvim-telescope/telescope-ui-select.nvim',
-    'tsakirist/telescope-lazy.nvim',
-    'axkirillov/easypick.nvim',
-  },
-  keys = {
-    {
-      '<leader>o?',
-      function()
-        require('telescope.builtin')
-            .help_tags()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Search help',
-    },
-    {
-      'z=',
-      function()
-        require('telescope.builtin')
-            .spell_suggest()
-      end,
-      noremap = true,
-      silent = true,
-    },
-    {
-      '<leader>oo',
-      function()
-        require('telescope.builtin')
-            .find_files()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find files'
-    },
-    {
-      '<leader>oO',
-      function()
-        require('telescope.builtin')
-            .find_files({ hidden = true })
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find files'
-    },
-    {
-      '<leader>o.',
-      function()
-        require('telescope.builtin')
-            .find_files({ cwd = '%:p:h' })
-      end,
-      noremap = true,
-      silent = true,
-      desc = "Find files in current file's directory"
-    },
-    {
-      '<leader>ov',
-      function()
-        require('telescope.builtin')
-            .find_files({ cwd = vim.fn.stdpath('config'), prompt_prefix = ' ' })
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find vim config files'
-    },
-    {
-      '<leader>og',
-      function()
-        require('telescope.builtin')
-            .git_files()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find Git files'
-    },
-    {
-      '<leader>ob',
-      function()
-        require('telescope.builtin')
-            .buffers(
-              {
-                attach_mappings = function(prompt_bufnr, map)
-                  local delete_buf = function()
-                    local selection = require('telescope.actions.state').get_selected_entry()
-                    require('telescope.actions').close(prompt_bufnr)
-                    vim.api.nvim_buf_delete(selection.bufnr, { force = true })
-                  end
-
-                  map('i', '<c-u>', delete_buf)
-
-                  return true
-                end
+  {
+    'ibhagwan/fzf-lua',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = config,
+    event = 'UiEnter',
+    keys = {
+      {
+        '<leader>o?',
+        function() require('fzf-lua').help_tags() end,
+        desc = 'Search help',
+      },
+      {
+        'z=',
+        function() require('fzf-lua').spell_suggest() end,
+      },
+      {
+        '<leader>oo',
+        function() require('fzf-lua').files() end,
+        desc = 'Find files',
+      },
+      {
+        '<leader>oO',
+        function() require('fzf-lua').files({ hidden = true }) end,
+        desc = 'Find files (hidden)',
+      },
+      {
+        '<leader>o.',
+        function() require('fzf-lua').files({ cwd = vim.fn.expand('%:p:h') }) end,
+        desc = "Find files in current file's directory",
+      },
+      {
+        '<leader>ov',
+        function() require('fzf-lua').files({ cwd = vim.fn.stdpath('config'), prompt = ' ' }) end,
+        desc = 'Find vim config files',
+      },
+      {
+        '<leader>og',
+        function() require('fzf-lua').git_files() end,
+        desc = 'Find Git files',
+      },
+      {
+        '<leader>ob',
+        function() require('fzf-lua').buffers() end,
+        desc = 'Find open buffer',
+      },
+      {
+        '<leader>oh',
+        function() require('fzf-lua').oldfiles({ cwd_only = true }) end,
+        desc = 'Find in project history',
+      },
+      {
+        '<leader>oH',
+        function() require('fzf-lua').oldfiles() end,
+        desc = 'Find in all history',
+      },
+      {
+        '<leader>ss',
+        function() require('fzf-lua').live_grep_native() end,
+        desc = 'Live grep',
+      },
+      {
+        '<leader>s.',
+        function() require('fzf-lua').grep_cword() end,
+        desc = 'Grep word under cursor',
+      },
+      {
+        '<leader>lr',
+        function() require('fzf-lua').lsp_references() end,
+        desc = 'Find LSP references',
+      },
+      {
+        '<leader>ld',
+        function() require('fzf-lua').lsp_definitions() end,
+        desc = 'Find LSP definitions',
+      },
+      {
+        '<leader>le',
+        function() require('fzf-lua').diagnostics_document() end,
+        desc = 'Find LSP diagnostics',
+      },
+      {
+        '<leader>ls',
+        function() require('fzf-lua').lsp_document_symbols() end,
+        desc = 'Find LSP document symbols',
+      },
+      {
+        '<leader>lS',
+        function() require('fzf-lua').lsp_workspace_symbols() end,
+        desc = 'Find LSP workspace symbols',
+      },
+      {
+        '<leader>gs',
+        function() require('fzf-lua').git_status() end,
+        desc = 'Git status',
+      },
+      {
+        '<leader>gb',
+        function() require('fzf-lua').git_branches() end,
+        desc = 'Git branches',
+      },
+      {
+        '<leader>tS',
+        function() require('fzf-lua').treesitter() end,
+        desc = 'Find treesitter symbols',
+      },
+      {
+        '<leader>st',
+        function() require('fzf-lua').treesitter() end,
+        desc = 'Find treesitter symbols',
+      },
+      {
+        '<leader>sa',
+        function()
+          require('fzf-lua').fzf_live(
+            'ast-grep --context 0 --heading never --pattern <query> 2>/dev/null',
+            {
+              exec_empty_query = false,
+              actions = {
+                ['default'] = require 'fzf-lua'.actions.file_edit,
+                ['ctrl-q'] = {
+                  fn = require('fzf-lua').actions.file_edit_or_qf,
+                  prefix = 'select-all+'
+                }
               }
-            )
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find open buffer'
-    },
-    {
-      '<leader>oh',
-      function()
-        require('telescope.builtin')
-            .oldfiles({ cwd_only = true })
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find in project history'
-    },
-    {
-      '<leader>oH',
-      function()
-        require('telescope.builtin')
-            .oldfiles()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find in all history'
-    },
-    {
-      '<leader>ss',
-      function()
-        require('telescope.builtin')
-            .live_grep()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Live grep'
-    },
-    {
-      '<leader>s.',
-      function()
-        require('telescope.builtin')
-            .grep_string()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Grep word under cursor'
-    },
-    {
-      '<leader>lr',
-      function()
-        require('telescope.builtin')
-            .lsp_references()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find LSP references'
-    },
-    {
-      '<leader>ld',
-      function()
-        require('telescope.builtin')
-            .lsp_definitions()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find LSP definitions'
-    },
-    {
-      '<leader>le',
-      function()
-        require('telescope.builtin')
-            .diagnostics()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find LSP diagnostics'
-    },
-    {
-      '<leader>ls',
-      function()
-        require('telescope.builtin')
-            .lsp_document_symbols()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find LSP document symbols'
-    },
-    {
-      '<leader>lS',
-      function()
-        require('telescope.builtin')
-            .lsp_dynamic_workspace_symbols()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find LSP workspace symbols'
-    },
-    {
-      '<leader>gs',
-      function()
-        require('telescope.builtin')
-            .git_status()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Git status'
-    },
-    {
-      '<leader>gb',
-      function()
-        require('telescope.builtin')
-            .git_branches()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Git brances'
-    },
-    {
-      '<leader>tS',
-      function()
-        require('telescope.builtin')
-            .treesitter()
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Find treesitter symbols'
-    },
-    {
-      '<leader>BB',
-      function()
-        require('telescope')
-            .extensions
-            .file_browser.file_browser({ grouped = true, prompt_prefix = ' ' })
-      end,
-      noremap = true,
-      silent = true,
-      desc = 'Browse project'
-    },
-    {
-      '<leader>B.',
-      function()
-        require('telescope')
-            .extensions
-            .file_browser.file_browser({ path = '%:p:h', grouped = true, prompt_prefix = ' ' })
-      end,
-      noremap = true,
-      silent = true,
-      desc = "Browse current file's directory"
-    },
-  },
-  config = config,
-  event = 'UiEnter',
-  -- cmd = 'Telescope',
+            }
+          )
+        end,
+        desc = 'ast-grep query',
+      },
+    }
+  }
 }

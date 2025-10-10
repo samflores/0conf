@@ -12,4 +12,5 @@ source $ZDOTDIR/aliases.zsh
 source $ZDOTDIR/bindkeys.zsh
 source $ZDOTDIR/hashs.zsh
 
+eval "$(zoxide init zsh)"
 eval "$(direnv hook zsh)"

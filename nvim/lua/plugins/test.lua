@@ -17,7 +17,15 @@ local config = function()
     },
     adapters = {
       require('neotest-python'),
-      require('rustaceanvim.neotest'),
+      require('neotest-rust'),
+      require('neotest-minitest')({
+        test_cmd = function()
+          return vim.iter({
+            'rails',
+            'test',
+          }):flatten():totable()
+        end
+      }),
       require('neotest-rspec')({
         rspec_cmd = function()
           local path = vim.fn.expand('./scripts/run')
@@ -44,7 +52,6 @@ local config = function()
           return 'tmp/rspec.out'
         end
       }),
-      -- require('neotest-minitest'),
       require('neotest-jest'),
       require('neotest-vitest'),
       require('neotest-vim-test')({ ignore_file_types = {} }),
@@ -56,6 +63,8 @@ local opt = { noremap = true }
 
 return {
   'nvim-neotest/neotest',
+  commit = '52fca6717ef972113ddd6ca223e30ad0abb2800c',
+  lazy = true,
   config = config,
   keys = {
     { '<leader>tt', function() require('neotest').run.run() end,                     opt },

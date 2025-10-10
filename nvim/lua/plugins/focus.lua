@@ -4,12 +4,12 @@ return {
     event = 'VeryLazy',
     config = true,
   },
-  {
-    'anuvyklack/windows.nvim',
-    dependencies = {
-      'anuvyklack/middleclass',
-      'anuvyklack/animation.nvim'
-    },
-    config = true
-  }
+  -- {
+  --   'anuvyklack/windows.nvim',
+  --   dependencies = {
+  --     'anuvyklack/middleclass',
+  --     'anuvyklack/animation.nvim'
+  --   },
+  --   config = true
+  -- }
 }

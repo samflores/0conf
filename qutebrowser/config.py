@@ -753,7 +753,7 @@ c.content.blocking.whitelist = ['sentry.io']
 ##   - no-3rdparty: Accept cookies from the same origin only. This is known to break some sites, such as GMail.
 ##   - no-unknown-3rdparty: Accept cookies from the same origin only, unless a cookie is already set for the domain. On QtWebEngine, this is the same as no-3rdparty.
 ##   - never: Don't accept cookies at all.
-# c.content.cookies.accept = 'all'
+c.content.cookies.accept = 'all'
 
 ## Store cookies.
 ## Type: Bool
@@ -838,7 +838,8 @@ c.content.blocking.whitelist = ['sentry.io']
 ## between 5.12 and 5.14 (inclusive), changing the value exposed to
 ## JavaScript requires a restart.
 ## Type: FormatString
-# c.content.headers.user_agent = 'Mozilla/5.0 ({os_info}) AppleWebKit/{webkit_version} (KHTML, like Gecko) {qt_key}/{qt_version} {upstream_browser_key}/{upstream_browser_version} Safari/{webkit_version}'
+# c.content.headers.user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36'
+# c.content.headers.user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0'
 
 ## Enable hyperlink auditing (`<a ping>`).
 ## Type: Bool

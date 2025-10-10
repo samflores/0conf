@@ -2,13 +2,15 @@ return {
   {
     'chrisgrieser/nvim-various-textobjs',
     opts = {
-      useDefaultKeymaps = true
+      keymaps = {
+        useDefaults = true
+      }
     },
     event = 'VeryLazy'
   },
   {
-    'echasnovski/mini.ai',
-    event = 'VeryLazy',
-    config = true
-  }
+    'nvim-mini/mini.nvim',
+    version = false,
+    event = 'VeryLazy'
+  },
 }
