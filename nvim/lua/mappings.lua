@@ -74,8 +74,8 @@ map('n', '<leader>i', ':set list!<cr>', silent_noremap_opt)
 -- Toggle spell
 map('n', '<leader>Z', ':set spell!<cr>', silent_noremap_opt)
 
-map('n', 'U', ':syntax sync fromstart<cr>:redraw!<cr>', silent_noremap_opt)
 -- [U]nfuck my screen
+map('n', 'U', ':syntax sync fromstart<cr>:redraw!<cr>', silent_noremap_opt)
 
 -- Keep search matches in the middle of the window.
 map('n', 'n', 'nzzzv', silent_noremap_opt)
@@ -97,14 +97,6 @@ map('', '<silent>k', 'gk', silent_noremap_opt)
 map('', '<silent>gj', 'j', silent_noremap_opt)
 map('', '<silent>gk', 'k', silent_noremap_opt)
 
--- Easy buffer navigation
--- map('', '<C-h>', '<C-w>h', silent_noremap_opt)
--- map('', '<C-j>', '<C-w>j', silent_noremap_opt)
--- map('', '<C-k>', '<C-w>k', silent_noremap_opt)
--- map('', '<C-l>', '<C-w>l', silent_noremap_opt)
-
-map('n', '<leader>bo', ':%bdelete|edit #|bdelete #<cr>|\'"', silent_noremap_opt)
-
 -- List navigation
 map('n', '<left>', ' :cprev<cr>zvzz', silent_noremap_opt)
 map('n', '<right>', ':cnext<cr>zvzz', silent_noremap_opt)
@@ -121,10 +113,10 @@ map('v', ';', ':', noremap_opt)
 map('v', ':', ';', noremap_opt)
 
 -- I prefer block selection
-map('n', 'v', '<C-V>', silent_noremap_opt)
-map('n', '<C-V>', 'v', silent_noremap_opt)
-map('v', 'v', '<C-V>', silent_noremap_opt)
-map('v', '<C-V>', 'v', silent_noremap_opt)
+-- map('n', 'v', '<C-V>', silent_noremap_opt)
+-- map('n', '<C-V>', 'v', silent_noremap_opt)
+-- map('v', 'v', '<C-V>', silent_noremap_opt)
+-- map('v', '<C-V>', 'v', silent_noremap_opt)
 
 -- Easier to type
 map('n', '<Leader><Leader>', '<c-^>', silent_noremap_opt)
@@ -139,7 +131,6 @@ map('t', '<Esc>', [[<C-\><C-n>]], silent_noremap_opt)
 -- RestartLsp
 map('n', '<leader>ll', ':LspRestart<cr>', silent_noremap_opt)
 map('n', '<leader>li', ':LspInfo<cr>', silent_noremap_opt)
-
 
 map('n', '<A-j>', ':m .+1<CR>==', silent_noremap_opt)
 map('n', '<A-k>', ':m .-2<CR>==', silent_noremap_opt)

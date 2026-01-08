@@ -126,6 +126,25 @@ create_augroup('Neovim configs', {
   }
 })
 
+create_augroup('RustFt', {
+  {
+    event = 'FileType',
+    pattern = 'rust',
+    callback = function()
+      vim.opt_local.foldmethod = 'expr'
+      vim.opt_local.foldexpr = 'nvim_treesitter#foldexpr()'
+    end,
+  }
+})
+
+create_augroup('TSHighlight', {
+  {
+    event = 'FileType',
+    pattern = { '<filetype>' },
+    callback = function() vim.treesitter.start() end,
+  }
+})
+
 create_augroup('UserLspConfig', {
   {
     event = 'LspAttach',
@@ -264,6 +283,12 @@ create_augroup('UserLspConfig', {
         )
       end
 
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_publishDiagnostics) then
+        map('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, opts)
+        map('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, opts)
+        map('n', ']D', function() vim.diagnostic.jump({ severity = vim.diagnostic.severity.ERROR, count = 1 }) end, opts)
+        map('n', '[D', function() vim.diagnostic.jump({ severity = vim.diagnostic.severity.ERROR, count = -1 }) end, opts)
+      end
 
       if client:supports_method(vim.lsp.protocol.Methods.textDocument_declaration) then
         map('n', 'gD', vim.lsp.buf.declaration)
