@@ -1,8 +1,15 @@
 return {
-  'kevinhwang91/nvim-bqf',
-  ft = 'qf',
-  opts = {
-    auto_resize_height = false,
-    magic_window = false
-  }
+  {
+    src = 'https://github.com/kevinhwang91/nvim-bqf',
+    name = 'nvim-bqf',
+    data = {
+      ft = 'qf',
+      after = function()
+        require('bqf').setup({
+          auto_resize_height = false,
+          magic_window = false
+        })
+      end,
+    },
+  },
 }

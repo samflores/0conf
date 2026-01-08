@@ -1,8 +1,13 @@
 return {
-  'tpope/vim-abolish',
-  cmd = {
-    'Abolish',
-    'Subvert',
-    'S'
-  }
+  {
+    src = 'https://github.com/tpope/vim-abolish',
+    name = 'vim-abolish',
+    data = {
+      cmd = {
+        'Abolish',
+        'Subvert',
+        'S'
+      },
+    },
+  },
 }

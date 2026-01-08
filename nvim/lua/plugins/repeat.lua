@@ -1,4 +1,9 @@
 return {
-  'tpope/vim-repeat',
-  event = 'VeryLazy',
+  {
+    src = 'https://github.com/tpope/vim-repeat',
+    name = 'vim-repeat',
+    data = {
+      event = 'DeferredUIEnter',
+    },
+  },
 }

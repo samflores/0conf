@@ -1,0 +1,52 @@
+local plugin_files = {
+  "fuzzy",
+  "ai",
+  "db",
+  "bqf",
+  "session",
+  "matchup",
+  "abolish",
+  "ruby",
+  "diaglist",
+  "clojure",
+  "colorscheme",
+  "numbers",
+  "textobjects",
+  "json",
+  "lsp",
+  "gx",
+  "folding",
+  "markdown",
+  "splitjoin",
+  "debugger",
+  "eunuch",
+  "statusline",
+  "git",
+  "notes",
+  "clipboard",
+  "undotree",
+  "motionsearch",
+  "align",
+  "formatting",
+  "color-picker",
+  "completion",
+  "node",
+  "treesitter",
+  "ui",
+  "mark",
+  "tmux",
+  "repeat",
+  "bufclose",
+  "coffeescript",
+  "test",
+  "comments",
+  "netrw",
+  "surround",
+}
+
+local all_plugins = {}
+for _, plugin_file in ipairs(plugin_files) do
+  vim.list_extend(all_plugins, require("plugins." .. plugin_file))
+end
+
+return all_plugins

@@ -1,7 +1,5 @@
 local config = function()
-  vim.api.nvim_exec2([[
-    let test#strategy = 'floaterm'
-  ]], {})
+  -- vim.api.nvim_exec2([[ let test#strategy = 'floaterm' ]], {})
 
   require('neotest').setup({
     icons = {
@@ -18,14 +16,7 @@ local config = function()
     adapters = {
       require('neotest-python'),
       require('neotest-rust'),
-      require('neotest-minitest')({
-        test_cmd = function()
-          return vim.iter({
-            'rails',
-            'test',
-          }):flatten():totable()
-        end
-      }),
+      require('neotest-minitest'),
       require('neotest-rspec')({
         rspec_cmd = function()
           local path = vim.fn.expand('./scripts/run')
@@ -62,29 +53,76 @@ end
 local opt = { noremap = true }
 
 return {
-  'nvim-neotest/neotest',
-  commit = '52fca6717ef972113ddd6ca223e30ad0abb2800c',
-  lazy = true,
-  config = config,
-  keys = {
-    { '<leader>tt', function() require('neotest').run.run() end,                     opt },
-    { '<leader>tf', function() require('neotest').run.run(vim.fn.expand('%')) end,   opt },
-    { '<leader>to', function() require('neotest').output.open({ short = true }) end, opt },
-    { '<leader>ts', function() require('neotest').summary.toggle() end,              opt },
-    { '<leader>ta', function() require('neotest').run.run('spec') end,               opt },
-    { '<leader>tl', function() require('neotest').run.run_last() end,                opt },
+  {
+    src = 'https://github.com/nvim-neotest/neotest.git',
+    name = 'neotest',
+    data = {
+      event = 'DeferredUIEnter',
+      keys = {
+        { lhs = '<leader>tt', rhs = function() require('neotest').run.run() end,                     },
+        { lhs = '<leader>tf', rhs = function() require('neotest').run.run(vim.fn.expand('%')) end,   },
+        { lhs = '<leader>to', rhs = function() require('neotest').output.open({ short = true }) end, },
+        { lhs = '<leader>ts', rhs = function() require('neotest').summary.toggle() end,              },
+        { lhs = '<leader>ta', rhs = function() require('neotest').run.run('spec') end,               },
+        { lhs = '<leader>tl', rhs = function() require('neotest').run.run_last() end,                },
+      },
+      before = function()
+        vim.cmd.packadd('neotest-python')
+        vim.cmd.packadd('neotest-rust')
+        vim.cmd.packadd('neotest-rspec')
+        vim.cmd.packadd('neotest-minitest')
+        vim.cmd.packadd('vim-test')
+        vim.cmd.packadd('neotest-jest')
+        vim.cmd.packadd('neotest-vitest')
+        vim.cmd.packadd('neotest-vim-test')
+        vim.cmd.packadd('plenary.nvim')
+        vim.cmd.packadd('FixCursorHold.nvim')
+        vim.cmd.packadd('nvim-nio')
+      end,
+      after = config,
+    },
   },
-  dependencies = {
-    'nvim-neotest/neotest-python',
-    'rouge8/neotest-rust',
-    'olimorris/neotest-rspec',
-    'zidhuss/neotest-minitest',
-    'vim-test/vim-test',
-    'haydenmeade/neotest-jest',
-    'marilari88/neotest-vitest',
-    'rcarriga/neotest-vim-test',
-    'nvim-lua/plenary.nvim',
-    'nvim-treesitter/nvim-treesitter',
-    'antoinemadec/FixCursorHold.nvim'
+  {
+    src = 'https://github.com/nvim-neotest/neotest-python.git',
+    name = 'neotest-python',
+  },
+  {
+    src = 'https://github.com/rouge8/neotest-rust.git',
+    name = 'neotest-rust',
+  },
+  {
+    src = 'https://github.com/olimorris/neotest-rspec.git',
+    name = 'neotest-rspec',
+  },
+  {
+    src = 'https://github.com/zidhuss/neotest-minitest.git',
+    name = 'neotest-minitest',
+  },
+  {
+    src = 'https://github.com/vim-test/vim-test.git',
+    name = 'vim-test',
+  },
+  {
+    src = 'https://github.com/nvim-neotest/neotest-jest.git',
+    name = 'neotest-jest',
+  },
+  {
+    src = 'https://github.com/marilari88/neotest-vitest.git',
+    name = 'neotest-vitest',
+  },
+  {
+    src = 'https://github.com/nvim-neotest/neotest-vim-test.git',
+    name = 'neotest-vim-test',
+  },
+  {
+    src = 'https://github.com/nvim-lua/plenary.nvim',
+    name = 'plenary.nvim',
+  },
+  {
+    src = 'https://github.com/antoinemadec/FixCursorHold.nvim.git',
+    name = 'FixCursorHold.nvim',
+  },
+  {
+    src = 'https://github.com/nvim-neotest/nvim-nio',
   }
 }

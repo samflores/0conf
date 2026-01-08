@@ -1,24 +1,22 @@
-local config = function()
-  vim.g.tmux_navigator_save_on_switch = 2
-  vim.g.tmux_navigator_preserve_zoom = 1
-  vim.g.tmux_navigator_disable_when_zoomed = 1
-end
-
 return {
-  'christoomey/vim-tmux-navigator',
-  config = config,
-  cmd = {
-    'TmuxNavigateLeft',
-    'TmuxNavigateDown',
-    'TmuxNavigateUp',
-    'TmuxNavigateRight',
-    'TmuxNavigatePrevious',
-  },
-  keys = {
-    { '<c-h>',  '<cmd><C-U>TmuxNavigateLeft<cr>' },
-    { '<c-j>',  '<cmd><C-U>TmuxNavigateDown<cr>' },
-    { '<c-k>',  '<cmd><C-U>TmuxNavigateUp<cr>' },
-    { '<c-l>',  '<cmd><C-U>TmuxNavigateRight<cr>' },
-    { '<c-\\>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
+  {
+    src = 'https://github.com/alexghergh/nvim-tmux-navigation',
+    name = 'nvim-tmux-navigation',
+    data = {
+      after = function()
+        require('nvim-tmux-navigation').setup({
+          disable_when_zoomed = true,
+        })
+      end,
+      event = 'DeferredUIEnter',
+      keys = {
+        { lhs = '<c-h>',     rhs = function() require('nvim-tmux-navigation').NvimTmuxNavigateLeft() end },
+        { lhs = '<c-j>',     rhs = function() require('nvim-tmux-navigation').NvimTmuxNavigateDown() end },
+        { lhs = '<c-k>',     rhs = function() require('nvim-tmux-navigation').NvimTmuxNavigateUp() end },
+        { lhs = '<c-l>',     rhs = function() require('nvim-tmux-navigation').NvimTmuxNavigateRight() end },
+        { lhs = '<c-\\>',    rhs = function() require('nvim-tmux-navigation').NvimTmuxNavigateLastActive() end },
+        { lhs = '<c-space>', rhs = function() require('nvim-tmux-navigation').NvimTmuxNavigateNext() end },
+      },
+    },
   },
 }

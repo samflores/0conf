@@ -1,6 +1,12 @@
 return {
-  'echasnovski/mini.align',
-  version = '*',
-  config = true,
-  event = 'BufReadPost'
+  {
+    src = 'https://github.com/echasnovski/mini.align',
+    name = 'mini.align',
+    data = {
+      event = 'BufReadPost',
+      after = function()
+        require('mini.align').setup()
+      end,
+    },
+  },
 }

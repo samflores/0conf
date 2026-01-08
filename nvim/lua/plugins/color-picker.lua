@@ -1,15 +1,22 @@
 return {
-  'uga-rosa/ccc.nvim',
-  opts = {
-    highlighter = {
-      auto_enable = true,
-      lsp = true,
-    },
-  },
-  cmd = { 'CccPick', 'CccConvert', 'CccHighlighterEnable', 'CccHighlighterDisable', 'CccHighlighterToggle' },
-  keys = {
-    { '<leader>cp', '<cmd>CccPick<cr>',              desc = 'Pick' },
-    { '<leader>cc', '<cmd>CccConvert<cr>',           desc = 'Convert' },
-    { '<leader>ch', '<cmd>CccHighlighterToggle<cr>', desc = 'Toggle Highlighter' },
+  {
+    src = 'https://github.com/night0721/ccc.nvim.git',
+    name = 'ccc',
+    data = {
+      cmd = { 'CccPick', 'CccConvert', 'CccHighlighterEnable', 'CccHighlighterDisable', 'CccHighlighterToggle' },
+      keys = {
+        { lhs = '<leader>cp', rhs = '<cmd>CccPick<cr>',              desc = 'Pick' },
+        { lhs = '<leader>cc', rhs = '<cmd>CccConvert<cr>',           desc = 'Convert' },
+        { lhs = '<leader>ch', rhs = '<cmd>CccHighlighterToggle<cr>', desc = 'Toggle Highlighter' },
+      },
+      after = function()
+        require('ccc').setup({
+          highlighter = {
+            auto_enable = true,
+            lsp = true,
+          },
+        })
+      end,
+    }
   },
 }

@@ -1,20 +1,28 @@
 return {
-  'kndndrj/nvim-dbee',
-  dependencies = {
-    'MunifTanjim/nui.nvim',
+  {
+    src = 'https://github.com/MunifTanjim/nui.nvim',
+    name = 'nui.nvim'
   },
-  cmd = {
-    'Dbee'
-  },
-  keys = {
-    { '<leader>D', function() require('dbee').toggle() end, noremap = true, silent = true, desc = 'Toggle DBEE' }
-  },
-  build = function()
-    require('dbee').install()
-  end,
-  opts = {
-    drawer = {
-      disable_help = false
-    }
+  {
+    src = 'https://github.com/kndndrj/nvim-dbee',
+    name = 'nvim-dbee',
+    data = {
+      cmd = {
+        'Dbee'
+      },
+      keys = {
+        { lhs = '<leader>D', rhs = function() require('dbee').toggle() end }
+      },
+      before = function()
+        vim.cmd.packadd('nui.nvim')
+      end,
+      after = function()
+        require('dbee').setup({
+          drawer = {
+            disable_help = false
+          }
+        })
+      end,
+    },
   },
 }

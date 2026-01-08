@@ -1,5 +1,12 @@
 return {
-  'prichrd/netrw.nvim',
-  config = true,
-  ft = 'netrw'
+  {
+    src = 'https://github.com/prichrd/netrw.nvim',
+    name = 'netrw.nvim',
+    data = {
+      ft = 'netrw',
+      after = function()
+        require('netrw').setup()
+      end,
+    },
+  },
 }

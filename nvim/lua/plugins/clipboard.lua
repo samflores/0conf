@@ -1,13 +1,20 @@
 return {
-  'gbprod/yanky.nvim',
-  config = true,
-  event = 'VeryLazy',
-  keys = {
-    { 'p',     '<Plug>(YankyPutAfter)',      desc = 'Put after',     mode = { 'n', 'x' } },
-    { 'P',     '<Plug>(YankyPutBefore)',     desc = 'Put before',    mode = { 'n', 'x' } },
-    { 'gp',    '<Plug>(YankyGPutAfter)',     desc = 'GPut after',    mode = { 'n', 'x' } },
-    { 'gP',    '<Plug>(YankyGPutBefore)',    desc = 'GPut before',   mode = { 'n', 'x' } },
-    { '<C-p>', '<Plug>(YankyPreviousEntry)', desc = 'Previous entry' },
-    { '<C-n>', '<Plug>(YankyNextEntry)',     desc = 'Next entry' },
+  {
+    src = 'https://github.com/gbprod/yanky.nvim',
+    name = 'yanky.nvim',
+    data = {
+      event = 'DeferredUIEnter',
+      keys = {
+        { lhs = 'p',     rhs = '<Plug>(YankyPutAfter)',      desc = 'Put after',     mode = { 'n', 'x' } },
+        { lhs = 'P',     rhs = '<Plug>(YankyPutBefore)',     desc = 'Put before',    mode = { 'n', 'x' } },
+        { lhs = 'gp',    rhs = '<Plug>(YankyGPutAfter)',     desc = 'GPut after',    mode = { 'n', 'x' } },
+        { lhs = 'gP',    rhs = '<Plug>(YankyGPutBefore)',    desc = 'GPut before',   mode = { 'n', 'x' } },
+        { lhs = '<C-p>', rhs = '<Plug>(YankyPreviousEntry)', desc = 'Previous entry' },
+        { lhs = '<C-n>', rhs = '<Plug>(YankyNextEntry)',     desc = 'Next entry' },
+      },
+      after = function()
+        require('yanky').setup()
+      end,
+    },
   },
 }

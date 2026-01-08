@@ -1,4 +1,6 @@
 return {
-  'onsails/diaglist.nvim',
-  ft = { 'rust', 'svelte' }
+  {
+    src = 'https://github.com/onsails/diaglist.nvim',
+    name = 'diaglist.nvim',
+  },
 }

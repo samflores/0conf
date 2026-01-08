@@ -1,4 +1,9 @@
 return {
-  'kchmck/vim-coffee-script',
-  ft = 'coffee'
+  {
+    src = 'https://github.com/kchmck/vim-coffee-script',
+    name = 'vim-coffee-script',
+    data = {
+      ft = 'coffee',
+    },
+  },
 }

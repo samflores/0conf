@@ -135,34 +135,53 @@ local config = function()
 end
 
 return {
-  'rcarriga/nvim-dap-ui',
-  dependencies = {
-    'nvim-neotest/nvim-nio',
-    'mfussenegger/nvim-dap',
-    'suketa/nvim-dap-ruby',
-    'theHamsta/nvim-dap-virtual-text',
+  {
+    src = 'https://github.com/nvim-neotest/nvim-nio',
+  },
+  {
+    src = 'https://github.com/mfussenegger/nvim-dap',
+    data = {
+      dep_of = 'nvim-dap-ui',
+    },
+  },
+  {
+    src = 'https://github.com/suketa/nvim-dap-ruby',
+    data = {
+      dep_of = 'nvim-dap-ui',
+    },
+  },
+  {
+    src = 'https://github.com/theHamsta/nvim-dap-virtual-text',
+    data = {
+      dep_of = 'nvim-dap-ui',
+    },
+  },
+  {
+    src = 'https://github.com/rcarriga/nvim-dap-ui',
+    name = 'nvim-dap-ui',
+    data = {
     -- {
     --   'microsoft/vscode-js-debug',
     --   version = '1.x',
     --   build = 'npm i && npm run compile vsDebugServerBundle && mv dist out'
     -- }
+      keys = {
+        { lhs = '<leader>db', rhs = function() require 'dap'.toggle_breakpoint() end },
+        { lhs = '<leader>dB', rhs = function() require 'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end },
+        { lhs = '<leader>dp', rhs = function() require 'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end },
+        { lhs = '<leader>dr', rhs = function() require 'dap'.repl.open() end },
+        { lhs = '<leader>dl', rhs = function() require 'dap'.run_last() end },
+        { lhs = '<f5>',       rhs = function() require 'dap'.continue() end },
+        { lhs = '<leader>dc', rhs = function() require 'dap'.continue() end },
+        { lhs = '<leader>do', rhs = function() require 'dap'.step_over() end },
+        { lhs = '<leader>di', rhs = function() require 'dap'.step_into() end },
+        { lhs = '<leader>dO', rhs = function() require 'dap'.step_out() end },
+        { lhs = '<leader>dd', rhs = function() require 'dapui'.toggle() end },
+        { lhs = '<Leader>dw', rhs = function() require('dapui').float_element('watches', { enter = true }) end },
+        { lhs = '<Leader>ds', rhs = function() require('dapui').float_element('scopes', { enter = true }) end },
+        { lhs = '<Leader>dr', rhs = function() require('dapui').float_element('repl', { enter = true }) end },
+      },
+      after = config,
+    },
   },
-  -- lazy = false,
-  config = config,
-  keys = {
-    { '<leader>db', function() require 'dap'.toggle_breakpoint() end },
-    { '<leader>dB', function() require 'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end },
-    { '<leader>dp', function() require 'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end },
-    { '<leader>dr', function() require 'dap'.repl.open() end },
-    { '<leader>dl', function() require 'dap'.run_last() end },
-    { '<f5>',       function() require 'dap'.continue() end },
-    { '<leader>dc', function() require 'dap'.continue() end },
-    { '<leader>do', function() require 'dap'.step_over() end },
-    { '<leader>di', function() require 'dap'.step_into() end },
-    { '<leader>dO', function() require 'dap'.step_out() end },
-    { '<leader>dd', function() require 'dapui'.toggle() end },
-    { '<Leader>dw', function() require('dapui').float_element('watches', { enter = true }) end },
-    { '<Leader>ds', function() require('dapui').float_element('scopes', { enter = true }) end },
-    { '<Leader>dr', function() require('dapui').float_element('repl', { enter = true }) end },
-  }
 }

@@ -1,7 +1,7 @@
 local lualine_config = function()
   local navic = require('nvim-navic')
   navic.setup {
-    highlight = true,
+    highlight = false,
     separator = ' > ',
     depth_limit = 5,
     depth_limit_indicator = '..',
@@ -48,62 +48,6 @@ local lualine_config = function()
     t = ' ',
   }
 
-  local palette = require 'tokyobones.palette'
-  local colors = {
-    normal_bg = palette.dark.bg.hex,
-    bright_fg = palette.dark.fg.hex,
-    bright_bg = palette.dark.bg_warm.hex,
-    gray = palette.dark.bg_warm.hex,
-    red = palette.dark.rose.hex,
-    green = palette.dark.leaf.hex,
-    orange = palette.dark.wood.hex,
-    blue = palette.dark.water.hex,
-    purple = palette.dark.blossom.hex,
-    cyan = palette.dark.sky.hex,
-    pink = palette.dark.orange.hex,
-  }
-
-  local custom_theme = {
-    normal = {
-      a = { bg = colors.purple, fg = colors.normal_bg, gui = 'bold' },
-      b = { bg = colors.bright_bg, fg = colors.bright_fg },
-      c = { bg = colors.normal_bg, fg = colors.normal_fg },
-      x = { bg = colors.bright_bg, fg = colors.bright_fg },
-      y = { bg = colors.bright_bg, fg = colors.bright_fg },
-      z = { bg = colors.bright_bg, fg = colors.bright_fg },
-    },
-    insert = {
-      a = { bg = colors.orange, fg = colors.normal_bg, gui = 'bold' },
-      b = { bg = colors.bright_bg, fg = colors.bright_fg },
-      c = { bg = colors.normal_bg, fg = colors.bright_fg }
-    },
-    visual = {
-      a = { bg = colors.blue, fg = colors.normal_bg, gui = 'bold' },
-      b = { bg = colors.bright_bg, fg = colors.bright_fg },
-      c = { bg = colors.normal_bg, fg = colors.bright_fg }
-    },
-    replace = {
-      a = { bg = colors.red, fg = colors.normal_bg, gui = 'bold' },
-      b = { bg = colors.bright_bg, fg = colors.bright_fg },
-      c = { bg = colors.normal_bg, fg = colors.bright_fg }
-    },
-    command = {
-      a = { bg = colors.cyan, fg = colors.normal_bg, gui = 'bold' },
-      b = { bg = colors.bright_bg, fg = colors.bright_fg },
-      c = { bg = colors.normal_bg, fg = colors.bright_fg }
-    },
-    terminal = {
-      a = { bg = colors.normal_bg, fg = colors.bright_fg, gui = 'bold' },
-      b = { bg = colors.bright_bg, fg = colors.bright_fg },
-      c = { bg = colors.normal_bg, fg = colors.bright_fg }
-    },
-    inactive = {
-      a = { bg = colors.normal_bg, fg = colors.gray },
-      b = { bg = colors.normal_bg, fg = colors.gray },
-      c = { bg = colors.normal_bg, fg = colors.gray },
-    }
-  }
-
   local mode_component = {
     'mode',
     fmt = function()
@@ -117,7 +61,6 @@ local lualine_config = function()
     'filetype',
     colored = true,
     icon_only = true,
-    color = { bg = colors.normal_bg },
     separator = { left = '', right = '' },
   }
 
@@ -156,13 +99,6 @@ local lualine_config = function()
     separator = { left = '', right = '' },
   }
 
-  local navic_component = {
-    'navic',
-    color_correction = 'dynamic',
-    navic_opts = nil,
-    -- separator = { left = '', right = '' },
-  }
-
   local git_component = {
     'diff',
     symbols = {
@@ -173,9 +109,22 @@ local lualine_config = function()
     separator = { left = '', right = '' },
   }
 
+  local navic_component = {
+    function()
+      if navic.is_available() then
+        return navic.get_location()
+      end
+      return ''
+    end,
+    cond = function()
+      return navic.is_available()
+    end,
+    separator = { left = '', right = '' },
+  }
+
   require('lualine').setup({
     options = {
-      theme = custom_theme,
+      theme = 'gypsum',
       component_separators = { left = '', right = '' },
       section_separators = { left = '', right = '' },
       always_divide_middle = true,
@@ -201,10 +150,24 @@ local lualine_config = function()
 end
 
 return {
-  'nvim-lualine/lualine.nvim',
-  dependencies = {
-    'nvim-tree/nvim-web-devicons',
-    'SmiteshP/nvim-navic'
+  {
+    src = 'https://github.com/nvim-lualine/lualine.nvim.git',
+    name = "lualine",
+    data = {
+      lazy = false,
+      after = lualine_config,
+    }
   },
-  config = lualine_config,
+  {
+    src =  'https://github.com/nvim-tree/nvim-web-devicons',
+    data = {
+      dep_of = "lualine"
+    }
+  },
+  {
+    src = 'https://github.com/SmiteshP/nvim-navic.git',
+    data = {
+      dep_of = "lualine"
+    }
+  },
 }

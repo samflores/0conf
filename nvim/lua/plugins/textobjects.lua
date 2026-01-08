@@ -1,16 +1,23 @@
 return {
   {
-    'chrisgrieser/nvim-various-textobjs',
-    opts = {
-      keymaps = {
-        useDefaults = true
-      }
+    src = 'https://github.com/chrisgrieser/nvim-various-textobjs',
+    name = 'nvim-various-textobjs',
+    data = {
+      event = 'DeferredUIEnter',
+      after = function()
+        require('various-textobjs').setup({
+          keymaps = {
+            useDefaults = true
+          }
+        })
+      end,
     },
-    event = 'VeryLazy'
   },
   {
-    'nvim-mini/mini.nvim',
-    version = false,
-    event = 'VeryLazy'
+    src = 'https://github.com/echasnovski/mini.ai',
+    name = 'mini.ai',
+    data = {
+      event = 'DeferredUIEnter',
+    },
   },
 }

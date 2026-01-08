@@ -1,4 +1,9 @@
 return {
-  'tpope/vim-eunuch',
-  cmd = { 'Mkdir', 'Unlink', 'Move' }
+  {
+    src = 'https://github.com/tpope/vim-eunuch',
+    name = 'vim-eunuch',
+    data = {
+      cmd = { 'Mkdir', 'Unlink', 'Move' },
+    },
+  },
 }

@@ -1,47 +1,70 @@
 return {
   {
-    'williamboman/mason.nvim',
-    opts = {
-      ui = {
-        icons = {
-          package_installed = '',
-          package_pending = '',
-          package_uninstalled = '',
-        },
-      }
-    }
+    src = 'https://github.com/williamboman/mason.nvim',
+    name = 'mason.nvim',
+    data = {
+      cmd = { 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUpdate' },
+      after = function()
+        require('mason').setup({
+          ui = {
+            icons = {
+              package_installed = '',
+              package_pending = '',
+              package_uninstalled = '',
+            },
+          }
+        })
+      end,
+    },
   },
   {
-    'folke/lazydev.nvim',
-    ft = 'lua',
-    dependencies = {
-      'saghen/blink.cmp',
-      { 'Bilal2453/luvit-meta', lazy = true },
+    src = 'https://github.com/Bilal2453/luvit-meta',
+    name = 'luvit-meta',
+    data = {
+      dep_of = 'lazydev.nvim',
     },
-    opts = {
-      library = {
-        { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+  },
+  {
+    src = 'https://github.com/folke/lazydev.nvim',
+    name = 'lazydev.nvim',
+    data = {
+      ft = 'lua',
+      after = function()
+        require('lazydev').setup({
+          library = {
+            { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+          },
+        })
+      end,
+    },
+  },
+  {
+    src = 'https://github.com/folke/trouble.nvim',
+    name = 'trouble.nvim',
+    data = {
+      keys = {
+        { lhs = '<leader>xx', rhs = function() require('trouble').toggle('diagnostics') end },
+        { lhs = '<leader>xw', rhs = function() require('trouble').toggle('workspace_diagnostics') end },
+        { lhs = '<leader>xd', rhs = function() require('trouble').toggle('document_diagnostics') end },
+        { lhs = '<leader>xq', rhs = function() require('trouble').toggle('quickfix') end },
+        { lhs = '<leader>xl', rhs = function() require('trouble').toggle('loclist') end },
+        { lhs = 'gR',         rhs = function() require('trouble').toggle('lsp_references') end },
       },
+      after = function()
+        require('trouble').setup()
+      end,
     },
   },
   {
-    'folke/trouble.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    opts = {},
-    keys = {
-      { '<leader>xx', function() require('trouble').toggle('diagnostics') end },
-      { '<leader>xw', function() require('trouble').toggle('workspace_diagnostics') end },
-      { '<leader>xd', function() require('trouble').toggle('document_diagnostics') end },
-      { '<leader>xq', function() require('trouble').toggle('quickfix') end },
-      { '<leader>xl', function() require('trouble').toggle('loclist') end },
-      { 'gR',         function() require('trouble').toggle('lsp_references') end },
-    }
-  },
-  {
-    'smjonas/inc-rename.nvim',
-    config = true,
-    keys = {
-      { '<leader>rn', ':IncRename ' }
-    }
+    src = 'https://github.com/smjonas/inc-rename.nvim',
+    name = 'inc-rename.nvim',
+    data = {
+      keys = {
+        { lhs = '<leader>rn', rhs = ':IncRename ' }
+      },
+      after = function()
+        require('inc_rename').setup()
+      end,
+    },
   },
 }
