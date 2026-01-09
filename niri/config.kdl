@@ -1,0 +1,9 @@
+// https://yalter.github.io/niri/Configuration:-Introduction
+
+include "input.kdl"
+include "environment.kdl"
+include "layout.kdl"
+include "output.kdl"
+include "startup.kdl"
+include "rules.kdl"
+include "bindings.kdl"

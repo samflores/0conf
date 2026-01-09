@@ -1,0 +1,52 @@
+// https://yalter.github.io/niri/Configuration:-Layout
+layout {
+    gaps 5
+    center-focused-column "never"
+
+    preset-column-widths {
+        proportion 0.32
+        proportion 0.48
+        proportion 0.67
+        proportion 1.00
+    }
+
+    preset-window-heights {
+        proportion 0.32
+        proportion 0.48
+        proportion 0.67
+        proportion 1.00
+    }
+
+    default-column-width { proportion 0.48; }
+
+    focus-ring {
+        off
+        width 4
+        active-color "#7fc8ff"
+        inactive-color "#505050"
+    }
+
+    border {
+        off
+        width 4
+        active-color "#ffc87f"
+        inactive-color "#505050"
+        urgent-color "#9b0000"
+    }
+
+    shadow {
+        on
+        softness 30
+        spread 5
+        offset x=0 y=5
+        color "#0007"
+    }
+
+    tab-indicator {
+        width 5
+        gap 3
+        length total-proportion=0.25
+        position "left"
+        place-within-column
+    }
+}

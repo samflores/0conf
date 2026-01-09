@@ -1,0 +1,12 @@
+spawn-sh-at-startup "eval \"$(dbus-launch --sh-syntax)\""
+spawn-sh-at-startup "dbus-update-activation-environment I3SOCK SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri NO_AT_BRIDGE=1 DBUS_SESSION_BUS_ADDRESS DBUS_SESSION_BUS_PID DBUS_SESSION_BUS_WINDOWID"
+
+spawn-at-startup "ironbar"
+spawn-at-startup "hypridle"
+spawn-at-startup "hyprpaper"
+spawn-at-startup "wl-clipboard-history"
+spawn-at-startup "gentoo-pipewire-launcher"
+spawn-at-startup "mako"
+spawn-at-startup "udiskie"
+spawn-at-startup "/usr/libexec/polkit-mate-authentication-agent-1"
+spawn-at-startup "xwayland-satellite"

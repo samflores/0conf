@@ -1,0 +1,32 @@
+hotkey-overlay {
+    skip-at-startup
+}
+
+cursor {
+    xcursor-theme "Adwaita"
+    xcursor-size 24
+}
+
+environment {
+    QT_QPA_PLATFORM "wayland"
+    // SDL_VIDEODRIVER "wayland"
+    CLUTTER_BACKEND "wayland"
+    RADV_PERFTEST "video_decode"
+
+    XDG_SCREENSHOTS_DIR "/home/samflores/Pictures/Screenshots"
+    TERMINAL "ghostty"
+    QT_QPA_PLATFORMTHEME "qt6ct"
+    GTK_THEME "Adwaita:dark"
+}
+
+prefer-no-csd
+
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+// https://yalter.github.io/niri/Configuration:-Animations
+/-animations {
+    off
+    slowdown 3.0
+}
+
+
