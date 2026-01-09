@@ -54,8 +54,10 @@ export HOST_IP=172.17.0.1
 export DENO_INSTALL="/home/samflores/.deno"
 
 export BUNDLE_PATH=$HOME/.gem/ruby/3.4.0
-# export BUNDLE_CACHE_PATH=$HOME/.bundle/cache
-# export BUNDLE_BIN=$HOME/.bundle/bin
+export BUNDLE_CACHE_PATH=$HOME/.bundle/cache
+export BUNDLE_BIN=$HOME/.bundle/bin
 
 export ANDROID_NDK_ROOT=/home/samflores/Android/Sdk/ndk/27.0.12077973/
 export ANDROID_HOME=/home/samflores/Android/Sdk/
+
+export ZK_NOTEBOOK_DIR=/home/samflores/Documents/Notes/

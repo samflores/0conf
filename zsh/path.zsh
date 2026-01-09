@@ -7,8 +7,6 @@ fi
 typeset -U path
 path=(
       $HOME/.bundle/bin
-      $HOME/.local/share/gem/ruby/3.4.0/bin
-      $HOME/.gem/ruby/3.4.0/bin
       $HOME/.yarn/bin
       $HOME/.config/yarn/global/node_modules/.bin
       $HOME/.local/bin
@@ -17,6 +15,7 @@ path=(
       $HOME/.local/flutter/bin
       $HOME/.cargo/bin
       $HOME/.yarn/bin
+      $HOME/bin
       $DENO_INSTALL/bin
       $ANDROID_SDK_ROOT/platform-tools
       $ANDROID_SDK_ROOT/tools/bin

@@ -12,3 +12,4 @@ zsh/zinit
 zsh/.zinit
 zsh/.zsh_history
 zsh/.zcompdump
+fish/functions/__ysu__*
