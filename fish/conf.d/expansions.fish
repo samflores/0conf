@@ -13,7 +13,7 @@ function __he_last_arg --description 'Expand !$ -> last argument of previous com
     test -n "$last"; or return 1
 
     set -l parts (string split ' ' -- $last)
-    test (count $parts) -ge 2; or return 1
+    test (count $parts) -ge 1; or return 1
     echo $parts[-1]
 end
 
@@ -40,8 +40,7 @@ abbr --erase __he_last_arg 2>/dev/null
 abbr --erase __he_first_arg 2>/dev/null
 abbr --erase __he_all_args 2>/dev/null
 
-abbr --add __he_bangbang  --global --regex '^\!\!$' --function __he_bangbang
-abbr --add __he_last_arg  --global --regex '^\!\$$' --function __he_last_arg
-abbr --add __he_first_arg --global --regex '^\!\^$'  --function __he_first_arg
-abbr --add __he_all_args  --global --regex '^\!\*$'  --function __he_all_args
-
+abbr --add '!!' --position anywhere --function __he_bangbang
+abbr --add '!$' --position anywhere --function __he_last_arg
+abbr --add '!^' --position anywhere --function __he_first_arg
+abbr --add '!*' --position anywhere --function __he_all_args
