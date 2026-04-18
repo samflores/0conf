@@ -8,6 +8,7 @@ return {
         vim.o.background = 'light'
         require('gypsum').setup({
           bg = true,
+          italic_strings = false,
         })
         vim.cmd([[colorscheme gypsum]])
       end,
