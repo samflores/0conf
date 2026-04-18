@@ -1,5 +1,6 @@
 import Quickshell
 import "./bar"
+import "./osd"
 
 ShellRoot {
     Variants {
@@ -12,5 +13,11 @@ ShellRoot {
         model: Quickshell.screens
 
         Bar {}
+    }
+
+    Variants {
+        model: Quickshell.screens
+
+        Osd {}
     }
 }
