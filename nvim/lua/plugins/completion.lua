@@ -4,6 +4,7 @@ return {
     name = 'blink.cmp',
     data = { 
       event = 'DeferredUIEnter',
+      version = '1.*',
       after = function()
         require('blink.cmp').setup({
           keymap = { preset = 'default' },
@@ -58,4 +59,3 @@ return {
     data = { dep_of = 'blink.cmp' }
   },
 }
--- { 'L3MON4D3/LuaSnip', version = 'v2.*' },
