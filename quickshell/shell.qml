@@ -5,6 +5,12 @@ ShellRoot {
     Variants {
         model: Quickshell.screens
 
+        BarExclusion {}
+    }
+
+    Variants {
+        model: Quickshell.screens
+
         Bar {}
     }
 }

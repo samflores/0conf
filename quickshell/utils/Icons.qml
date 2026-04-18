@@ -124,6 +124,12 @@ Singleton {
         themeDark:       "\uf186",        // fa-moon
         themeLight:      "\uf185",        // fa-sun
         notifications:   "\uf0f3",        // fa-bell
-        settings:        "\uf013"         // fa-cog
+        settings:        "\uf013",        // fa-cog
+        power:           "\uf011",        // fa-power-off
+        lock:            "\uf023",        // fa-lock
+        suspend:         "\uf186",        // fa-moon
+        reboot:          "\uf021",        // fa-refresh
+        shutdown:        "\uf011",        // fa-power-off
+        logout:          "\uf08b"         // fa-sign-out
     })
 }
