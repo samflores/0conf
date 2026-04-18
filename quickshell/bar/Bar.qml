@@ -4,6 +4,7 @@ import QtQuick.Shapes
 import Quickshell
 import Niri 0.1
 import "../theme"
+import "./widgets"
 
 PanelWindow {
     id: root
@@ -45,6 +46,10 @@ PanelWindow {
 
         Workspaces {
             screen: root.screen
+            niri: niri
+        }
+
+        ActiveWindow {
             niri: niri
         }
     }
