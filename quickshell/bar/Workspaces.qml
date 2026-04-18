@@ -1,44 +1,37 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
+import "../theme"
 
-Rectangle {
-    property var screen: null
-    anchors.left: parent.left
-    color: "#ff0000"
-    height: 25
+RowLayout {
+    id: root
 
-    Rectangle {
-        id: workspaceLayout
-        anchors {
-            verticalCenter: parent.verticalCenter
-            left: parent.left
-            right: parent.right
-        }
+    required property var screen
+    required property var niri
 
-        RowLayout {
-            anchors {
-                verticalCenter: parent.verticalCenter
+    spacing: 6
+
+    Repeater {
+        model: root.niri.workspaces
+
+        Rectangle {
+            visible: root.screen && root.screen.name === model.output
+            implicitWidth: model.isActive ? 18 : 8
+            implicitHeight: 8
+            radius: 4
+            color: model.isActive ? Theme.fg : Theme.fgDim
+            opacity: model.isActive ? 1.0 : 0.5
+
+            Behavior on implicitWidth {
+                NumberAnimation { duration: 150; easing.type: Easing.OutCubic }
             }
-            spacing: 5
+            Behavior on color {
+                ColorAnimation { duration: 150 }
+            }
 
-            Repeater {
-                model: niri.workspaces
-
-                Rectangle {
-                    visible: screen.name === model.output
-                    width: 12
-                    height: 12
-                    radius: 6
-                    color: "#cdd6f4"
-                    opacity: model.isActive ? 1.0 : 0.3
-
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: niri.focusWorkspaceById(model.id)
-                    }
-                }
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: root.niri.focusWorkspaceById(model.id)
             }
         }
     }

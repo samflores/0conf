@@ -43,11 +43,9 @@ PanelWindow {
         anchors.verticalCenter: barBg.verticalCenter
         spacing: Theme.widgetGap
 
-        Text {
-            text: "·"
-            color: Theme.fgDim
-            font.family: Theme.fontFamily
-            font.pixelSize: Theme.fontSize
+        Workspaces {
+            screen: root.screen
+            niri: niri
         }
     }
 
