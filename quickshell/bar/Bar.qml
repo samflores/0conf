@@ -109,6 +109,7 @@ PanelWindow {
             spacing: Theme.widgetGap
 
             Tray {}
+            NotificationHistory {}
             Mic {
                 barScreen: root.screen
             }
@@ -121,6 +122,7 @@ PanelWindow {
             Bluetooth {
                 barScreen: root.screen
             }
+            ThemeToggle {}
             Power {
                 barScreen: root.screen
             }
