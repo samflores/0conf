@@ -45,12 +45,12 @@ return {
         },
         {
           lhs = '<leader>oh',
-          rhs = function() require('fzf-lua').oldfiles({ cwd_only = true }) end,
+          rhs = function() require('fzf-lua').history({ cwd_only = true }) end,
           desc = 'Find in project history',
         },
         {
           lhs = '<leader>oH',
-          rhs = function() require('fzf-lua').oldfiles() end,
+          rhs = function() require('fzf-lua').history() end,
           desc = 'Find in all history',
         },
         {
