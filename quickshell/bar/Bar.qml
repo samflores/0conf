@@ -91,10 +91,14 @@ PanelWindow {
             id: centerRow
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            spacing: Theme.widgetGap
+            spacing: Theme.widgetGap * 4
 
-            Clock {}
-            MediaMini {}
+            Clock {
+                barScreen: root.screen
+            }
+            MediaMini {
+                barScreen: root.screen
+            }
         }
 
         RowLayout {
@@ -191,6 +195,12 @@ PanelWindow {
         anchors.bottom: parent.bottom
 
         PowerMenu {
+            panelScreen: root.screen
+        }
+        CalendarPanel {
+            panelScreen: root.screen
+        }
+        MediaPanel {
             panelScreen: root.screen
         }
     }
