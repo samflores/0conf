@@ -1,4 +1,5 @@
-if require('zk.util').notebook_root(vim.fn.expand('%:p')) ~= nil then
+local ok, zk_util = pcall(require, 'zk.util')
+if ok and zk_util.notebook_root(vim.fn.expand('%:p')) ~= nil then
   local function map(...) vim.api.nvim_buf_set_keymap(0, ...) end
   local opts = { noremap = true, silent = false }
 

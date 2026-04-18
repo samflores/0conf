@@ -132,7 +132,7 @@ create_augroup('RustFt', {
     pattern = 'rust',
     callback = function()
       vim.opt_local.foldmethod = 'expr'
-      vim.opt_local.foldexpr = 'nvim_treesitter#foldexpr()'
+      vim.opt_local.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     end,
   }
 })
@@ -154,28 +154,6 @@ create_augroup('UserLspConfig', {
         return
       end
 
-      vim.diagnostic.config({
-        signs = {
-          text = {
-            [vim.diagnostic.severity.ERROR] = ' ',
-            [vim.diagnostic.severity.WARN] = ' ',
-            [vim.diagnostic.severity.HINT] = ' ',
-            [vim.diagnostic.severity.INFO] = ' ',
-          },
-          linehl = {
-            [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
-            [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
-            [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
-            [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
-          },
-          numhl = {
-            [vim.diagnostic.severity.ERROR] = '',
-            [vim.diagnostic.severity.WARN] = '',
-            [vim.diagnostic.severity.HINT] = '',
-            [vim.diagnostic.severity.INFO] = '',
-          },
-        },
-      })
 
       local map = vim.keymap.set
       local opts = { noremap = true, buffer = ev.buf }
@@ -208,7 +186,7 @@ create_augroup('UserLspConfig', {
         map('n', 'K', function() vim.lsp.buf.hover { max_width = 100 } end)
       end
 
-      if false and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
+      if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
         vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'fuzzy', 'popup' }
         vim.lsp.inline_completion.enable(true)
         map('i', '<Tab>',
@@ -324,6 +302,22 @@ create_augroup('UserLspConfig', {
     callback = function(args)
       if args.data.method == 'textDocument/didOpen' then
         vim.lsp.foldclose('imports', vim.fn.bufwinid(args.buf))
+      end
+    end
+  }
+})
+
+create_augroup('BackupRotation', {
+  {
+    event = 'VimEnter',
+    callback = function()
+      local backup_dir = vim.fn.stdpath('config') .. '/backups/'
+      local backups = vim.fn.glob(backup_dir .. '*', false, true)
+      table.sort(backups, function(a, b)
+        return vim.fn.getftime(a) > vim.fn.getftime(b)
+      end)
+      for i = 101, #backups do
+        vim.fn.delete(backups[i])
       end
     end
   }

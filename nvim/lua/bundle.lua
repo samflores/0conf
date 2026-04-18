@@ -1,6 +1,6 @@
 local plugins = require('plugins')
 
-vim.pack.add({ "https://github.com/BirdeeHub/lze" }, { confirm = false })
+vim.pack.add({ 'https://github.com/BirdeeHub/lze' }, { confirm = false })
 
 local pack_specs = {}
 for _, plugin in ipairs(plugins) do
@@ -16,17 +16,15 @@ vim.pack.add(pack_specs, {
   confirm = true,
 })
 
-vim.cmd.packadd("lze")
+vim.cmd.packadd('lze')
 
 local lze_specs = {}
 for _, plugin in ipairs(plugins) do
   if plugin.data then
     local spec = plugin.data
-    spec.name = plugin.name or plugin.src:match("([^/]+)%.git$") or plugin.src:match("([^/]+)$")
+    spec.name = plugin.name or plugin.src:match('([^/]+)%.git$') or plugin.src:match('([^/]+)$')
     table.insert(lze_specs, spec)
   end
 end
 
-if #lze_specs > 0 then
-  require("lze").load(lze_specs)
-end
+if #lze_specs > 0 then require('lze').load(lze_specs) end

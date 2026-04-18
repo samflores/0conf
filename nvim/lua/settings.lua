@@ -9,13 +9,12 @@ set.equalalways        = false
 set.autoread           = true
 set.autowrite          = true
 set.backup             = true
-set.backupdir          = '/home/samflores/.config/nvim/backups/'
+set.backupdir          = vim.fn.stdpath('config') .. '/backups/'
 set.clipboard          = 'unnamedplus'
 set.completeopt        = 'menu,menuone,noselect'
 set.conceallevel       = 3
 set.cmdheight          = 1
 set.cursorline         = false
-set.equalalways        = false
 set.expandtab          = true
 set.fillchars          = {
   eob = ' ',
@@ -74,8 +73,7 @@ set.textwidth          = 120
 set.timeoutlen         = 1000
 set.title              = true
 set.ttimeoutlen        = 0
-set.undodir            = '/home/samflores/.config/nvim/undos/'
-set.undofile           = true
+set.undodir            = vim.fn.stdpath('config') .. '/undos/'
 set.undofile           = true
 set.undoreload         = 10000
 set.wildmenu           = true
@@ -106,10 +104,25 @@ vim.filetype.add({
   }
 })
 
-g.clap_layout = {
-  relative = 'editor',
-  width = '100%',
-  height = '33%',
-  row = '70%',
-  col = '33%',
-}
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = ' ',
+      [vim.diagnostic.severity.WARN] = ' ',
+      [vim.diagnostic.severity.HINT] = ' ',
+      [vim.diagnostic.severity.INFO] = ' ',
+    },
+    linehl = {
+      [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
+      [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
+      [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
+      [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
+    },
+    numhl = {
+      [vim.diagnostic.severity.ERROR] = '',
+      [vim.diagnostic.severity.WARN] = '',
+      [vim.diagnostic.severity.HINT] = '',
+      [vim.diagnostic.severity.INFO] = '',
+    },
+  },
+})
