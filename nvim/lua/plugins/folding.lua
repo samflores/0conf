@@ -56,9 +56,41 @@ return {
       end,
       after = function()
         require('ufo').setup({
-          provider_selector = function()
-            return { 'treesitter', 'indent' }
+          provider_selector = function(bufnr, filetype, buftype)
+            -- Languages with LSP support for comment/import folding
+            local lsp_languages = {
+              rust = true,
+              ruby = true,
+              typescript = true,
+              typescriptreact = true,
+              javascript = true,
+              javascriptreact = true,
+              python = true,
+              lua = true,
+              c = true,
+              cpp = true,
+            }
+
+            if lsp_languages[filetype] then
+              return { 'lsp', 'treesitter' }
+            else
+              return { 'treesitter', 'indent' }
+            end
           end,
+
+          close_fold_kinds_for_ft = {
+            rust = { 'comment', 'imports' },
+            ruby = { 'comment', 'imports' },
+            typescript = { 'comment', 'imports' },
+            typescriptreact = { 'comment', 'imports' },
+            javascript = { 'comment', 'imports' },
+            javascriptreact = { 'comment', 'imports' },
+            python = { 'comment', 'imports' },
+            lua = { 'comment', 'imports' },
+            c = { 'comment', 'imports' },
+            cpp = { 'comment', 'imports' },
+            default = { 'imports' },
+          },
 
           fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
             local newVirtText = {}
