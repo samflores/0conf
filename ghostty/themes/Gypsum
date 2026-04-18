@@ -1,0 +1,40 @@
+background = #F7F7F7
+foreground = #000000
+
+cursor-color = #000000
+cursor-text = #F7F7F7
+
+selection-background = #BFDBFE
+selection-foreground = #000000
+
+# Black
+palette = 0=#000000
+palette = 8=#777777
+
+# Red
+palette = 1=#AA3731
+palette = 9=#CC3333
+
+# Green
+palette = 2=#448C27
+palette = 10=#5FA030
+
+# Yellow
+palette = 3=#FFBC5D
+palette = 11=#FFD280
+
+# Blue
+palette = 4=#325CC0
+palette = 12=#007ACC
+
+# Magenta
+palette = 5=#7A3E9D
+palette = 13=#9B4FBD
+
+# Cyan
+palette = 6=#007ACC
+palette = 14=#1A8FDD
+
+# White (changed from #CECECE to darker for visibility)
+palette = 7=#999999
+palette = 15=#666666

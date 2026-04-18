@@ -1,0 +1,8 @@
+theme = Gypsum
+window-padding-balance = true
+font-family = monospace
+font-size = 11
+
+keybind = ctrl+shift++=increase_font_size:1
+keybind = ctrl+==set_font_size:11
+keybind = ctrl+0=set_font_size:11

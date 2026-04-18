@@ -1,0 +1,10 @@
+theme = Gypsum
+window-padding-balance = true
+font-family = monospace
+font-family-italic = MonaspiceRn Nerd Font
+font-size = 12
+
+keybind = ctrl+shift++=increase_font_size:1
+keybind = ctrl+==set_font_size:11
+keybind = ctrl+0=set_font_size:11
+# keybind = shift+enter=text:\x1b\r
