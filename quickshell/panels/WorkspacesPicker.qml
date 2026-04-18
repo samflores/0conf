@@ -12,40 +12,31 @@ Panel {
 
     required property var niri
 
-    // Workspaces from Niri for this panel's screen only.
-    readonly property var wsList: {
-        if (!niri || !niri.workspaces) return []
-        var arr = []
-        for (var i = 0; i < niri.workspaces.count; i++) {
-            var ws = niri.workspaces.get(i)
-            if (ws && ws.output === panelScreen?.name) arr.push(ws)
-        }
-        return arr
-    }
-
     ColumnLayout {
         spacing: 8
 
         Repeater {
-            model: root.wsList
+            model: root.niri.workspaces
 
             ColumnLayout {
-                required property var modelData
+                required property var model
+                required property int index
+                visible: model.output === root.panelScreen?.name
                 spacing: 4
                 Layout.fillWidth: true
 
                 readonly property var wsWindows: Windows.windows.filter(w =>
-                    w.workspaceId === modelData.id
+                    w.workspaceId === model.id
                 )
 
                 Text {
-                    text: modelData.name && modelData.name.length > 0
-                        ? modelData.name
-                        : ("Workspace " + modelData.idx)
-                    color: modelData.isActive ? Theme.accent : Theme.fgDim
+                    text: model.name && model.name.length > 0
+                        ? model.name
+                        : ("Workspace " + index)
+                    color: model.isActive ? Theme.accent : Theme.fgDim
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontSize - 1
-                    font.bold: modelData.isActive
+                    font.bold: model.isActive
                 }
 
                 RowLayout {
@@ -57,7 +48,6 @@ Panel {
 
                         MouseArea {
                             required property var modelData
-                            // Bucket → preferred cell width in the picker.
                             readonly property var bucketWidths: [80, 120, 170, 240]
 
                             Layout.preferredWidth: bucketWidths[modelData.bucket] || 80
