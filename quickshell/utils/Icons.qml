@@ -1,228 +1,129 @@
 pragma Singleton
 
-import qs.config
+import QtQuick
 import Quickshell
-import Quickshell.Services.Notifications
 
 Singleton {
     id: root
 
+    // WTTR weather codes → Nerd Font weather glyphs (nf-weather-*)
     readonly property var weatherIcons: ({
-            "113": "clear_day",
-            "116": "partly_cloudy_day",
-            "119": "cloud",
-            "122": "cloud",
-            "143": "foggy",
-            "176": "rainy",
-            "179": "rainy",
-            "182": "rainy",
-            "185": "rainy",
-            "200": "thunderstorm",
-            "227": "cloudy_snowing",
-            "230": "snowing_heavy",
-            "248": "foggy",
-            "260": "foggy",
-            "263": "rainy",
-            "266": "rainy",
-            "281": "rainy",
-            "284": "rainy",
-            "293": "rainy",
-            "296": "rainy",
-            "299": "rainy",
-            "302": "weather_hail",
-            "305": "rainy",
-            "308": "weather_hail",
-            "311": "rainy",
-            "314": "rainy",
-            "317": "rainy",
-            "320": "cloudy_snowing",
-            "323": "cloudy_snowing",
-            "326": "cloudy_snowing",
-            "329": "snowing_heavy",
-            "332": "snowing_heavy",
-            "335": "snowing",
-            "338": "snowing_heavy",
-            "350": "rainy",
-            "353": "rainy",
-            "356": "rainy",
-            "359": "weather_hail",
-            "362": "rainy",
-            "365": "rainy",
-            "368": "cloudy_snowing",
-            "371": "snowing",
-            "374": "rainy",
-            "377": "rainy",
-            "386": "thunderstorm",
-            "389": "thunderstorm",
-            "392": "thunderstorm",
-            "395": "snowing"
-        })
+        "113": "\uf185",   // day-sunny
+        "116": "\uf002",   // day-cloudy
+        "119": "\uf013",   // cloudy
+        "122": "\uf013",   // cloudy
+        "143": "\uf014",   // fog
+        "176": "\uf019",   // rain
+        "179": "\uf01b",   // snow
+        "182": "\uf0b2",   // rain-mix
+        "185": "\uf0b2",
+        "200": "\uf01e",   // thunderstorm
+        "227": "\uf064",   // snow-wind
+        "230": "\uf064",
+        "248": "\uf014",
+        "260": "\uf014",
+        "263": "\uf019",
+        "266": "\uf019",
+        "281": "\uf0b2",
+        "284": "\uf0b2",
+        "293": "\uf019",
+        "296": "\uf019",
+        "299": "\uf019",
+        "302": "\uf01a",   // hail → showers (use showers glyph)
+        "305": "\uf019",
+        "308": "\uf01a",
+        "311": "\uf0b2",
+        "314": "\uf0b2",
+        "317": "\uf0b2",
+        "320": "\uf064",
+        "323": "\uf01b",
+        "326": "\uf01b",
+        "329": "\uf064",
+        "332": "\uf064",
+        "335": "\uf01b",
+        "338": "\uf064",
+        "350": "\uf01a",
+        "353": "\uf019",
+        "356": "\uf019",
+        "359": "\uf01a",
+        "362": "\uf019",
+        "365": "\uf019",
+        "368": "\uf064",
+        "371": "\uf01b",
+        "374": "\uf01a",
+        "377": "\uf01a",
+        "386": "\uf01e",
+        "389": "\uf01e",
+        "392": "\uf01e",
+        "395": "\uf01b"
+    })
 
+    // Desktop category → Nerd Font glyph (nf-md-*, nf-fa-*)
     readonly property var categoryIcons: ({
-            WebBrowser: "web",
-            Printing: "print",
-            Security: "security",
-            Network: "chat",
-            Archiving: "archive",
-            Compression: "archive",
-            Development: "code",
-            IDE: "code",
-            TextEditor: "edit_note",
-            Audio: "music_note",
-            Music: "music_note",
-            Player: "music_note",
-            Recorder: "mic",
-            Game: "sports_esports",
-            FileTools: "files",
-            FileManager: "files",
-            Filesystem: "files",
-            FileTransfer: "files",
-            Settings: "settings",
-            DesktopSettings: "settings",
-            HardwareSettings: "settings",
-            TerminalEmulator: "terminal",
-            ConsoleOnly: "terminal",
-            Utility: "build",
-            Monitor: "monitor_heart",
-            Midi: "graphic_eq",
-            Mixer: "graphic_eq",
-            AudioVideoEditing: "video_settings",
-            AudioVideo: "music_video",
-            Video: "videocam",
-            Building: "construction",
-            Graphics: "photo_library",
-            "2DGraphics": "photo_library",
-            RasterGraphics: "photo_library",
-            TV: "tv",
-            System: "host",
-            Office: "content_paste"
-        })
+        WebBrowser:  "\udb80\udf43",   // globe
+        Printing:    "\uf02f",         // print
+        Security:    "\udb80\udcbe",   // shield-lock
+        Network:     "\uf0e8",         // sitemap
+        Archiving:   "\uf187",         // archive
+        Compression: "\uf187",
+        Development: "\uf121",         // code
+        IDE:         "\uf121",
+        Building:    "\uf085",         // cogs
+        Debugger:    "\uf188",         // bug
+        GUIDesigner: "\udb81\ude03",   // pencil-ruler
+        Translation: "\udb80\udfd8",   // translate
+        Game:        "\uf11b",         // gamepad
+        Graphics:    "\udb80\udc6e",   // palette
+        Audio:       "\uf001",         // music
+        Video:       "\uf03d",         // video
+        AudioVideo:  "\uf008",         // film
+        Office:      "\uf0f6",         // file-text
+        Email:       "\uf0e0",         // envelope
+        Education:   "\uf19d",         // graduation-cap
+        Science:     "\udb80\udc52",   // flask
+        Utility:     "\uf013",         // cog
+        System:      "\uf108",         // desktop
+        Settings:    "\uf013",
+        TerminalEmulator: "\uf120",    // terminal
+        FileManager: "\uf07b",         // folder
+        Chat:        "\uf075",         // comment
+        VideoConference: "\uf03d"
+    })
 
-    function getAppIcon(name: string, fallback: string): string {
-        const icon = DesktopEntries.heuristicLookup(name)?.icon;
-        if (fallback !== "undefined")
-            return Quickshell.iconPath(icon, fallback);
-        return Quickshell.iconPath(icon);
-    }
-
-    function getAppCategoryIcon(name: string, fallback: string): string {
-        const categories = DesktopEntries.heuristicLookup(name)?.categories;
-
-        if (categories)
-            for (const [key, value] of Object.entries(categoryIcons))
-                if (categories.includes(key))
-                    return value;
-        return fallback;
-    }
-
-    function getNetworkIcon(strength: int): string {
-        if (strength >= 80)
-            return "signal_wifi_4_bar";
-        if (strength >= 60)
-            return "network_wifi_3_bar";
-        if (strength >= 40)
-            return "network_wifi_2_bar";
-        if (strength >= 20)
-            return "network_wifi_1_bar";
-        return "signal_wifi_0_bar";
-    }
-
-    function getBluetoothIcon(icon: string): string {
-        if (icon.includes("headset") || icon.includes("headphones"))
-            return "headphones";
-        if (icon.includes("audio"))
-            return "speaker";
-        if (icon.includes("phone"))
-            return "smartphone";
-        if (icon.includes("mouse"))
-            return "mouse";
-        if (icon.includes("keyboard"))
-            return "keyboard";
-        return "bluetooth";
-    }
-
-    function getWeatherIcon(code: string): string {
-        if (weatherIcons.hasOwnProperty(code))
-            return weatherIcons[code];
-        return "air";
-    }
-
-    function getNotifIcon(summary: string, urgency: int): string {
-        summary = summary.toLowerCase();
-        if (summary.includes("reboot"))
-            return "restart_alt";
-        if (summary.includes("recording"))
-            return "screen_record";
-        if (summary.includes("battery"))
-            return "power";
-        if (summary.includes("screenshot"))
-            return "screenshot_monitor";
-        if (summary.includes("welcome"))
-            return "waving_hand";
-        if (summary.includes("time") || summary.includes("a break"))
-            return "schedule";
-        if (summary.includes("installed"))
-            return "download";
-        if (summary.includes("update"))
-            return "update";
-        if (summary.includes("unable to"))
-            return "deployed_code_alert";
-        if (summary.includes("profile"))
-            return "person";
-        if (summary.includes("file"))
-            return "folder_copy";
-        if (urgency === NotificationUrgency.Critical)
-            return "release_alert";
-        return "chat";
-    }
-
-    function getVolumeIcon(volume: real, isMuted: bool): string {
-        if (isMuted)
-            return "no_sound";
-        if (volume >= 0.5)
-            return "volume_up";
-        if (volume > 0)
-            return "volume_down";
-        return "volume_mute";
-    }
-
-    function getMicVolumeIcon(volume: real, isMuted: bool): string {
-        if (!isMuted && volume > 0)
-            return "mic";
-        return "mic_off";
-    }
-
-    function getSpecialWsIcon(name: string): string {
-        name = name.toLowerCase().slice("special:".length);
-        
-        for (const iconConfig of Config.bar.workspaces.specialWorkspaceIcons) {
-            if (iconConfig.name === name) {
-                return iconConfig.icon;
-            }
-        }
-        
-        if (name === "special")
-            return "star";
-        if (name === "communication")
-            return "forum";
-        if (name === "music")
-            return "music_cast";
-        if (name === "todo")
-            return "checklist";
-        if (name === "sysmon")
-            return "monitor_heart";
-        return name[0].toUpperCase();
-    }
-
-    function getTrayIcon(id: string, icon: string): string {
-        for (const sub of Config.bar.tray.iconSubs)
-            if (sub.id === id)
-                return sub.image ? Qt.resolvedUrl(sub.image) : Quickshell.iconPath(sub.icon);
-
-        if (icon.includes("?path=")) {
-            const [name, path] = icon.split("?path=");
-            icon = Qt.resolvedUrl(`${path}/${name.slice(name.lastIndexOf("/") + 1)}`);
-        }
-        return icon;
-    }
+    // System glyphs used by bar, panels, and OSDs
+    readonly property var systemIcons: ({
+        volume:          "\udb81\udd7e",  // volume-high
+        volumeMid:       "\udb81\udd80",  // volume-medium
+        volumeLow:       "\udb81\udd7f",  // volume-low
+        volumeMute:      "\udb81\udd81",  // volume-mute
+        mic:             "\uf130",        // microphone
+        micMute:         "\uf131",        // microphone-slash
+        bluetoothOn:     "\uf293",        // bluetooth
+        bluetoothOff:    "\uf294",        // bluetooth-b (used as off)
+        wifiOn:          "\uf1eb",        // wifi
+        wifiOff:         "\uf6ab",        // wifi-off (mdi fallback)
+        wifiLow:         "\udb82\udd7a",  // wifi-strength-1
+        wifiMid:         "\udb82\udd7c",  // wifi-strength-3
+        wifiHigh:        "\udb82\udd7e",  // wifi-strength-4
+        batteryFull:     "\uf240",
+        batteryThreeQ:   "\uf241",
+        batteryHalf:     "\uf242",
+        batteryQuarter:  "\uf243",
+        batteryEmpty:    "\uf244",
+        batteryCharging: "\uf0e7",        // bolt
+        brightness:      "\uf185",        // sun
+        media:           "\uf001",        // music
+        play:            "\uf04b",
+        pause:           "\uf04c",
+        prev:            "\uf048",
+        next:            "\uf051",
+        dndOn:           "\uf05e",        // ban
+        dndOff:          "\uf0a2",        // bell
+        tray:            "\udb80\udd82",  // apps
+        launcher:        "\uf0c9",        // bars
+        themeDark:       "\uf186",        // moon
+        themeLight:      "\uf185",        // sun
+        notifications:   "\uf0a2",        // bell
+        settings:        "\uf013"         // cog
+    })
 }
