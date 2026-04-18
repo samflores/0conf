@@ -71,6 +71,7 @@ PanelWindow {
         anchors.verticalCenter: barBg.verticalCenter
         spacing: Theme.widgetGap
 
+        Tray {}
         Mic {}
         Volume {}
         Network {}

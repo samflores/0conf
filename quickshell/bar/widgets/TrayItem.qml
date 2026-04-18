@@ -12,8 +12,8 @@ MouseArea {
     required property SystemTrayItem modelData
 
     acceptedButtons: Qt.LeftButton | Qt.RightButton
-    implicitWidth: 18
-    implicitHeight: 18
+    implicitWidth: 16
+    implicitHeight: 16
 
 
     function getTrayIcon(id: string, icon: string): string {

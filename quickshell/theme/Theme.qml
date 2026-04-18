@@ -28,5 +28,5 @@ Singleton {
 
     readonly property string fontFamily: "MonaspiceKr Nerd Font Mono"
     readonly property int fontSize: 12
-    readonly property int iconSize: 14
+    readonly property int iconSize: 16
 }
