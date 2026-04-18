@@ -109,8 +109,9 @@ PanelWindow {
             anchors.verticalCenter: parent.verticalCenter
             spacing: Theme.widgetGap
 
-            Tray {}
-            NotificationHistory {}
+            Tray {
+                barScreen: root.screen
+            }
             Mic {
                 barScreen: root.screen
             }
@@ -229,6 +230,9 @@ PanelWindow {
         WorkspacesPicker {
             panelScreen: root.screen
             niri: niri
+        }
+        TrayPanel {
+            panelScreen: root.screen
         }
     }
 
