@@ -23,11 +23,9 @@ return {
           'typescript',
           'xml',
         })
-
-        vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+        vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
       end,
-      -- build = ':TSUpdate',
-      -- event = 'DeferredUIEnter',
+      event = 'DeferredUIEnter',
       ft = {
         'sh',
         'bash',
@@ -50,6 +48,9 @@ return {
     src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git',
     version = 'main',
     data = {
+      before = function()
+        vim.cmd.packadd('nvim-treesitter')
+      end,
       after = function()
         require('nvim-treesitter-textobjects').setup {
           select = {
