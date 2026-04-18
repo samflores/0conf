@@ -1,2 +1,3 @@
 singleton Brightness 1.0 Brightness.qml
 singleton Network 1.0 Network.qml
+singleton Bluetooth 1.0 Bluetooth.qml
