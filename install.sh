@@ -176,6 +176,7 @@ else
         mapfile -t MODULES < <(
             printf '%s\n' "${ALL_MODULES[@]}" | sort |
             gum choose --no-limit \
+                --height "${#ALL_MODULES[@]}" \
                 --header "Pick modules (space to toggle, enter to confirm)" \
                 "${selected_flags[@]}"
         )
