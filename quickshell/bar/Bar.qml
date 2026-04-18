@@ -109,10 +109,18 @@ PanelWindow {
             spacing: Theme.widgetGap
 
             Tray {}
-            Mic {}
-            Volume {}
-            Network {}
-            Bluetooth {}
+            Mic {
+                barScreen: root.screen
+            }
+            Volume {
+                barScreen: root.screen
+            }
+            Network {
+                barScreen: root.screen
+            }
+            Bluetooth {
+                barScreen: root.screen
+            }
             Power {
                 barScreen: root.screen
             }
@@ -201,6 +209,18 @@ PanelWindow {
             panelScreen: root.screen
         }
         MediaPanel {
+            panelScreen: root.screen
+        }
+        VolumePanel {
+            panelScreen: root.screen
+        }
+        BluetoothPanel {
+            panelScreen: root.screen
+        }
+        NetworkPanel {
+            panelScreen: root.screen
+        }
+        MicPanel {
             panelScreen: root.screen
         }
     }

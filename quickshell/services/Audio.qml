@@ -43,6 +43,8 @@ Singleton {
     function toggleMicMute(): void { setMicMuted(!micMuted) }
 
     PwObjectTracker {
-        objects: [root.sink, root.source].filter(n => n !== null)
+        // Track all sinks/sources so their audio properties populate
+        // (needed for device pickers, not just the defaults).
+        objects: Pipewire.nodes.values.filter(n => !n.isStream)
     }
 }

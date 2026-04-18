@@ -10,7 +10,13 @@ Singleton {
     property string device: ""
     property bool connected: false
     property string ssid: ""
-    property int signal: 0  // 0-100
+    property int signal: 0
+
+    // Lists of network names (strings). Signal-sorted.
+    property var networks: []      // currently visible (from get-networks)
+    property var knownNetworks: [] // names in iwd's known-networks store
+
+    property bool scanning: false
 
     function refresh() {
         if (device === "") {
@@ -18,6 +24,19 @@ Singleton {
         } else {
             statusProc.running = true
         }
+    }
+
+    function scan() {
+        if (device === "" || scanning) return
+        scanning = true
+        scanProc.command = ["iwctl", "station", device, "scan"]
+        scanProc.running = true
+    }
+
+    function connectTo(ssid) {
+        if (device === "") return
+        connectProc.command = ["iwctl", "station", device, "connect", ssid]
+        connectProc.running = true
     }
 
     function rssiToSignal(rssi) {
@@ -35,7 +54,11 @@ Singleton {
         stdout: StdioCollector {
             onStreamFinished: {
                 root.device = this.text.trim()
-                if (root.device !== "") statusProc.running = true
+                if (root.device !== "") {
+                    statusProc.running = true
+                    knownProc.running = true
+                    networksProc.running = true
+                }
             }
         }
     }
@@ -69,6 +92,77 @@ Singleton {
                 root.ssid = network
                 root.signal = root.connected ? root.rssiToSignal(rssi) : 0
             }
+        }
+    }
+
+    Process {
+        id: networksProc
+        command: ["sh", "-c", root.device === "" ? "true" : ("iwctl station " + root.device + " get-networks | sed 's/\\x1b\\[[0-9;]*m//g'")]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                var out = this.text
+                var lines = out.split("\n")
+                var names = []
+                for (var i = 0; i < lines.length; i++) {
+                    var line = lines[i]
+                    // Skip headers and separators.
+                    if (line.trim() === "" || line.indexOf("---") !== -1) continue
+                    if (line.indexOf("Network name") !== -1 || line.indexOf("Available networks") !== -1) continue
+                    // Format: optional ">" marker + name (possibly with spaces) + security + signal.
+                    // Strip leading indicator "  >  " or "      ", then take the name up to 2+ spaces before security.
+                    var m = line.match(/^\s*(?:>\s*)?(\S.*?)\s{2,}(?:open|psk|8021x|wep)\s/)
+                    if (m) names.push(m[1].trim())
+                }
+                root.networks = names
+            }
+        }
+    }
+
+    Process {
+        id: knownProc
+        command: ["sh", "-c", "iwctl known-networks list | sed 's/\\x1b\\[[0-9;]*m//g'"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                var out = this.text
+                var lines = out.split("\n")
+                var names = []
+                for (var i = 0; i < lines.length; i++) {
+                    var line = lines[i]
+                    if (line.trim() === "" || line.indexOf("---") !== -1) continue
+                    if (line.indexOf("Name") !== -1 || line.indexOf("Known Networks") !== -1) continue
+                    var m = line.match(/^\s*(\S.*?)\s{2,}(?:open|psk|8021x|wep)\s/)
+                    if (m) names.push(m[1].trim())
+                }
+                root.knownNetworks = names
+            }
+        }
+    }
+
+    Process {
+        id: scanProc
+        onRunningChanged: {
+            if (!running) {
+                // Scan finishes; refresh the network list shortly after.
+                root.scanning = false
+                refreshAfterScan.start()
+            }
+        }
+    }
+
+    Process {
+        id: connectProc
+        onRunningChanged: {
+            if (!running) refreshAfterScan.start()
+        }
+    }
+
+    Timer {
+        id: refreshAfterScan
+        interval: 1500
+        onTriggered: {
+            networksProc.running = true
+            statusProc.running = true
+            knownProc.running = true
         }
     }
 

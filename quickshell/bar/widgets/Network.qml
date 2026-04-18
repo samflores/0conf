@@ -1,18 +1,19 @@
 import QtQuick
 import "../../theme"
+import "../../panels"
 import "../../services"
 import "../../utils"
 
 MouseArea {
     id: root
 
-    signal requestControlCenter()
+    required property var barScreen
 
     implicitWidth: icon.implicitWidth
     implicitHeight: icon.implicitHeight
     cursorShape: Qt.PointingHandCursor
 
-    onClicked: root.requestControlCenter()
+    onClicked: PanelState.toggle("network", "right", root.barScreen)
 
     Text {
         id: icon
@@ -22,7 +23,10 @@ MouseArea {
             if (Network.signal >= 50) return Icons.systemIcons.wifiMid
             return Icons.systemIcons.wifiLow
         }
-        color: Network.connected ? Theme.fg : Theme.fgDim
+        color: {
+            if (PanelState.openPanel === "network") return Theme.accent
+            return Network.connected ? Theme.fg : Theme.fgDim
+        }
         font.family: Theme.fontFamily
         font.pixelSize: Theme.iconSize
     }
