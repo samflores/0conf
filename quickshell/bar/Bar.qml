@@ -61,6 +61,7 @@ PanelWindow {
         spacing: Theme.widgetGap
 
         Clock {}
+        MediaMini {}
     }
 
     RowLayout {
