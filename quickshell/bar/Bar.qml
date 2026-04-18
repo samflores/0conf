@@ -8,7 +8,8 @@ import "../theme"
 PanelWindow {
     id: root
 
-    property var screen
+    required property var modelData
+    screen: modelData
 
     anchors {
         top: true
@@ -17,6 +18,7 @@ PanelWindow {
     }
 
     implicitHeight: Theme.barHeight + Theme.pillRadius
+    exclusiveZone: Theme.barHeight
     color: "transparent"
 
     Niri {
