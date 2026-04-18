@@ -115,113 +115,71 @@ PanelWindow {
         }
     }
 
-    // Left screen-edge concave: at the bottom of the bar-color column
-    // on the left. Y depends on whether a left popup extends the bar.
-    Shape {
-        id: leftScreenCorner
+    // Corner geometry helpers. The "left-edge corner" path is bar-color
+    // filling the top-right triangle of a pillRadius square, with the
+    // hypotenuse carved by a concave arc toward (0,0). Used for:
+    //   - screen's left edge (at bar bottom)
+    //   - popup's top-right wrap (when popup is on the left half of bar)
+    // The "right-edge corner" path is the mirror.
+
+    component LeftEdgeCorner: Shape {
+        width: Theme.pillRadius
+        height: Theme.pillRadius
+        preferredRendererType: Shape.CurveRenderer
+
+        ShapePath {
+            strokeWidth: -1
+            fillColor: Theme.bg
+            startX: 0
+            startY: 0
+            PathLine { x: Theme.pillRadius; y: 0 }
+            PathArc {
+                x: 0; y: Theme.pillRadius
+                radiusX: Theme.pillRadius
+                radiusY: Theme.pillRadius
+                direction: PathArc.Counterclockwise
+            }
+            PathLine { x: 0; y: 0 }
+        }
+    }
+
+    component RightEdgeCorner: Shape {
+        width: Theme.pillRadius
+        height: Theme.pillRadius
+        preferredRendererType: Shape.CurveRenderer
+
+        ShapePath {
+            strokeWidth: -1
+            fillColor: Theme.bg
+            startX: 0
+            startY: 0
+            PathLine { x: Theme.pillRadius; y: 0 }
+            PathLine { x: Theme.pillRadius; y: Theme.pillRadius }
+            PathArc {
+                x: 0; y: 0
+                radiusX: Theme.pillRadius
+                radiusY: Theme.pillRadius
+                direction: PathArc.Counterclockwise
+            }
+        }
+    }
+
+    // Screen-left concave at bar bottom. Drops to popup bottom when a
+    // left-aligned popup is open on this screen.
+    LeftEdgeCorner {
         anchors.left: parent.left
-        y: Theme.barHeight + (root.panelOnThisScreen && PanelState.openSide === "left" ? PanelState.openHeight : 0)
-        width: Theme.pillRadius
-        height: Theme.pillRadius
-        preferredRendererType: Shape.CurveRenderer
-
-        ShapePath {
-            strokeWidth: -1
-            fillColor: Theme.bg
-            startX: 0
-            startY: 0
-            PathLine { x: Theme.pillRadius; y: 0 }
-            PathArc {
-                x: 0; y: Theme.pillRadius
-                radiusX: Theme.pillRadius
-                radiusY: Theme.pillRadius
-                direction: PathArc.Counterclockwise
-            }
-            PathLine { x: 0; y: 0 }
-        }
+        y: Theme.barHeight + (root.panelOnThisScreen && PanelState.touchesLeft ? PanelState.openHeight : 0)
     }
 
-    // Right screen-edge concave: at the bottom of the bar-color column
-    // on the right. Y depends on whether a right popup extends the bar.
-    Shape {
-        id: rightScreenCorner
+    // Screen-right concave at bar bottom. Drops to popup bottom when a
+    // right-aligned popup is open on this screen.
+    RightEdgeCorner {
         anchors.right: parent.right
-        y: Theme.barHeight + (root.panelOnThisScreen && PanelState.openSide === "right" ? PanelState.openHeight : 0)
-        width: Theme.pillRadius
-        height: Theme.pillRadius
-        preferredRendererType: Shape.CurveRenderer
-
-        ShapePath {
-            strokeWidth: -1
-            fillColor: Theme.bg
-            startX: 0
-            startY: 0
-            PathLine { x: Theme.pillRadius; y: 0 }
-            PathLine { x: Theme.pillRadius; y: Theme.pillRadius }
-            PathArc {
-                x: 0; y: 0
-                radiusX: Theme.pillRadius
-                radiusY: Theme.pillRadius
-                direction: PathArc.Counterclockwise
-            }
-        }
+        y: Theme.barHeight + (root.panelOnThisScreen && PanelState.touchesRight ? PanelState.openHeight : 0)
     }
 
-    // Concave wrap from bar into popup's inner top corner.
-    // For right-side popup: sits to the left of popup, at bar bottom.
-    // Fill a pillRadius square with its bottom-right corner carved out,
-    // so it visually continues the bar color up to the popup while
-    // curving away toward wallpaper below.
-    // Concave wrap for right-side popup: same shape as bar's right
-    // screen corner, positioned at popup's top-left instead.
-    Shape {
-        x: root.width - PanelState.openRight - Theme.pillRadius
-        y: Theme.barHeight
-        width: Theme.pillRadius
-        height: Theme.pillRadius
-        preferredRendererType: Shape.CurveRenderer
-        visible: root.panelOnThisScreen && PanelState.openSide === "right"
-
-        ShapePath {
-            strokeWidth: -1
-            fillColor: Theme.bg
-            startX: 0
-            startY: 0
-            PathLine { x: Theme.pillRadius; y: 0 }
-            PathLine { x: Theme.pillRadius; y: Theme.pillRadius }
-            PathArc {
-                x: 0; y: 0
-                radiusX: Theme.pillRadius
-                radiusY: Theme.pillRadius
-                direction: PathArc.Counterclockwise
-            }
-        }
-    }
-
-    // For left-side popup: sits to the right of popup, at bar bottom.
-    Shape {
-        x: PanelState.openLeft
-        y: Theme.barHeight
-        width: Theme.pillRadius
-        height: Theme.pillRadius
-        preferredRendererType: Shape.CurveRenderer
-        visible: root.panelOnThisScreen && PanelState.openSide === "left"
-
-        ShapePath {
-            strokeWidth: -1
-            fillColor: Theme.bg
-            startX: 0
-            startY: 0
-            PathLine { x: Theme.pillRadius; y: 0 }
-            PathArc {
-                x: 0; y: Theme.pillRadius
-                radiusX: Theme.pillRadius
-                radiusY: Theme.pillRadius
-                direction: PathArc.Counterclockwise
-            }
-            PathLine { x: 0; y: 0 }
-        }
-    }
+    // The wrap shapes at popup's top-left and top-right corners are
+    // drawn inside Panel itself so they transform with it.
 
     // Panel host — panels mount here. Each panel positions itself via
     // its `side` property. Only one panel is visible at a time.
