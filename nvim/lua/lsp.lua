@@ -7,7 +7,7 @@ vim.lsp.enable({
   'docker_compose_language_service',
   'dockerls',
   'emmet_ls',
-  -- 'eslint',
+  'eslint',
   'graphql',
   'herb_ls',
   'hls',

@@ -1,4 +1,3 @@
-local util = require 'lspconfig.util'
 local lsp = vim.lsp
 
 local eslint_config_files = {
@@ -15,6 +14,22 @@ local eslint_config_files = {
   'eslint.config.mts',
   'eslint.config.cts',
 }
+
+-- Helper function to check if package.json has eslintConfig
+local function has_package_json_eslint_config(path)
+  local package_json_path = path .. '/package.json'
+  if vim.uv.fs_stat(package_json_path) then
+    local ok, content = pcall(vim.fn.readfile, package_json_path)
+    if ok and #content > 0 then
+      local json_str = table.concat(content, '\n')
+      local ok2, json = pcall(vim.json.decode, json_str)
+      if ok2 and json and json.eslintConfig then
+        return true
+      end
+    end
+  end
+  return false
+end
 
 ---@type vim.lsp.Config
 return {
@@ -64,15 +79,34 @@ return {
     -- Eslint used to support package.json files as config files, but it doesn't anymore.
     -- We keep this for backward compatibility.
     local filename = vim.api.nvim_buf_get_name(bufnr)
-    local eslint_config_files_with_package_json =
-        util.insert_package_json(eslint_config_files, 'eslintConfig', filename)
-    local is_buffer_using_eslint = vim.fs.find(eslint_config_files_with_package_json, {
+
+    -- First check for eslint config files
+    local is_buffer_using_eslint = vim.fs.find(eslint_config_files, {
       path = filename,
       type = 'file',
       limit = 1,
       upward = true,
       stop = vim.fs.dirname(project_root),
     })[1]
+
+    -- If no config file found, check for package.json with eslintConfig
+    if not is_buffer_using_eslint then
+      local current_dir = vim.fs.dirname(filename)
+      while current_dir and current_dir ~= vim.fs.dirname(project_root) do
+        if has_package_json_eslint_config(current_dir) then
+          is_buffer_using_eslint = true
+          break
+        end
+        local parent = vim.fs.dirname(current_dir)
+        if parent == current_dir then break end
+        current_dir = parent
+      end
+      -- Check project root as well
+      if not is_buffer_using_eslint and has_package_json_eslint_config(project_root) then
+        is_buffer_using_eslint = true
+      end
+    end
+
     if not is_buffer_using_eslint then
       return
     end
