@@ -2,7 +2,7 @@ local config = function()
   local dap = require('dap')
   local dapui = require('dapui')
   local dap_vt = require('nvim-dap-virtual-text')
-  local dap_vsc_js = require('dap-vscode-js')
+  -- local dap_vsc_js = require('dap-vscode-js')
   local dap_ruby = require('dap-ruby')
 
   vim.api.nvim_set_hl(0, 'DapBreakpoint', { link = 'DiffAdd' })
@@ -56,6 +56,12 @@ local config = function()
       command = vim.fn.stdpath('data') .. '/mason/packages/codelldb/extension/adapter/codelldb',
       args = { '--port', '${port}' },
     }
+  }
+
+  dap.adapters.cppdbg = {
+    id = 'cppdbg',
+    type = 'executable',
+    command = vim.fn.stdpath('data') .. '/mason/packages/cpptools/extension/debugAdapters/bin/OpenDebugAD7',
   }
 
   for _, language in ipairs({ 'typescript', 'javascript', 'svelte' }) do
@@ -124,7 +130,36 @@ local config = function()
       cwd = 'target/debug',
       stopOnEntry = false,
       args = {},
-    }
+    },
+    {
+      name = 'Attach to QEMU (min-os kernel)',
+      type = 'cppdbg',
+      request = 'launch',
+      MIMode = 'gdb',
+      miDebuggerServerAddress = 'localhost:1234',
+      miDebuggerPath = '/bin/gdb',
+      program = '${workspaceFolder}/target/x86_64-unknown-none/release/min-os-kernel',
+      cwd = '${workspaceFolder}',
+      stopAtEntry = false,
+      setupCommands = {
+        { text = 'set architecture i386:x86-64', ignoreFailures = false },
+        { text = 'add-symbol-file ${workspaceFolder}/target/x86_64-unknown-none/release/init 0x400000', ignoreFailures = true },
+        { text = 'add-symbol-file ${workspaceFolder}/target/x86_64-unknown-none/release/memsrv 0x500000', ignoreFailures = true },
+      },
+    },
+    {
+      name = 'Launch GDB (min-os kernel)',
+      type = 'cppdbg',
+      request = 'launch',
+      MIMode = 'gdb',
+      miDebuggerPath = '/bin/gdb',
+      program = '${workspaceFolder}/target/x86_64-unknown-none/release/min-os-kernel',
+      cwd = '${workspaceFolder}',
+      stopAtEntry = true,
+      setupCommands = {
+        { text = 'set architecture i386:x86-64', ignoreFailures = false },
+      },
+    },
   }
 
   dap.listeners.after.event_initialized['dapui_config'] = function()
@@ -160,11 +195,17 @@ return {
     src = 'https://github.com/rcarriga/nvim-dap-ui',
     name = 'nvim-dap-ui',
     data = {
-    -- {
-    --   'microsoft/vscode-js-debug',
-    --   version = '1.x',
-    --   build = 'npm i && npm run compile vsDebugServerBundle && mv dist out'
-    -- }
+      -- {
+      --   'microsoft/vscode-js-debug',
+      --   version = '1.x',
+      --   build = 'npm i && npm run compile vsDebugServerBundle && mv dist out'
+      -- }
+      before = function()
+        vim.cmd.packadd('nvim-nio')
+        vim.cmd.packadd('nvim-dap')
+        vim.cmd.packadd('nvim-dap-ruby')
+        vim.cmd.packadd('nvim-dap-virtual-text')
+      end,
       keys = {
         { lhs = '<leader>db', rhs = function() require 'dap'.toggle_breakpoint() end },
         { lhs = '<leader>dB', rhs = function() require 'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end },
