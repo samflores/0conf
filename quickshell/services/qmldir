@@ -5,3 +5,4 @@ singleton Bluetooth 1.0 Bluetooth.qml
 singleton Dnd 1.0 Dnd.qml
 singleton Media 1.0 Media.qml
 singleton Network 1.0 Network.qml
+singleton Windows 1.0 Windows.qml

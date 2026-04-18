@@ -7,3 +7,4 @@ VolumePanel 1.0 VolumePanel.qml
 BluetoothPanel 1.0 BluetoothPanel.qml
 NetworkPanel 1.0 NetworkPanel.qml
 MicPanel 1.0 MicPanel.qml
+WorkspacesPicker 1.0 WorkspacesPicker.qml

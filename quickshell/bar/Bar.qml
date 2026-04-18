@@ -80,6 +80,7 @@ PanelWindow {
             Workspaces {
                 screen: root.screen
                 niri: niri
+                barScreen: root.screen
             }
 
             ActiveWindow {
@@ -224,6 +225,10 @@ PanelWindow {
         }
         MicPanel {
             panelScreen: root.screen
+        }
+        WorkspacesPicker {
+            panelScreen: root.screen
+            niri: niri
         }
     }
 
