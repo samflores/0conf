@@ -50,7 +50,7 @@ function fish_prompt
             set indicator '#'
     end
 
-    printf '%s%s%s ' (set_color --bold white) $indicator (set_color normal)
+    printf '%s%s%s ' (set_color white) $indicator (set_color normal)
 end
 
 function fish_right_prompt

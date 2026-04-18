@@ -65,3 +65,6 @@ set -x ANDROID_HOME $HOME/Android/Sdk
 
 set -x ZK_NOTEBOOK_DIR $HOME/Documents/Notes
 set -x PASSWORD_STORE_DIR $HOME/.local/share/password-store
+
+# --- Rust
+set -gx CARGO_HOME /home/samflores/.local/share/cargo

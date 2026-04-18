@@ -1,6 +1,6 @@
 function mkcd --description 'mkdir -p DIR and cd into it'
     if test -n "$argv[1]"
-        mkdir -p -- "$argv[1]" and cd -- "$argv[1]"
+        mkdir -p -- "$argv[1]"; and cd -- "$argv[1]"
     end
 end
 

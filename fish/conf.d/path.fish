@@ -6,6 +6,7 @@ fish_add_path -g \
     $HOME/.yarn/bin \
     $HOME/.config/yarn/global/node_modules/.bin \
     $HOME/.local/bin \
+    $HOME/.local/share/nvim/mason/bin/ \
     $HOME/.local/share/cargo/bin \
     $HOME/.local/share/go/bin \
     $HOME/.local/flutter/bin \
