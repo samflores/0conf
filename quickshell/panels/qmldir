@@ -1,0 +1,11 @@
+singleton PanelState 1.0 PanelState.qml
+Panel 1.0 Panel.qml
+PowerMenu 1.0 PowerMenu.qml
+CalendarPanel 1.0 CalendarPanel.qml
+MediaPanel 1.0 MediaPanel.qml
+VolumePanel 1.0 VolumePanel.qml
+BluetoothPanel 1.0 BluetoothPanel.qml
+NetworkPanel 1.0 NetworkPanel.qml
+MicPanel 1.0 MicPanel.qml
+WorkspacesPicker 1.0 WorkspacesPicker.qml
+TrayPanel 1.0 TrayPanel.qml
