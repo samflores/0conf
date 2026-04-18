@@ -68,3 +68,6 @@ set -x PASSWORD_STORE_DIR $HOME/.local/share/password-store
 
 # --- Rust
 set -gx CARGO_HOME /home/samflores/.local/share/cargo
+
+# --- Pi coding agent
+set -gx PI_CODING_AGENT_DIR $HOME/.config/pi/agent

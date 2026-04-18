@@ -1,0 +1,36 @@
+{
+  "providers": {
+    "ollama": {
+      "api": "openai-completions",
+      "apiKey": "ollama",
+      "baseUrl": "http://127.0.0.1:11434/v1",
+      "models": [
+        {
+          "_launch": true,
+          "contextWindow": 131072,
+          "id": "gemma4",
+          "input": [
+            "text",
+            "image"
+          ],
+          "reasoning": true
+        }
+      ]
+    },
+    "zai": {
+      "api": "openai-completions",
+      "apiKey": "ZAI_API_KEY",
+      "baseUrl": "https://api.z.ai/api/coding/paas/v4",
+      "models": [
+        {
+          "contextWindow": 204800,
+          "id": "glm-5.1",
+          "input": ["text"],
+          "maxTokens": 131072,
+          "name": "GLM-5.1",
+          "reasoning": true
+        }
+      ]
+    }
+  }
+}
