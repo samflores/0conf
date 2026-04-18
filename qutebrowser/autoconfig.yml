@@ -18,6 +18,7 @@ settings:
     global: true
   content.desktop_capture:
     https://app.slack.com: true
+    https://discord.com: true
     https://meet.google.com: true
   content.geolocation:
     http://localhost:8123: true
@@ -39,6 +40,7 @@ settings:
     https://github.com: access-paste
     https://mail.google.com: access-paste
     https://pi.equatorialenergia.com.br: access-paste
+    https://sandbox-3.reactblade.portal.azure.net: access-paste
     https://share.1password.com: access-paste
     https://us-east-1.console.aws.amazon.com: access-paste
     https://www.urlencoder.org: access-paste
@@ -77,8 +79,11 @@ settings:
     https://www.pichau.com.br: false
     https://www.puravida.com.br: false
     https://www.shopclub.com.br: false
+    https://www.stacksocial.com: false
     https://www.tecmundo.com.br: false
+    https://www.terabyteshop.com.br: false
     https://www.tiktok.com: false
+    https://www.tomsguide.com: false
     https://www.vivadecora.com.br: false
     https://www.youtube.com: false
   content.register_protocol_handler:
