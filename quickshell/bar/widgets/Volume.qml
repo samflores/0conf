@@ -12,30 +12,32 @@ MouseArea {
     cursorShape: Qt.PointingHandCursor
     acceptedButtons: Qt.LeftButton
 
-    onClicked: Media.playPause()
+    onClicked: Audio.toggleMute()
     onWheel: function(wheel) {
-        if (wheel.angleDelta.y > 0) Media.next()
-        else if (wheel.angleDelta.y < 0) Media.prev()
+        var delta = wheel.angleDelta.y > 0 ? 5 : -5
+        Audio.setVolume(Audio.volume + delta)
         wheel.accepted = true
     }
 
     RowLayout {
         id: row
-        spacing: 6
+        spacing: 4
 
         Text {
-            text: Icons.systemIcons.media
-            color: Media.active ? Theme.fg : Theme.fgDim
+            text: {
+                if (Audio.muted || Audio.volume === 0) return Icons.systemIcons.volumeMute
+                if (Audio.volume <= 33) return Icons.systemIcons.volumeLow
+                if (Audio.volume <= 66) return Icons.systemIcons.volumeMid
+                return Icons.systemIcons.volume
+            }
+            color: Audio.muted ? Theme.fgDim : Theme.fg
             font.family: Theme.fontFamily
             font.pixelSize: Theme.iconSize
         }
 
         Text {
-            visible: Media.active && Media.title.length > 0
-            text: {
-                var t = Media.title
-                return t.length > 30 ? t.substring(0, 27) + "…" : t
-            }
+            text: Audio.volume + "%"
+            visible: !Audio.muted
             color: Theme.fg
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSize
