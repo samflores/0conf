@@ -21,7 +21,7 @@ MouseArea {
 
     Text {
         id: audioText
-        text: Audio.muted ? "" : (Audio.volume <= 0.3 ? "" : ( Audio.volume <= 0.6 ? "" : "" ))
+        text: Audio.muted ? "" : (Audio.volume <= 30 ? "" : ( Audio.volume <= 60 ? "" : "" ))
         font.pixelSize: 14
         font.family: "monospace"
         color: "#cdd6f4"
