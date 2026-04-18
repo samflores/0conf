@@ -73,6 +73,8 @@ PanelWindow {
 
         Mic {}
         Volume {}
+        Network {}
+        Bluetooth {}
     }
 
     // Concave bottom corners: squares flush with the screen edge,

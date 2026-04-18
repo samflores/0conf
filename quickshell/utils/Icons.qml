@@ -90,40 +90,40 @@ Singleton {
         VideoConference: "\uf03d"
     })
 
-    // System glyphs used by bar, panels, and OSDs
+    // System glyphs — Nerd Font (FontAwesome + Material Design Icons)
     readonly property var systemIcons: ({
-        volume:          "\udb81\udd7e",  // volume-high
-        volumeMid:       "\udb81\udd80",  // volume-medium
-        volumeLow:       "\udb81\udd7f",  // volume-low
-        volumeMute:      "\udb81\udd81",  // volume-mute
-        mic:             "\uf130",        // microphone
-        micMute:         "\uf131",        // microphone-slash
-        bluetoothOn:     "\uf293",        // bluetooth
-        bluetoothOff:    "\uf294",        // bluetooth-b (used as off)
-        wifiOn:          "\uf1eb",        // wifi
-        wifiOff:         "\uf6ab",        // wifi-off (mdi fallback)
-        wifiLow:         "\udb82\udd7a",  // wifi-strength-1
-        wifiMid:         "\udb82\udd7c",  // wifi-strength-3
-        wifiHigh:        "\udb82\udd7e",  // wifi-strength-4
+        volume:          "\uf028",        // fa-volume-up
+        volumeMid:       "\uf027",        // fa-volume-down
+        volumeLow:       "\uf027",        // fa-volume-down (no separate low)
+        volumeMute:      "\uf026",        // fa-volume-off
+        mic:             "\uf130",        // fa-microphone
+        micMute:         "\uf131",        // fa-microphone-slash
+        bluetoothOn:     "\uf293",        // fa-bluetooth
+        bluetoothOff:    "\uf294",        // fa-bluetooth-b
+        wifiOn:          "\udb82\udd28",  // mdi-wifi-strength-4
+        wifiOff:         "\udb82\udd2b",  // mdi-wifi-strength-off
+        wifiLow:         "\udb82\udd1f",  // mdi-wifi-strength-1
+        wifiMid:         "\udb82\udd25",  // mdi-wifi-strength-3
+        wifiHigh:        "\udb82\udd28",  // mdi-wifi-strength-4
         batteryFull:     "\uf240",
         batteryThreeQ:   "\uf241",
         batteryHalf:     "\uf242",
         batteryQuarter:  "\uf243",
         batteryEmpty:    "\uf244",
-        batteryCharging: "\uf0e7",        // bolt
-        brightness:      "\uf185",        // sun
-        media:           "\uf001",        // music
+        batteryCharging: "\uf0e7",        // fa-bolt
+        brightness:      "\uf185",        // fa-sun
+        media:           "\uf001",        // fa-music
         play:            "\uf04b",
         pause:           "\uf04c",
         prev:            "\uf048",
         next:            "\uf051",
-        dndOn:           "\uf05e",        // ban
-        dndOff:          "\uf0a2",        // bell
-        tray:            "\udb80\udd82",  // apps
-        launcher:        "\uf0c9",        // bars
-        themeDark:       "\uf186",        // moon
-        themeLight:      "\uf185",        // sun
-        notifications:   "\uf0a2",        // bell
-        settings:        "\uf013"         // cog
+        dndOn:           "\uf1f6",        // fa-bell-slash
+        dndOff:          "\uf0f3",        // fa-bell
+        tray:            "\uf00a",        // fa-th
+        launcher:        "\uf002",        // fa-search
+        themeDark:       "\uf186",        // fa-moon
+        themeLight:      "\uf185",        // fa-sun
+        notifications:   "\uf0f3",        // fa-bell
+        settings:        "\uf013"         // fa-cog
     })
 }

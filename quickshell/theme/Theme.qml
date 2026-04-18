@@ -26,7 +26,7 @@ Singleton {
     readonly property int widgetGap:   6
     readonly property int outerMargin: 8
 
-    readonly property string fontFamily: "MonaspiceAr Nerd Font Mono"
+    readonly property string fontFamily: "MonaspiceKr Nerd Font Mono"
     readonly property int fontSize: 12
     readonly property int iconSize: 14
 }
