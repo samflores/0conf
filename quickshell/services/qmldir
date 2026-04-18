@@ -1,1 +1,2 @@
 singleton Brightness 1.0 Brightness.qml
+singleton Network 1.0 Network.qml
