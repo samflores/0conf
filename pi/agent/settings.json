@@ -1,0 +1,6 @@
+{
+  "defaultModel": "gemma4",
+  "defaultProvider": "ollama",
+  "lastChangelogVersion": "0.67.68",
+  "theme": "gypsum"
+}

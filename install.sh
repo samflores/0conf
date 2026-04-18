@@ -19,6 +19,7 @@ declare -A SRC=(
     [ghostty]="ghostty"
     [fontconfig]="fontconfig"
     [git]="gitconfig"
+    [pi]="pi"
     [eww]="eww"
     [rofi]="rofi"
     [kitty]="kitty"
@@ -27,7 +28,7 @@ declare -A SRC=(
 )
 
 # Default selection.
-DEFAULTS=(nvim fish tmux niri hypr quickshell ghostty fontconfig git)
+DEFAULTS=(nvim fish tmux niri hypr quickshell ghostty fontconfig git pi)
 
 # Runtime dependency map. Missing deps are warned, never installed.
 declare -A DEPS=(
@@ -40,6 +41,7 @@ declare -A DEPS=(
     [ghostty]="ghostty"
     [fontconfig]=""
     [git]="git gh git-lfs"
+    [pi]="pi"
     [eww]="eww"
     [rofi]="rofi"
     [kitty]="kitty"
