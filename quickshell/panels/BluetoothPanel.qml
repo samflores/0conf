@@ -117,7 +117,7 @@ Panel {
             color: Theme.fgDim
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSize
-            visible: root.devices.length === 0 && Bluetooth.powered
+            visible: root.devices.length === 0 && Bluetooth.powered === true
             Layout.alignment: Qt.AlignHCenter
             topPadding: 4
             bottomPadding: 4
