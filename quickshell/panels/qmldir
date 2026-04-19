@@ -11,3 +11,4 @@ WorkspacesPicker 1.0 WorkspacesPicker.qml
 TrayPanel 1.0 TrayPanel.qml
 BrightnessPanel 1.0 BrightnessPanel.qml
 BatteryPanel 1.0 BatteryPanel.qml
+SettingsPanel 1.0 SettingsPanel.qml

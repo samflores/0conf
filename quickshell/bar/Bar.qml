@@ -112,7 +112,9 @@ PanelWindow {
             Tray {
                 barScreen: root.screen
             }
-            ThemeToggle {}
+            Settings {
+                barScreen: root.screen
+            }
             Mic {
                 barScreen: root.screen
             }
@@ -244,6 +246,9 @@ PanelWindow {
             panelScreen: root.screen
         }
         BatteryPanel {
+            panelScreen: root.screen
+        }
+        SettingsPanel {
             panelScreen: root.screen
         }
     }
