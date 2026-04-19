@@ -14,6 +14,7 @@ MouseArea {
     implicitWidth: row.implicitWidth
     implicitHeight: row.implicitHeight
     cursorShape: Qt.PointingHandCursor
+    hoverEnabled: true
 
     onClicked: PanelState.toggle("brightness", "right", root.barScreen)
     onWheel: function(wheel) {
@@ -35,6 +36,7 @@ MouseArea {
 
         Text {
             text: Brightness.percent + "%"
+            visible: root.containsMouse
             color: Theme.fg
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSize

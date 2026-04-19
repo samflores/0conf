@@ -14,6 +14,9 @@ MouseArea {
     implicitWidth: row.implicitWidth
     implicitHeight: row.implicitHeight
     cursorShape: Qt.PointingHandCursor
+    hoverEnabled: true
+
+    readonly property bool low: !Battery.charging && Battery.percent <= 15
 
     onClicked: PanelState.toggle("battery", "right", root.barScreen)
 
@@ -33,7 +36,7 @@ MouseArea {
             }
             color: {
                 if (PanelState.openPanel === "battery") return Theme.accent
-                if (!Battery.charging && Battery.percent <= 15) return Theme.err
+                if (root.low) return Theme.err
                 if (Battery.charging) return Theme.ok
                 return Theme.fg
             }
@@ -43,6 +46,7 @@ MouseArea {
 
         Text {
             text: Battery.percent + "%"
+            visible: root.low || root.containsMouse
             color: Theme.fg
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSize
