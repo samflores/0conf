@@ -112,6 +112,12 @@ PanelWindow {
             Tray {
                 barScreen: root.screen
             }
+            Battery {
+                barScreen: root.screen
+            }
+            Brightness {
+                barScreen: root.screen
+            }
             Mic {
                 barScreen: root.screen
             }
@@ -232,6 +238,12 @@ PanelWindow {
             niri: niri
         }
         TrayPanel {
+            panelScreen: root.screen
+        }
+        BrightnessPanel {
+            panelScreen: root.screen
+        }
+        BatteryPanel {
             panelScreen: root.screen
         }
     }
