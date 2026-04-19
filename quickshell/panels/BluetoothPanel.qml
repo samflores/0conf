@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Bluetooth
+import Quickshell.Bluetooth as Bluez
 import "../theme"
 import "../services"
 import "../utils"
@@ -12,8 +12,16 @@ Panel {
     side: "right"
     contentPadding: 12
 
-    readonly property var adapter: Bluetooth.defaultAdapter
-    readonly property var devices: adapter?.devices?.values ?? []
+    readonly property var adapter: Bluetooth.adapter
+    readonly property var devices: {
+        var list = (adapter?.devices?.values ?? []).slice()
+        list.sort(function(a, b) {
+            var an = (a.name || a.address || "").toLowerCase()
+            var bn = (b.name || b.address || "").toLowerCase()
+            return an < bn ? -1 : an > bn ? 1 : 0
+        })
+        return list
+    }
 
     ColumnLayout {
         spacing: 10
