@@ -2,14 +2,19 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.Bluetooth
+import Quickshell.Bluetooth as Bluez
 
 Singleton {
     id: root
 
-    readonly property var adapter: Bluetooth.defaultAdapter
+    readonly property var adapter: Bluez.Bluetooth.defaultAdapter
     readonly property bool available: adapter !== null
-    readonly property bool powered: !!adapter?.enabled
+    readonly property bool powered: {
+        if (!adapter) return false
+        if (adapter.state === Bluez.BluetoothAdapterState.Enabled) return true
+        if (adapter.state === Bluez.BluetoothAdapterState.Enabling) return true
+        return !!adapter.enabled
+    }
 
     function toggle() {
         if (adapter) adapter.enabled = !adapter.enabled
