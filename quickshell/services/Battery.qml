@@ -25,27 +25,4 @@ Singleton {
 
     readonly property int timeToEmpty: present ? (device.timeToEmpty ?? 0) : 0
     readonly property int timeToFull: present ? (device.timeToFull ?? 0) : 0
-
-    function dump() {
-        var devs = UPower.devices?.values ?? []
-        console.info("Battery: devices count=", devs.length, "onBattery=", UPower.onBattery)
-        for (var i = 0; i < devs.length; i++) {
-            var d = devs[i]
-            console.info("  [", i, "] type=", d.type, "isPresent=", d.isPresent,
-                "isLaptop=", d.isLaptopBattery, "model=", d.model,
-                "nativePath=", d.nativePath, "percentage=", d.percentage, "state=", d.state)
-        }
-    }
-
-    Component.onCompleted: {
-        dump()
-        pollTimer.start()
-    }
-
-    Timer {
-        id: pollTimer
-        interval: 1000
-        repeat: true
-        onTriggered: root.dump()
-    }
 }
