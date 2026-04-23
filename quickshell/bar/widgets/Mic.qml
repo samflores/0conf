@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import "../../theme"
 import "../../panels"
 import "../../services"
@@ -9,10 +10,11 @@ MouseArea {
 
     required property var barScreen
 
-    implicitWidth: icon.implicitWidth
-    implicitHeight: icon.implicitHeight
+    implicitWidth: row.implicitWidth
+    implicitHeight: row.implicitHeight
     cursorShape: Qt.PointingHandCursor
     acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+    hoverEnabled: true
 
     onClicked: function(mouse) {
         if (mouse.button === Qt.MiddleButton) {
@@ -22,14 +24,26 @@ MouseArea {
         }
     }
 
-    Text {
-        id: icon
-        text: Audio.micMuted ? Icons.systemIcons.micMute : Icons.systemIcons.mic
-        color: {
-            if (PanelState.openPanel === "mic") return Theme.accent
-            return Audio.micMuted ? Theme.fgDim : Theme.fg
+    RowLayout {
+        id: row
+        spacing: 4
+
+        Text {
+            text: Audio.micMuted ? Icons.systemIcons.micMute : Icons.systemIcons.mic
+            color: {
+                if (PanelState.openPanel === "mic") return Theme.accent
+                return Audio.micMuted ? Theme.fgDim : Theme.fg
+            }
+            font.family: Theme.fontFamily
+            font.pixelSize: Theme.iconSize
         }
-        font.family: Theme.fontFamily
-        font.pixelSize: Theme.iconSize
+
+        Text {
+            text: Audio.micVolume + "%"
+            visible: !Audio.micMuted && root.containsMouse
+            color: Theme.fg
+            font.family: Theme.fontFamily
+            font.pixelSize: Theme.fontSize
+        }
     }
 }

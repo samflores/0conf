@@ -10,34 +10,32 @@ MouseArea {
 
     required property var barScreen
 
+    visible: Brightness.available
     implicitWidth: row.implicitWidth
     implicitHeight: row.implicitHeight
     cursorShape: Qt.PointingHandCursor
     hoverEnabled: true
 
-    onClicked: PanelState.toggle("network", "right", root.barScreen)
+    onClicked: PanelState.toggle("brightness", "right", root.barScreen)
+    onWheel: function(wheel) {
+        var delta = wheel.angleDelta.y > 0 ? 5 : -5
+        Brightness.set(Brightness.percent + delta)
+        wheel.accepted = true
+    }
 
     RowLayout {
         id: row
         spacing: 4
 
         Text {
-            text: {
-                if (!Network.connected) return Icons.systemIcons.wifiOff
-                if (Network.signal >= 75) return Icons.systemIcons.wifiHigh
-                if (Network.signal >= 50) return Icons.systemIcons.wifiMid
-                return Icons.systemIcons.wifiLow
-            }
-            color: {
-                if (PanelState.openPanel === "network") return Theme.accent
-                return Network.connected ? Theme.fg : Theme.fgDim
-            }
+            text: Icons.systemIcons.brightness
+            color: PanelState.openPanel === "brightness" ? Theme.accent : Theme.fg
             font.family: Theme.fontFamily
             font.pixelSize: Theme.iconSize
         }
 
         Text {
-            text: Network.connected ? (Network.signal + "%") : (Network.networks.length + " available")
+            text: Brightness.percent + "%"
             visible: root.containsMouse
             color: Theme.fg
             font.family: Theme.fontFamily

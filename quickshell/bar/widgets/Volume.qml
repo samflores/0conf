@@ -14,6 +14,7 @@ MouseArea {
     implicitHeight: row.implicitHeight
     cursorShape: Qt.PointingHandCursor
     acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+    hoverEnabled: true
 
     onClicked: function(mouse) {
         if (mouse.button === Qt.MiddleButton) {
@@ -50,7 +51,7 @@ MouseArea {
 
         Text {
             text: Audio.volume + "%"
-            visible: !Audio.muted
+            visible: !Audio.muted && root.containsMouse
             color: Theme.fg
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSize

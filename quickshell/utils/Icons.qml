@@ -125,6 +125,9 @@ Singleton {
         themeLight:      "\uf185",        // fa-sun
         notifications:   "\uf0f3",        // fa-bell
         settings:        "\uf013",        // fa-cog
+        nightLight:      "\udb81\udd81",  // mdi-weather-night
+        airplaneOn:      "\uf072",        // fa-plane
+        airplaneOff:     "\udb81\udd79",  // mdi-airplane-off
         power:           "\uf011",        // fa-power-off
         lock:            "\uf023",        // fa-lock
         suspend:         "\uf186",        // fa-moon

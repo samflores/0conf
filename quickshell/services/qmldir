@@ -1,3 +1,4 @@
+singleton Airplane 1.0 Airplane.qml
 singleton Audio 1.0 Audio.qml
 singleton Battery 1.0 Battery.qml
 singleton Brightness 1.0 Brightness.qml
@@ -5,4 +6,5 @@ singleton Bluetooth 1.0 Bluetooth.qml
 singleton Dnd 1.0 Dnd.qml
 singleton Media 1.0 Media.qml
 singleton Network 1.0 Network.qml
+singleton Nightlight 1.0 Nightlight.qml
 singleton Windows 1.0 Windows.qml

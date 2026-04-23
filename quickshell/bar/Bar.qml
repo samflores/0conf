@@ -112,19 +112,27 @@ PanelWindow {
             Tray {
                 barScreen: root.screen
             }
+            Settings {
+                barScreen: root.screen
+            }
             Mic {
                 barScreen: root.screen
             }
             Volume {
                 barScreen: root.screen
             }
-            Network {
+            Brightness {
                 barScreen: root.screen
             }
             Bluetooth {
                 barScreen: root.screen
             }
-            ThemeToggle {}
+            Network {
+                barScreen: root.screen
+            }
+            Battery {
+                barScreen: root.screen
+            }
             Power {
                 barScreen: root.screen
             }
@@ -232,6 +240,15 @@ PanelWindow {
             niri: niri
         }
         TrayPanel {
+            panelScreen: root.screen
+        }
+        BrightnessPanel {
+            panelScreen: root.screen
+        }
+        BatteryPanel {
+            panelScreen: root.screen
+        }
+        SettingsPanel {
             panelScreen: root.screen
         }
     }
