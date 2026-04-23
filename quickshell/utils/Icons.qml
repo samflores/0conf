@@ -128,6 +128,9 @@ Singleton {
         nightLight:      "\udb81\udd81",  // mdi-weather-night
         airplaneOn:      "\uf072",        // fa-plane
         airplaneOff:     "\udb81\udd79",  // mdi-airplane-off
+        perfPerformance: "\uf0e4",        // fa-tachometer (speedometer)
+        perfBalanced:    "\uf24e",        // fa-balance-scale
+        perfPowerSaver:  "\uf06c",        // fa-leaf
         power:           "\uf011",        // fa-power-off
         lock:            "\uf023",        // fa-lock
         suspend:         "\uf186",        // fa-moon

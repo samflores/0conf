@@ -133,6 +133,9 @@ PanelWindow {
             Battery {
                 barScreen: root.screen
             }
+            PowerProfile {
+                barScreen: root.screen
+            }
             Power {
                 barScreen: root.screen
             }
@@ -249,6 +252,9 @@ PanelWindow {
             panelScreen: root.screen
         }
         SettingsPanel {
+            panelScreen: root.screen
+        }
+        PowerProfilePanel {
             panelScreen: root.screen
         }
     }
