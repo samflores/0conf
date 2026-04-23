@@ -4,7 +4,7 @@ binds {
 
     Mod+Shift+Slash { show-hotkey-overlay; }
     Mod+Return hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
-    Mod+Space hotkey-overlay-title="Run an Application: drmenu" { spawn-sh "/home/samflores/.cargo/bin/desx | /home/samflores/.cargo/bin/drmenu | sh"; }
+    Mod+Space hotkey-overlay-title="Run an Application: drmenu" { spawn-sh "/home/samflores/.cargo/bin/desx | /home/samflores/.local/share/cargo/bin/drmenu | sh"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: hyrlock" { spawn "hyprlock"; }
 
     Mod+Shift+E hotkey-overlay-title="Pick an emoji" { spawn-sh "/home/samflores/.local/bin/emoji-picker"; }
@@ -26,7 +26,7 @@ binds {
 
     Mod+O repeat=false { toggle-overview; }
 
-    Mod+X repeat=false { close-window; }
+    Mod+Q repeat=false { close-window; }
 
     Mod+Left  { focus-column-left; }
     Mod+Down  { focus-window-down; }
@@ -146,9 +146,11 @@ binds {
 
     Mod+W { toggle-column-tabbed-display; }
 
-    Print { spawn-sh "hyprshot -m output --raw | satty -f -"; }
-    Shift+Print { spawn-sh "hyprshot -m region --raw | satty -f -"; }
-    Ctrl+Shift+Print { spawn-sh "hyprshot -m active -m window --raw | satty -f -"; }
+    // Print { spawn-sh "hyprshot -m output --raw | satty -f -"; }
+    Print { spawn-sh "set -e; grim -t ppm -o \"$(niri msg --json focused-output | jq -r .name)\" - | satty -f -"; }
+    Shift+Print { spawn-sh "set -e; grim -t ppm -g \"$(slurp -o -d -F monospace)\" - | satty -f -"; }
+    Ctrl+Print { spawn-sh "set -e; niri msg action screenshot-window -d true --path /tmp/screenshot.png && satty -f /tmp/screenshot.png; rm -f
+  /tmp/screenshot.png"; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 

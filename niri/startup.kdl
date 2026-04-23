@@ -1,7 +1,8 @@
 spawn-sh-at-startup "eval \"$(dbus-launch --sh-syntax)\""
 spawn-sh-at-startup "dbus-update-activation-environment I3SOCK SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri NO_AT_BRIDGE=1 DBUS_SESSION_BUS_ADDRESS DBUS_SESSION_BUS_PID DBUS_SESSION_BUS_WINDOWID"
+spawn-sh-at-startup "wlsunset -l -5.1 -L -42.7"
 
-spawn-at-startup "ironbar"
+spawn-at-startup "qs"
 spawn-at-startup "hypridle"
 spawn-at-startup "hyprpaper"
 spawn-at-startup "wl-clipboard-history"
