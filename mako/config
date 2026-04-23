@@ -48,7 +48,7 @@ ignore-timeout=0
 max-visible=5
 
 layer=top
-anchor=top-right
+anchor=bottom-right
 
 [urgency=low]
 border-color=#1A1F20
