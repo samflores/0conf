@@ -23,9 +23,7 @@ outer-margin=8
 margin=6
 padding=10
 
-# Theme.border
-border-size=1
-border-color=#1A1F20
+border-size=0
 
 # Theme.pillRadius
 border-radius=10
@@ -50,14 +48,7 @@ max-visible=5
 layer=top
 anchor=bottom-right
 
-[urgency=low]
-border-color=#1A1F20
-
-[urgency=normal]
-border-color=#71ADE7
-
 [urgency=critical]
-border-color=#CC3333
 default-timeout=0
 
 [app-name="tidal-hifi"]
