@@ -6,6 +6,7 @@ singleton Bluetooth 1.0 Bluetooth.qml
 singleton Dnd 1.0 Dnd.qml
 singleton Media 1.0 Media.qml
 singleton Network 1.0 Network.qml
+singleton Notifications 1.0 Notifications.qml
 singleton Nightlight 1.0 Nightlight.qml
 singleton PowerProfile 1.0 PowerProfile.qml
 singleton Windows 1.0 Windows.qml
