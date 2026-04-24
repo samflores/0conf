@@ -1,0 +1,55 @@
+# [ Global Config ]
+max-history=5
+sort=+time
+
+# [ BINDING OPTIONS ]
+on-button-left=invoke-default-action
+on-button-middle=dismiss-group
+on-button-right=dismiss
+on-touch=invoke-default-action
+
+# [ STYLE OPTIONS ]
+# Match quickshell bar theme (Gypsum dark).
+font=MonaspiceKr Nerd Font Mono 12
+
+# Theme.bg / Theme.fg
+background-color=#0E1415
+text-color=#CECECE
+
+width=320
+height=110
+
+outer-margin=8
+margin=6
+padding=10
+
+border-size=0
+
+# Theme.pillRadius
+border-radius=10
+
+# Theme.accent for progress indicator
+progress-color=over #71ADE7
+
+icons=1
+max-icon-size=34
+icon-location=left
+
+actions=1
+history=1
+
+format=<b>%s</b>\n%b
+text-alignment=left
+
+default-timeout=10000
+ignore-timeout=0
+max-visible=5
+
+layer=top
+anchor=bottom-right
+
+[urgency=critical]
+default-timeout=0
+
+[app-name="tidal-hifi"]
+on-notify=exec mpv /usr/share/sounds/freedesktop/stereo/message-none.oga
