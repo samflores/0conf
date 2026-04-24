@@ -1,6 +1,7 @@
 import Quickshell
 import "./bar"
 import "./osd"
+import "./notifications"
 
 ShellRoot {
     Variants {
@@ -19,5 +20,11 @@ ShellRoot {
         model: Quickshell.screens
 
         Osd {}
+    }
+
+    Variants {
+        model: Quickshell.screens
+
+        NotificationLayer {}
     }
 }

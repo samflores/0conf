@@ -10,6 +10,8 @@ binds {
     Mod+Shift+E hotkey-overlay-title="Pick an emoji" { spawn-sh "/home/samflores/.local/bin/emoji-picker"; }
     Mod+Shift+C hotkey-overlay-title="Open a config file" { spawn-sh "/home/samflores/.local/bin/config-picker"; }
 
+    Mod+Slash hotkey-overlay-title="Focus notification stack" { spawn "qs" "ipc" "call" "notifications" "focus"; }
+
     XF86AudioPlay      allow-when-locked=true { spawn-sh "playerctl play-pause"; }
     XF86AudioNext      allow-when-locked=true { spawn-sh "playerctl next"; }
     XF86AudioPrev      allow-when-locked=true { spawn-sh "playerctl previous"; }
