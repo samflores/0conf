@@ -29,7 +29,7 @@ declare -A SRC=(
 )
 
 # Default selection.
-DEFAULTS=(nvim fish tmux niri hypr quickshell mako ghostty fontconfig git pi)
+DEFAULTS=(nvim fish tmux niri hypr quickshell ghostty fontconfig git pi)
 
 # Runtime dependency map. Missing deps are warned, never installed.
 declare -A DEPS=(
