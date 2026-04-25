@@ -42,6 +42,8 @@ My dotfiles.
 
 Defaults: `nvim fish tmux niri quickshell ghostty fontconfig git pi stasis swaylock`.
 
+The interactive picker uses [gum](https://github.com/charmbracelet/gum) for the module checklist and the wallpaper chooser. If `gum` isn't on `$PATH`, the installer falls back to the default set (and a numbered prompt for the wallpaper).
+
 Existing files at the target are backed up to `<path>.back`; existing symlinks are replaced.
 
 `greetd` is not symlinked automatically — the installer prints the `sudo ln` commands to run.
