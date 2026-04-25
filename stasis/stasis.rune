@@ -17,6 +17,32 @@ default:
 
   lid_close_action "swaylock"
 
+  custom_brightness_instant:
+    timeout 0
+    command "brightnessctl set 100%"
+  end
+
+  brightness:
+    timeout 300
+    command "brightnessctl set 50%"
+  end
+
+  dpms:
+    timeout 120
+    command "niri msg action power-off-monitors"
+    resume_command "niri msg action power-on-monitors"
+  end
+
+  lock_screen:
+    timeout 180
+    command "swaylock"
+  end
+
+  suspend:
+    timeout 600
+    command "loginctl suspend"
+  end
+
   ac:
     custom_brightness_instant:
       timeout 0
