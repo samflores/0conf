@@ -198,10 +198,6 @@ install_module() {
             ;;
     esac
 
-    if [[ "$module" == "swaylock" ]]; then
-        setup_wallpaper
-    fi
-
     check_deps "$module"
 }
 
@@ -265,6 +261,14 @@ done
 
 for m in "${MODULES[@]}"; do
     install_module "$m"
+done
+
+for m in "${MODULES[@]}"; do
+    if [[ "$m" == "swaylock" || "$m" == "niri" ]]; then
+        printf '\033[1m== wallpaper ==\033[0m\n'
+        setup_wallpaper
+        break
+    fi
 done
 
 printf '\n\033[1mdone.\033[0m\n'
