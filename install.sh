@@ -107,6 +107,67 @@ link_to() {
     printf '  \033[32mlinked\033[0m %s -> %s\n' "$dst" "$src"
 }
 
+setup_wallpaper() {
+    local dir="$HOME/Pictures/Wallpapers"
+    local link="$dir/current"
+
+    if [[ -L "$link" || -e "$link" ]]; then
+        return
+    fi
+
+    if [[ ! -d "$dir" ]]; then
+        printf '  \033[33m! %s missing, skipping wallpaper symlink\033[0m\n' "$dir"
+        return
+    fi
+
+    local files=()
+    while IFS= read -r -d '' f; do
+        files+=("$(basename "$f")")
+    done < <(find "$dir" -maxdepth 1 -type f -print0 | sort -z)
+
+    if (( ${#files[@]} == 0 )); then
+        printf '  \033[33m! no files in %s, skipping wallpaper symlink\033[0m\n' "$dir"
+        return
+    fi
+
+    local pick=""
+    if have gum; then
+        pick="$(printf '%s\n' "${files[@]}" | gum choose \
+            --height "${#files[@]}" \
+            --header "Pick a wallpaper for ~/Pictures/Wallpapers/current")"
+    else
+        printf 'Pick a wallpaper for ~/Pictures/Wallpapers/current:\n'
+        local i=1
+        for f in "${files[@]}"; do
+            printf '  %d) %s\n' "$i" "$f"
+            ((i++))
+        done
+        local choice=""
+        read -r -p "number: " choice
+        if [[ "$choice" =~ ^[0-9]+$ ]] && (( choice >= 1 && choice <= ${#files[@]} )); then
+            pick="${files[$((choice - 1))]}"
+        fi
+    fi
+
+    if [[ -z "$pick" ]]; then
+        printf '  \033[33m! no wallpaper picked, skipping\033[0m\n'
+        return
+    fi
+
+    if [[ "$DRY" == 1 ]]; then
+        printf '  \033[36mwould link\033[0m %s -> %s\n' "$link" "$pick"
+        printf '  \033[36mwould run\033[0m awww img %s\n' "$link"
+        return
+    fi
+
+    ln -s "$pick" "$link"
+    printf '  \033[32mlinked\033[0m %s -> %s\n' "$link" "$pick"
+
+    if have awww; then
+        awww img "$link"
+    fi
+}
+
 install_module() {
     local module="$1"
     local src="$origin/${SRC[$module]}"
@@ -136,6 +197,10 @@ install_module() {
             link_to "$src" "$target/$module"
             ;;
     esac
+
+    if [[ "$module" == "swaylock" ]]; then
+        setup_wallpaper
+    fi
 
     check_deps "$module"
 }
