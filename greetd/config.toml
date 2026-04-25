@@ -1,0 +1,7 @@
+[terminal]
+vt = 7
+
+[default_session]
+# command = "Hyprland --config /etc/greetd/hyprland.conf"
+command = "sh -lc 'until [ -e /dev/dri/card0 ] && [ -e /dev/dri/card1 ]; do sleep 0.1; done; sleep 0.5; dbus-run-session niri -c /etc/greetd/niri.kdl'"
+user = "greetd"

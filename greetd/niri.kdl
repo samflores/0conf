@@ -1,0 +1,53 @@
+spawn-sh-at-startup "gtkgreet -c 'dbus-run-session niri --session' -s /etc/greetd/style.css -b /etc/greetd/wallpaper; niri msg action quit --skip-confirmation"
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+output "HDMI-A-1" {
+    mode "3840x2160@60"
+    transform "90"
+    position x=0 y=0
+    scale 1
+
+    layout {
+        default-column-width { proportion 1.0; }
+    }
+}
+
+output "DP-1" {
+    mode "3440x1440@160"
+    transform "normal"
+    position x=2160 y=0
+    focus-at-startup
+}
+
+output "HDMI-A-2" {
+    mode "1920x1080@60"
+    transform "normal"
+    position x=2160 y=1441
+
+    layout {
+        default-column-width { proportion 0.67; }
+    }
+}
+
+layout {
+    gaps 0
+    center-focused-column "always"
+    default-column-width { proportion 1.0; }
+
+    focus-ring {
+        off
+    }
+
+    border {
+        off
+    }
+}
+
+animations {
+    off
+}
+
+prefer-no-csd
