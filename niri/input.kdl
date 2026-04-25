@@ -8,7 +8,6 @@ input {
     }
 
     touchpad {
-        off
         tap
         natural-scroll
     }

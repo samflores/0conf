@@ -1,0 +1,76 @@
+# Reference: https://saltnpepper97.github.io/stasis-site/configuration
+
+@author "Dustin Pilgrim"
+@description "Lightweight feature packed idle manager for Wayland"
+
+default:
+  enable_dbus_inhibit true
+
+  monitor_media true
+  ignore_remote_media true
+
+  inhibit_apps [
+    "vlc"
+    "mpv"
+    r"steam_app_.*"
+  ]
+
+  lid_close_action "swaylock"
+
+  ac:
+    custom_brightness_instant:
+      timeout 0
+      command "brightnessctl set 100%"
+    end
+
+    brightness:
+      timeout 300
+      command "brightnessctl set 50%"
+    end
+
+    dpms:
+      timeout 120
+      command "niri msg action power-off-monitors"
+      resume_command "niri msg action power-on-monitors"
+    end
+
+    lock_screen:
+      timeout 180
+      command "swaylock"
+    end
+
+    suspend:
+      timeout 600
+      command "loginctl suspend"
+    end
+  end
+
+  battery:
+    custom_brightness_instant:
+      timeout 0
+      command "brightnessctl set 50%"
+    end
+
+    brightness:
+      timeout 60
+      command "brightnessctl set 30%"
+      resume_command "brightnessctl set 50%"
+    end
+
+    dpms:
+      timeout 30
+      command "niri msg action power-off-monitors"
+      resume_command "niri msg action power-on-monitors"
+    end
+
+    lock_screen:
+      timeout 60
+      command "swaylock"
+    end
+
+    suspend:
+      timeout 120
+      command "systemctl suspend"
+    end
+  end
+end
