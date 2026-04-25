@@ -71,3 +71,6 @@ set -gx CARGO_HOME /home/samflores/.local/share/cargo
 
 # --- Pi coding agent
 set -gx PI_CODING_AGENT_DIR $HOME/.config/pi/agent
+
+# --- Claude Code
+set -gx CLAUDE_CONFIG_DIR $HOME/.config/claude-code
