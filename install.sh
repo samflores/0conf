@@ -28,6 +28,7 @@ declare -A SRC=(
     [kitty]="kitty"
     [zsh]="zsh"
     [qutebrowser]="qutebrowser"
+    [greetd]="greetd"
 )
 
 # Default selection.
@@ -53,6 +54,7 @@ declare -A DEPS=(
     [kitty]="kitty"
     [zsh]="zsh"
     [qutebrowser]="qutebrowser"
+    [greetd]="greetd"
 )
 
 ALL_MODULES=("${!SRC[@]}")
@@ -192,6 +194,13 @@ install_module() {
                 ln -sf "$target/zsh/zprofile" "$HOME/.zprofile"
                 printf '  \033[32mlinked\033[0m ~/.zshrc, ~/.zshenv, ~/.zprofile\n'
             fi
+            ;;
+        greetd)
+            printf '  greetd lives under /etc/. Run as root:\n'
+            printf '    \033[36msudo ln -sfn %s/config.toml /etc/greetd/config.toml\033[0m\n' "$src"
+            printf '    \033[36msudo ln -sfn %s/niri.kdl    /etc/greetd/niri.kdl\033[0m\n' "$src"
+            printf '    \033[36msudo ln -sfn %s/style.css   /etc/greetd/style.css\033[0m\n' "$src"
+            printf '    \033[36msudo ln -sfn %s/Pictures/Wallpapers/current /etc/greetd/wallpaper\033[0m\n' "$HOME"
             ;;
         *)
             link_to "$src" "$target/$module"
