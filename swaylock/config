@@ -1,0 +1,44 @@
+image=/home/samflores/Pictures/Wallpapers/flowers.png
+ignore-empty-password
+
+# Background fallback color
+color=1d1f21
+
+# Indicator
+indicator
+indicator-idle-visible
+indicator-radius=150
+indicator-thickness=30
+
+# Enable clock
+clock
+timestr=%H:%M
+datestr=%a %d %b
+
+# Indicator center translucency
+inside-color=00000080
+inside-clear-color=00000080
+inside-ver-color=00000080
+inside-wrong-color=00000080
+
+# Highlight colors
+key-hl-color=7aa6daaa
+bs-hl-color=d54e53aa
+
+separator-color=55555555
+
+line-color=1d1f21
+line-uses-ring
+
+# Text colors
+text-color=81a2be
+text-clear-color=b5bd68
+text-caps-lock-color=f0c674
+text-ver-color=81a2be
+text-wrong-color=cc6666
+
+# Ring colors
+ring-color=81a2be55
+ring-ver-color=81a2be
+ring-clear-color=b5bd6811
+ring-wrong-color=cc6666

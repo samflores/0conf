@@ -16,6 +16,8 @@ declare -A SRC=(
     [niri]="niri"
     [hypr]="hypr"
     [mako]="mako"
+    [stasis]="stasis"
+    [swaylock]="swaylock"
     [quickshell]="quickshell"
     [ghostty]="ghostty"
     [fontconfig]="fontconfig"
@@ -29,15 +31,17 @@ declare -A SRC=(
 )
 
 # Default selection.
-DEFAULTS=(nvim fish tmux niri hypr quickshell ghostty fontconfig git pi)
+DEFAULTS=(nvim fish tmux niri quickshell ghostty fontconfig git pi stasis swaylock)
 
 # Runtime dependency map. Missing deps are warned, never installed.
 declare -A DEPS=(
     [nvim]="nvim"
     [fish]="fish eza fzf"
     [tmux]="tmux sesh"
-    [niri]="niri grim slurp satty jq wlsunset"
+    [niri]="niri grim slurp satty jq wlsunset awww"
     [hypr]="hyprpaper hypridle hyprlock"
+    [stasis]="stasis"
+    [swaylock]="swaylock"
     [mako]="mako"
     [quickshell]="qs brightnessctl bluetoothctl iwctl wpctl"
     [ghostty]="ghostty"
