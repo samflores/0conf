@@ -14,8 +14,8 @@ Panel {
     Process { id: action }
 
     // Confirmation state. While pendingLabel is non-empty the menu shows
-    // a confirm prompt with a 5s countdown that defaults to running the
-    // command.
+    // a tray-style submenu with Yes/No entries and a 5s countdown that
+    // defaults to running the command.
     property string pendingLabel: ""
     property var pendingCommand: null
     property int countdown: 0
@@ -73,43 +73,41 @@ Panel {
         }
     }
 
-    component Action: MouseArea {
-        id: act
+    component Row: MouseArea {
+        id: r
         property string label
         property string glyph
-        property var command
-        property bool needsConfirm: false
         signal triggered()
 
         Layout.fillWidth: true
-        implicitWidth: row.implicitWidth + 24
-        implicitHeight: row.implicitHeight + 12
+        implicitWidth: rowLayout.implicitWidth + 24
+        implicitHeight: rowLayout.implicitHeight + 12
         cursorShape: Qt.PointingHandCursor
         hoverEnabled: true
 
-        onClicked: act.triggered()
+        onClicked: r.triggered()
 
         Rectangle {
             anchors.fill: parent
-            color: act.containsMouse ? Theme.bgAlt : "transparent"
+            color: r.containsMouse ? Theme.bgAlt : "transparent"
             radius: 6
         }
 
         RowLayout {
-            id: row
+            id: rowLayout
             anchors.fill: parent
             anchors.leftMargin: 10
             anchors.rightMargin: 10
             spacing: 10
 
             Text {
-                text: act.glyph
+                text: r.glyph
                 color: Theme.fg
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.iconSize
             }
             Text {
-                text: act.label
+                text: r.label
                 color: Theme.fg
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSize
@@ -118,120 +116,86 @@ Panel {
         }
     }
 
-    // Action list — visible when no confirmation is pending.
     ColumnLayout {
-        id: menu
-        spacing: 0
-        visible: root.pendingLabel === ""
+        id: contentCol
+        spacing: 2
 
-        Action {
-            label: "Lock"
-            glyph: Icons.systemIcons.lock
-            command: ["loginctl", "lock-session"]
-            onTriggered: root.run(command)
-        }
-        Action {
-            label: "Suspend"
-            glyph: Icons.systemIcons.suspend
-            command: ["loginctl", "suspend"]
-            onTriggered: root.run(command)
-        }
-        Action {
-            label: "Log out"
-            glyph: Icons.systemIcons.logout
-            command: ["niri", "msg", "action", "quit"]
-            onTriggered: root.run(command)
-        }
-        Action {
-            label: "Reboot"
-            glyph: Icons.systemIcons.reboot
-            command: ["loginctl", "reboot"]
-            onTriggered: root.confirm(label, command)
-        }
-        Action {
-            label: "Shut down"
-            glyph: Icons.systemIcons.shutdown
-            command: ["loginctl", "poweroff"]
-            onTriggered: root.confirm(label, command)
-        }
-    }
+        // Header — only shown in confirm view (mirrors TrayPanel's
+        // breadcrumb), but the back-arrow is hidden so the panel stays
+        // sticky until Yes/No is chosen.
+        Item {
+            visible: root.pendingLabel !== ""
+            Layout.fillWidth: true
+            implicitWidth: headerRow.implicitWidth + 16
+            implicitHeight: 26
 
-    // Confirmation prompt — visible while pendingLabel is set.
-    ColumnLayout {
-        id: confirmView
-        visible: root.pendingLabel !== ""
-        spacing: 10
+            RowLayout {
+                id: headerRow
+                anchors.fill: parent
+                anchors.leftMargin: 6
+                anchors.rightMargin: 8
+                spacing: 8
 
-        Text {
-            text: root.pendingLabel + "?"
-            color: Theme.fg
-            font.family: Theme.fontFamily
-            font.pixelSize: Theme.fontSize + 1
-            font.bold: true
-            Layout.alignment: Qt.AlignHCenter
-        }
-
-        Text {
-            text: "Continuing in " + root.countdown + "s..."
-            color: Theme.fgDim
-            font.family: Theme.fontFamily
-            font.pixelSize: Theme.fontSize
-            Layout.alignment: Qt.AlignHCenter
-        }
-
-        RowLayout {
-            spacing: 8
-            Layout.alignment: Qt.AlignHCenter
-
-            MouseArea {
-                id: yesBtn
-                implicitWidth: yesText.implicitWidth + 24
-                implicitHeight: yesText.implicitHeight + 12
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-                onClicked: root.run(root.pendingCommand)
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: 6
-                    color: yesBtn.containsMouse ? Theme.accent : Theme.surface
-                    border.color: Theme.accent
-                    border.width: 1
-                }
                 Text {
-                    id: yesText
-                    anchors.centerIn: parent
-                    text: "Yes"
-                    color: yesBtn.containsMouse ? Theme.bg : Theme.fg
-                    font.family: Theme.fontFamily
-                    font.pixelSize: Theme.fontSize
-                    font.bold: true
-                }
-            }
-
-            MouseArea {
-                id: noBtn
-                implicitWidth: noText.implicitWidth + 24
-                implicitHeight: noText.implicitHeight + 12
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-                onClicked: root.cancelConfirm()
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: 6
-                    color: noBtn.containsMouse ? Theme.bgAlt : "transparent"
-                    border.color: Theme.fgDim
-                    border.width: 1
-                }
-                Text {
-                    id: noText
-                    anchors.centerIn: parent
-                    text: "No"
+                    text: root.pendingLabel
                     color: Theme.fg
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontSize
+                    font.bold: true
+                    Layout.fillWidth: true
+                    elide: Text.ElideRight
                 }
+            }
+        }
+
+        // Action list — visible when no confirmation is pending.
+        ColumnLayout {
+            id: menu
+            spacing: 0
+            visible: root.pendingLabel === ""
+
+            Row {
+                label: "Lock"
+                glyph: Icons.systemIcons.lock
+                onTriggered: root.run(["loginctl", "lock-session"])
+            }
+            Row {
+                label: "Suspend"
+                glyph: Icons.systemIcons.suspend
+                onTriggered: root.run(["loginctl", "suspend"])
+            }
+            Row {
+                label: "Log out"
+                glyph: Icons.systemIcons.logout
+                onTriggered: root.run(["niri", "msg", "action", "quit"])
+            }
+            Row {
+                label: "Reboot"
+                glyph: Icons.systemIcons.reboot
+                onTriggered: root.confirm(label, ["loginctl", "reboot"])
+            }
+            Row {
+                label: "Shut down"
+                glyph: Icons.systemIcons.shutdown
+                onTriggered: root.confirm(label, ["loginctl", "poweroff"])
+            }
+        }
+
+        // Confirmation submenu — visible while pendingLabel is set.
+        ColumnLayout {
+            id: confirmView
+            visible: root.pendingLabel !== ""
+            spacing: 0
+
+            Row {
+                label: "Yes (" + root.countdown + "s)"
+                glyph: ""  // fa-check
+                onTriggered: root.run(root.pendingCommand)
+            }
+            Row {
+                label: "No"
+                glyph: ""  // fa-times
+                onTriggered: root.cancelConfirm()
             }
         }
     }
