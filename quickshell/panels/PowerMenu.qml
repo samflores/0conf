@@ -121,13 +121,21 @@ Panel {
         spacing: 2
 
         // Header — only shown in confirm view (mirrors TrayPanel's
-        // breadcrumb), but the back-arrow is hidden so the panel stays
-        // sticky until Yes/No is chosen.
-        Item {
+        // breadcrumb). Click returns to the action list.
+        MouseArea {
             visible: root.pendingLabel !== ""
             Layout.fillWidth: true
             implicitWidth: headerRow.implicitWidth + 16
             implicitHeight: 26
+            cursorShape: Qt.PointingHandCursor
+            hoverEnabled: true
+            onClicked: root.cancelConfirm()
+
+            Rectangle {
+                anchors.fill: parent
+                radius: 6
+                color: parent.containsMouse ? Theme.bgAlt : "transparent"
+            }
 
             RowLayout {
                 id: headerRow
@@ -136,6 +144,12 @@ Panel {
                 anchors.rightMargin: 8
                 spacing: 8
 
+                Text {
+                    text: ""  // fa-chevron-left
+                    color: Theme.fgDim
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontSize
+                }
                 Text {
                     text: root.pendingLabel
                     color: Theme.fg
@@ -195,7 +209,10 @@ Panel {
             Row {
                 label: "No"
                 glyph: ""  // fa-times
-                onTriggered: root.cancelConfirm()
+                onTriggered: {
+                    root.cancelConfirm()
+                    PanelState.close()
+                }
             }
         }
     }
