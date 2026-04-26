@@ -6,6 +6,7 @@ import Quickshell.Wayland
 import Niri 0.1
 import "../theme"
 import "../panels"
+import "../services"
 import "./widgets"
 
 PanelWindow {
@@ -262,11 +263,38 @@ PanelWindow {
         }
     }
 
-    // Dismiss panels when clicking outside them.
+    // Dismiss panels when clicking outside them. Suppressed while the
+    // battery panel is sticky-open due to low+discharging battery.
     MouseArea {
         anchors.fill: parent
-        enabled: PanelState.openPanel !== ""
+        enabled: PanelState.openPanel !== "" && !(PanelState.openPanel === "battery" && Battery.lowDischarging)
         z: -1
         onClicked: PanelState.close()
+    }
+
+    // While the battery is low and discharging, keep the battery panel
+    // pinned open on the primary bar. Only one bar triggers, to avoid
+    // races between per-screen Bar instances.
+    readonly property bool isPrimaryBar: Quickshell.screens.length > 0 && Quickshell.screens[0] === root.screen
+
+    function ensureBatteryOpen() {
+        if (!root.isPrimaryBar) return
+        if (!Battery.lowDischarging) return
+        if (PanelState.openPanel === "battery" && PanelState.openScreen === root.screen) return
+        PanelState.toggle("battery", "right", root.screen)
+    }
+
+    Connections {
+        target: Battery
+        function onLowDischargingChanged() { root.ensureBatteryOpen() }
+    }
+
+    Connections {
+        target: PanelState
+        function onOpenPanelChanged() {
+            if (Battery.lowDischarging && PanelState.openPanel !== "battery") {
+                Qt.callLater(root.ensureBatteryOpen)
+            }
+        }
     }
 }
