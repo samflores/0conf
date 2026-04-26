@@ -15,6 +15,10 @@ Singleton {
     property real openWidth: 0
     // Squish factor (0..1, 1 = at rest) applied to width during bounce.
     property real openXScale: 1.0
+    // While true, the open panel cannot be dismissed by clicking outside,
+    // and is re-asserted if anything tries to close it. Used for sticky
+    // alerts (low battery, power-action confirmation, etc.).
+    property bool sticky: false
 
     readonly property bool touchesLeft: openPanel !== "" && openSide === "left"
     readonly property bool touchesRight: openPanel !== "" && openSide === "right"

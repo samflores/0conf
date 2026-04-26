@@ -263,11 +263,11 @@ PanelWindow {
         }
     }
 
-    // Dismiss panels when clicking outside them. Suppressed while the
-    // battery panel is sticky-open due to low+discharging battery.
+    // Dismiss panels when clicking outside them. Suppressed when the
+    // open panel is sticky (low-battery alert, power-action confirm).
     MouseArea {
         anchors.fill: parent
-        enabled: PanelState.openPanel !== "" && !(PanelState.openPanel === "battery" && Battery.lowDischarging)
+        enabled: PanelState.openPanel !== "" && !PanelState.sticky
         z: -1
         onClicked: PanelState.close()
     }
@@ -286,12 +286,23 @@ PanelWindow {
 
     Connections {
         target: Battery
-        function onLowDischargingChanged() { root.ensureBatteryOpen() }
+        function onLowDischargingChanged() {
+            if (Battery.lowDischarging) {
+                root.ensureBatteryOpen()
+            } else if (PanelState.openPanel === "battery") {
+                PanelState.sticky = false
+            }
+        }
     }
 
     Connections {
         target: PanelState
         function onOpenPanelChanged() {
+            // Reflect the battery alert into PanelState.sticky. PowerMenu
+            // owns its own sticky lifecycle for the confirm prompt.
+            if (PanelState.openPanel === "battery" && Battery.lowDischarging) {
+                PanelState.sticky = true
+            }
             if (Battery.lowDischarging && PanelState.openPanel !== "battery") {
                 Qt.callLater(root.ensureBatteryOpen)
             }
