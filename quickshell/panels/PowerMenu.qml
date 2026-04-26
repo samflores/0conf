@@ -31,6 +31,7 @@ Panel {
         root.pendingLabel = label
         root.pendingCommand = cmd
         root.countdown = 5
+        PanelState.sticky = true
         countdownTimer.restart()
     }
 
@@ -39,9 +40,8 @@ Panel {
         root.pendingLabel = ""
         root.pendingCommand = null
         root.countdown = 0
+        PanelState.sticky = false
     }
-
-    onOpenChanged: if (!open) cancelConfirm()
 
     Timer {
         id: countdownTimer
@@ -51,6 +51,24 @@ Panel {
             root.countdown -= 1
             if (root.countdown <= 0) {
                 root.run(root.pendingCommand)
+            }
+        }
+    }
+
+    // Pin the panel open while a confirm is pending — re-assert if any
+    // path tries to close or switch panels.
+    Connections {
+        target: PanelState
+        function onOpenPanelChanged() {
+            if (root.pendingLabel === "") return
+            if (PanelState.openPanel !== "power" || PanelState.openScreen !== root.panelScreen) {
+                Qt.callLater(function() {
+                    if (root.pendingLabel === "") return
+                    PanelState.openPanel = "power"
+                    PanelState.openSide = "right"
+                    PanelState.openScreen = root.panelScreen
+                    PanelState.sticky = true
+                })
             }
         }
     }
