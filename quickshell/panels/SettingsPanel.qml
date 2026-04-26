@@ -14,6 +14,49 @@ Panel {
         id: menu
         spacing: 0
 
+        component Action: MouseArea {
+            id: act
+            property string label
+            property string glyph
+            signal activated()
+
+            Layout.fillWidth: true
+            implicitWidth: actRow.implicitWidth + 24
+            implicitHeight: actRow.implicitHeight + 12
+            cursorShape: Qt.PointingHandCursor
+            hoverEnabled: true
+
+            onClicked: act.activated()
+
+            Rectangle {
+                anchors.fill: parent
+                color: act.containsMouse ? Theme.bgAlt : "transparent"
+                radius: 6
+            }
+
+            RowLayout {
+                id: actRow
+                anchors.fill: parent
+                anchors.leftMargin: 10
+                anchors.rightMargin: 10
+                spacing: 10
+
+                Text {
+                    text: act.glyph
+                    color: Theme.fg
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.iconSize
+                }
+                Text {
+                    text: act.label
+                    color: Theme.fg
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontSize
+                    Layout.fillWidth: true
+                }
+            }
+        }
+
         component Toggle: MouseArea {
             id: tog
             property string label
@@ -84,6 +127,12 @@ Panel {
             glyph: Airplane.enabled ? Icons.systemIcons.airplaneOn : Icons.systemIcons.airplaneOff
             active: Airplane.enabled
             onActivated: Airplane.toggle()
+        }
+
+        Action {
+            label: "Wallpaper..."
+            glyph: Icons.systemIcons.wallpaper
+            onActivated: PanelState.toggle("wallpaper", "right", root.panelScreen)
         }
     }
 }

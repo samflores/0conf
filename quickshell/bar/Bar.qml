@@ -257,6 +257,9 @@ PanelWindow {
         PowerProfilePanel {
             panelScreen: root.screen
         }
+        WallpaperPanel {
+            panelScreen: root.screen
+        }
     }
 
     // Dismiss panels when clicking outside them.
