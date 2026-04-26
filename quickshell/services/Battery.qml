@@ -25,4 +25,6 @@ Singleton {
 
     readonly property int timeToEmpty: present ? (device.timeToEmpty ?? 0) : 0
     readonly property int timeToFull: present ? (device.timeToFull ?? 0) : 0
+
+    readonly property bool lowDischarging: present && !charging && percent <= 15 && percent > 0
 }
