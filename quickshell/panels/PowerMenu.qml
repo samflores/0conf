@@ -171,7 +171,7 @@ Panel {
             Row {
                 label: "Lock"
                 glyph: Icons.systemIcons.lock
-                onTriggered: root.run(["loginctl", "lock-session"])
+                onTriggered: root.run(["stasis", "trigger", "lock_screen"])
             }
             Row {
                 label: "Suspend"
