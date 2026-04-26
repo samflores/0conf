@@ -126,6 +126,7 @@ Singleton {
         notifications:   "\uf0f3",        // fa-bell
         settings:        "\uf013",        // fa-cog
         nightLight:      "\udb81\udd81",  // mdi-weather-night
+        wallpaper:       "\uf03e",        // fa-picture-o
         airplaneOn:      "\uf072",        // fa-plane
         airplaneOff:     "\udb81\udd79",  // mdi-airplane-off
         perfPerformance: "\uf0e4",        // fa-tachometer (speedometer)
