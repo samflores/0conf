@@ -1,0 +1,3 @@
+#!/bin/sh
+# Tear down the OpenVPN process started by qs-openvpn-up.
+exec pkill -TERM -f '/etc/openvpn/openvpn.conf'

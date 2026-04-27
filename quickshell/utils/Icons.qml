@@ -137,6 +137,8 @@ Singleton {
         suspend:         "\uf186",        // fa-moon
         reboot:          "\uf021",        // fa-refresh
         shutdown:        "\uf011",        // fa-power-off
-        logout:          "\uf08b"         // fa-sign-out
+        logout:          "\uf08b",        // fa-sign-out
+        vpnOn:           "\udb80\udcbe",  // mdi-shield-lock
+        vpnOff:          "\udb81\udd9f"   // mdi-web (globe)
     })
 }
