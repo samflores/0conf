@@ -128,7 +128,7 @@ Panel {
             spacing: 8
 
             Text {
-                text: ""  // fa-chevron-left
+                text: ""  // fa-chevron-left
                 color: Theme.fgDim
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSize
