@@ -1,6 +1,6 @@
 # Reference: https://saltnpepper97.github.io/stasis-site/configuration
 
-@author "Dustin Pilgrim"
+@author "Samuel Flores"
 @description "Lightweight feature packed idle manager for Wayland"
 
 default:
