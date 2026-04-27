@@ -4,6 +4,7 @@ singleton Battery 1.0 Battery.qml
 singleton Brightness 1.0 Brightness.qml
 singleton Bluetooth 1.0 Bluetooth.qml
 singleton Dnd 1.0 Dnd.qml
+singleton Docker 1.0 Docker.qml
 singleton Media 1.0 Media.qml
 singleton Network 1.0 Network.qml
 singleton Notifications 1.0 Notifications.qml

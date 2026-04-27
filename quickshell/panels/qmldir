@@ -14,3 +14,4 @@ BatteryPanel 1.0 BatteryPanel.qml
 SettingsPanel 1.0 SettingsPanel.qml
 PowerProfilePanel 1.0 PowerProfilePanel.qml
 WallpaperPanel 1.0 WallpaperPanel.qml
+DockerPanel 1.0 DockerPanel.qml

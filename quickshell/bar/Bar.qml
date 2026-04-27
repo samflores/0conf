@@ -116,6 +116,9 @@ PanelWindow {
             Settings {
                 barScreen: root.screen
             }
+            Docker {
+                barScreen: root.screen
+            }
             Mic {
                 barScreen: root.screen
             }
@@ -259,6 +262,9 @@ PanelWindow {
             panelScreen: root.screen
         }
         WallpaperPanel {
+            panelScreen: root.screen
+        }
+        DockerPanel {
             panelScreen: root.screen
         }
     }
