@@ -14,28 +14,20 @@ Singleton {
 
     function start() {
         if (recording) return
-        startProc.command = ["sh", "-c",
-            "mkdir -p \"" + root.outDir + "\" && " +
-            "out=\"" + root.outDir + "/$(date +%Y-%m-%d_%H-%M-%S).mp4\" && " +
-            "geom=\"$(slurp -d -F monospace)\" && " +
-            "[ -n \"$geom\" ] && exec wf-recorder -g \"$geom\" -f \"$out\""]
-        startProc.running = true
+        proc.command = ["/home/samflores/Code/0conf/niri/bin/qs-record", "region"]
+        proc.running = true
     }
 
     function startOutput() {
         if (recording) return
-        startProc.command = ["sh", "-c",
-            "mkdir -p \"" + root.outDir + "\" && " +
-            "out=\"" + root.outDir + "/$(date +%Y-%m-%d_%H-%M-%S).mp4\" && " +
-            "name=\"$(niri msg --json focused-output | jq -r .name)\" && " +
-            "exec wf-recorder -o \"$name\" -f \"$out\""]
-        startProc.running = true
+        proc.command = ["/home/samflores/Code/0conf/niri/bin/qs-record", "output"]
+        proc.running = true
     }
 
     function stop() {
-        // SIGINT lets wf-recorder finalize the file cleanly.
-        stopProc.command = ["pkill", "-INT", "-x", "wf-recorder"]
-        stopProc.running = true
+        // The script toggles, so calling it while recording stops cleanly.
+        proc.command = ["/home/samflores/Code/0conf/niri/bin/qs-record", "region"]
+        proc.running = true
     }
 
     function toggle() {
@@ -43,8 +35,7 @@ Singleton {
         else start()
     }
 
-    Process { id: startProc }
-    Process { id: stopProc }
+    Process { id: proc }
 
     Process {
         id: probe
