@@ -155,8 +155,8 @@ binds {
 
     // Screen recording. wf-recorder is finalized with SIGINT so the file is
     // playable. Output goes under ~/Media/Screen Recordings.
-    Mod+Print { spawn-sh "if pgrep -x wf-recorder >/dev/null; then pkill -INT -x wf-recorder; else dir=\"$HOME/Media/Screen Recordings\"; mkdir -p \"$dir\"; out=\"$dir/$(date +%Y-%m-%d_%H-%M-%S).mp4\"; geom=\"$(slurp -d -F monospace)\" && [ -n \"$geom\" ] && wf-recorder -g \"$geom\" -f \"$out\"; fi"; }
-    Mod+Shift+Print { spawn-sh "if pgrep -x wf-recorder >/dev/null; then pkill -INT -x wf-recorder; else dir=\"$HOME/Media/Screen Recordings\"; mkdir -p \"$dir\"; out=\"$dir/$(date +%Y-%m-%d_%H-%M-%S).mp4\"; name=\"$(niri msg --json focused-output | jq -r .name)\"; wf-recorder -o \"$name\" -f \"$out\"; fi"; }
+    Mod+Print       { spawn "/home/samflores/Code/0conf/niri/bin/qs-record" "region"; }
+    Mod+Shift+Print { spawn "/home/samflores/Code/0conf/niri/bin/qs-record" "output"; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
