@@ -20,7 +20,7 @@ MouseArea {
 
         Text {
             id: dot
-            text: ""  // nf-fa-circle
+            text: ""  // nf-fa-circle
             color: Theme.err
             font.family: Theme.fontFamily
             font.pixelSize: Theme.iconSize
