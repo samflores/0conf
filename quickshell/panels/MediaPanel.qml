@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 import "../theme"
 import "../services"
 import "../utils"
@@ -112,44 +111,17 @@ Panel {
             Layout.fillWidth: true
             spacing: 2
 
-            Slider {
-                id: scrubber
+            PanelSlider {
                 Layout.fillWidth: true
                 implicitWidth: 400
                 from: 0
                 to: Math.max(1, Media.player?.length ?? 0)
                 value: root.displayPosition
                 enabled: !!Media.player?.canSeek
-                onMoved: {
+                onMoved: function(v) {
                     if (Media.player && Media.player.canSeek) {
-                        Media.player.position = value
+                        Media.player.position = v
                     }
-                }
-                background: Rectangle {
-                    x: scrubber.leftPadding
-                    y: scrubber.topPadding + scrubber.availableHeight / 2 - 2
-                    implicitWidth: 200
-                    implicitHeight: 4
-                    width: scrubber.availableWidth
-                    height: 4
-                    radius: 2
-                    color: Theme.surface
-                    Rectangle {
-                        width: scrubber.visualPosition * parent.width
-                        height: parent.height
-                        color: Theme.accent
-                        radius: 2
-                    }
-                }
-                handle: Rectangle {
-                    x: scrubber.leftPadding + scrubber.visualPosition * (scrubber.availableWidth - width)
-                    y: scrubber.topPadding + scrubber.availableHeight / 2 - height / 2
-                    width: 12
-                    height: 12
-                    radius: 6
-                    color: Theme.fg
-                    border.color: Theme.accent
-                    border.width: 1
                 }
             }
 
