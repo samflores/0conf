@@ -153,6 +153,11 @@ binds {
     Ctrl+Print { spawn-sh "set -e; niri msg action screenshot-window -d true --path /tmp/screenshot.png && satty -f /tmp/screenshot.png; rm -f
   /tmp/screenshot.png"; }
 
+    // Screen recording. wf-recorder is finalized with SIGINT so the file is
+    // playable. Output goes under ~/Media/Screen Recordings.
+    Mod+Print       { spawn "/home/samflores/Code/0conf/niri/bin/qs-record" "region"; }
+    Mod+Shift+Print { spawn "/home/samflores/Code/0conf/niri/bin/qs-record" "output"; }
+
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
     Mod+Shift+Q { quit; }

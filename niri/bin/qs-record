@@ -1,0 +1,32 @@
+#!/bin/sh
+# Toggle wf-recorder. Mode: "region" (default) prompts via slurp,
+# "output" records the focused niri output. Files land in
+# ~/Media/Screen Recordings, finalized via SIGINT so they're playable.
+
+set -eu
+
+mode="${1:-region}"
+
+if pgrep -x wf-recorder >/dev/null; then
+    exec pkill -INT -x wf-recorder
+fi
+
+dir="$HOME/Media/Screen Recordings"
+mkdir -p "$dir"
+out="$dir/$(date +%Y-%m-%d_%H-%M-%S).mp4"
+
+case "$mode" in
+    region)
+        geom="$(slurp -d -F monospace)" || exit 0
+        [ -n "$geom" ] || exit 0
+        exec wf-recorder -g "$geom" -f "$out"
+        ;;
+    output)
+        name="$(niri msg --json focused-output | jq -r .name)"
+        exec wf-recorder -o "$name" -f "$out"
+        ;;
+    *)
+        echo "usage: qs-record [region|output]" >&2
+        exit 2
+        ;;
+esac
