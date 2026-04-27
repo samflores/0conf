@@ -10,5 +10,6 @@ singleton Network 1.0 Network.qml
 singleton Notifications 1.0 Notifications.qml
 singleton Nightlight 1.0 Nightlight.qml
 singleton PowerProfile 1.0 PowerProfile.qml
+singleton Recorder 1.0 Recorder.qml
 singleton Wallpaper 1.0 Wallpaper.qml
 singleton Windows 1.0 Windows.qml

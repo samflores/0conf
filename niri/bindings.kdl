@@ -153,6 +153,11 @@ binds {
     Ctrl+Print { spawn-sh "set -e; niri msg action screenshot-window -d true --path /tmp/screenshot.png && satty -f /tmp/screenshot.png; rm -f
   /tmp/screenshot.png"; }
 
+    // Screen recording. wf-recorder is finalized with SIGINT so the file is
+    // playable. Output goes under ~/Media/Screen Recordings.
+    Mod+Print { spawn-sh "if pgrep -x wf-recorder >/dev/null; then pkill -INT -x wf-recorder; else dir=\"$HOME/Media/Screen Recordings\"; mkdir -p \"$dir\"; out=\"$dir/$(date +%Y-%m-%d_%H-%M-%S).mp4\"; geom=\"$(slurp -d -F monospace)\" && [ -n \"$geom\" ] && wf-recorder -g \"$geom\" -f \"$out\"; fi"; }
+    Mod+Shift+Print { spawn-sh "if pgrep -x wf-recorder >/dev/null; then pkill -INT -x wf-recorder; else dir=\"$HOME/Media/Screen Recordings\"; mkdir -p \"$dir\"; out=\"$dir/$(date +%Y-%m-%d_%H-%M-%S).mp4\"; name=\"$(niri msg --json focused-output | jq -r .name)\"; wf-recorder -o \"$name\" -f \"$out\"; fi"; }
+
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
     Mod+Shift+Q { quit; }
