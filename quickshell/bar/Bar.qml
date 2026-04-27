@@ -19,6 +19,9 @@ PanelWindow {
 
     WlrLayershell.layer: WlrLayer.Top
     WlrLayershell.exclusionMode: ExclusionMode.Ignore
+    WlrLayershell.keyboardFocus: PanelState.openPanel === "vpn" && PanelState.openScreen === root.screen
+                                 ? WlrKeyboardFocus.OnDemand
+                                 : WlrKeyboardFocus.None
 
     anchors {
         top: true
@@ -117,6 +120,9 @@ PanelWindow {
                 barScreen: root.screen
             }
             Docker {
+                barScreen: root.screen
+            }
+            Vpn {
                 barScreen: root.screen
             }
             Mic {
@@ -265,6 +271,9 @@ PanelWindow {
             panelScreen: root.screen
         }
         DockerPanel {
+            panelScreen: root.screen
+        }
+        VpnPanel {
             panelScreen: root.screen
         }
     }

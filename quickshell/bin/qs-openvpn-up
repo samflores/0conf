@@ -1,0 +1,26 @@
+#!/bin/sh
+# Start OpenVPN with a management socket so the QS widget can drive auth.
+# Socket is created in the user's runtime dir; only the named user/group may
+# connect (enforced via SO_PEERCRED by openvpn).
+
+set -eu
+
+USER_NAME="${1:-}"
+USER_GROUP="${2:-}"
+SOCK="${3:-}"
+
+if [ -z "$USER_NAME" ] || [ -z "$USER_GROUP" ] || [ -z "$SOCK" ]; then
+    echo "usage: qs-openvpn-up <user> <group> <socket-path>" >&2
+    exit 2
+fi
+
+rm -f "$SOCK"
+
+exec openvpn \
+    --config /etc/openvpn/openvpn.conf \
+    --management "$SOCK" unix \
+    --management-client-user "$USER_NAME" \
+    --management-client-group "$USER_GROUP" \
+    --management-query-passwords \
+    --management-hold \
+    --auth-retry interact
