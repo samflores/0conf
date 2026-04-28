@@ -50,8 +50,8 @@ MouseArea {
         }
 
         Text {
-            text: Audio.volume + "%"
-            visible: !Audio.muted && root.containsMouse
+            text: Audio.muted ? "mute" : Audio.volume + "%"
+            visible: root.containsMouse
             color: Theme.fg
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSize
