@@ -35,7 +35,14 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: Notifications.focusIndex = popup.popupIndex
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: function(mouse) {
+            if (mouse.button === Qt.RightButton) {
+                if (popup.notif) popup.notif.dismiss()
+            } else {
+                Notifications.focusIndex = popup.popupIndex
+            }
+        }
     }
 
     readonly property var actionHint: ["n", "t", "e", "s", "i", "r", "o", "a"]
