@@ -1,5 +1,6 @@
 singleton PanelState 1.0 PanelState.qml
 Panel 1.0 Panel.qml
+PanelSlider 1.0 PanelSlider.qml
 PowerMenu 1.0 PowerMenu.qml
 CalendarPanel 1.0 CalendarPanel.qml
 MediaPanel 1.0 MediaPanel.qml

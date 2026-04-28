@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 import Quickshell.Services.Pipewire
 import "../theme"
 import "../services"
@@ -43,39 +42,13 @@ Panel {
                 }
             }
 
-            Slider {
-                id: slider
+            PanelSlider {
                 Layout.fillWidth: true
                 implicitWidth: 220
                 from: 0
                 to: 100
                 value: Audio.volume
-                onMoved: Audio.setVolume(value)
-
-                background: Rectangle {
-                    x: slider.leftPadding
-                    y: slider.topPadding + slider.availableHeight / 2 - 2
-                    width: slider.availableWidth
-                    height: 4
-                    radius: 2
-                    color: Theme.surface
-                    Rectangle {
-                        width: slider.visualPosition * parent.width
-                        height: parent.height
-                        color: Theme.accent
-                        radius: 2
-                    }
-                }
-                handle: Rectangle {
-                    x: slider.leftPadding + slider.visualPosition * (slider.availableWidth - width)
-                    y: slider.topPadding + slider.availableHeight / 2 - height / 2
-                    width: 12
-                    height: 12
-                    radius: 6
-                    color: Theme.fg
-                    border.color: Theme.accent
-                    border.width: 1
-                }
+                onMoved: function(v) { Audio.setVolume(v) }
             }
 
             Text {
