@@ -101,6 +101,7 @@ PanelWindow {
             Clock {
                 barScreen: root.screen
             }
+            Recorder {}
             MediaMini {
                 barScreen: root.screen
             }
