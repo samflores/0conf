@@ -5,6 +5,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
     Mod+Return hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
     Mod+Space hotkey-overlay-title="Run an Application: drmenu" { spawn-sh "/home/samflores/.local/share/cargo/bin/desx | /home/samflores/.local/share/cargo/bin/drmenu | sh"; }
+    Mod+Ctrl+Space hotkey-overlay-title="Open a file manager: nemo" { spawn "nemo"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: stasis" { spawn "stasis" "trigger" "lock_screen"; }
 
     Mod+Shift+E hotkey-overlay-title="Pick an emoji" { spawn-sh "/home/samflores/.local/bin/emoji-picker"; }
@@ -148,8 +149,8 @@ binds {
 
     Mod+W { toggle-column-tabbed-display; }
 
-    Print { spawn-sh "set -e; grim -t ppm -o \"$(niri msg --json focused-output | jq -r .name)\" - | satty -f -"; }
-    Shift+Print { spawn-sh "set -e; grim -t ppm -g \"$(slurp -o -d -F monospace)\" - | satty -f -"; }
+    Print { spawn-sh "set -e; grim -t ppm -g \"$(slurp -o -d -F monospace)\" - | satty -f -"; }
+    Shift+Print { spawn-sh "set -e; grim -t ppm -o \"$(niri msg --json focused-output | jq -r .name)\" - | satty -f -"; }
     Ctrl+Print { spawn-sh "set -e; niri msg action screenshot-window -d true --path /tmp/screenshot.png && satty -f /tmp/screenshot.png; rm -f
   /tmp/screenshot.png"; }
 
