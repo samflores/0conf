@@ -126,3 +126,6 @@ vim.diagnostic.config({
     },
   },
 })
+
+-- LSP inline completion is opt-in; toggle in normal mode with <leader>ic.
+vim.g.inline_completion_enabled = false

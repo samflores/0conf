@@ -188,9 +188,13 @@ create_augroup('UserLspConfig', {
 
       if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
         vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'fuzzy', 'popup' }
-        vim.lsp.inline_completion.enable(true)
+        -- Mirror the current global toggle state for this buffer.
+        vim.lsp.inline_completion.enable(vim.g.inline_completion_enabled == true)
         map('i', '<Tab>',
           function()
+            if not vim.g.inline_completion_enabled then
+              return '<Tab>'
+            end
             if not vim.lsp.inline_completion.get() then
               return '<Tab>'
             end
@@ -199,15 +203,23 @@ create_augroup('UserLspConfig', {
         )
         map('i', '<M-n>',
           function()
-            vim.lsp.inline_completion.select({})
+            if vim.g.inline_completion_enabled then vim.lsp.inline_completion.select({}) end
           end,
           { desc = 'Show next inline completion suggestion', }
         )
         map('i', '<M-p>',
           function()
-            vim.lsp.inline_completion.select({ count = -1 })
+            if vim.g.inline_completion_enabled then vim.lsp.inline_completion.select({ count = -1 }) end
           end,
           { desc = 'Show previous inline completion suggestion', }
+        )
+        map('n', '<leader>ic',
+          function()
+            vim.g.inline_completion_enabled = not vim.g.inline_completion_enabled
+            vim.lsp.inline_completion.enable(vim.g.inline_completion_enabled == true)
+            vim.notify('Inline completion ' .. (vim.g.inline_completion_enabled and 'enabled' or 'disabled'))
+          end,
+          { desc = 'Toggle LSP inline completion' }
         )
       end
 
