@@ -13,3 +13,5 @@ zsh/.zinit
 zsh/.zsh_history
 zsh/.zcompdump
 fish/functions/__ysu__*
+.clj-kondo/.cache
+.lsp/.cache
