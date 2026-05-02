@@ -127,8 +127,7 @@ Singleton {
         settings:        "\uf013",        // fa-cog
         nightLight:      "\udb81\udd81",  // mdi-weather-night
         wallpaper:       "\uf03e",        // fa-picture-o
-        airplaneOn:      "\uf072",        // fa-plane
-        airplaneOff:     "\udb81\udd79",  // mdi-airplane-off
+        airplane:        "\udb80\udc1d",        // mdi-airplane
         perfPerformance: "\uf0e4",        // fa-tachometer (speedometer)
         perfBalanced:    "\uf24e",        // fa-balance-scale
         perfPowerSaver:  "\uf06c",        // fa-leaf

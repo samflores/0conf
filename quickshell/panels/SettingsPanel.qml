@@ -124,7 +124,7 @@ Panel {
 
         Toggle {
             label: "Airplane mode"
-            glyph: Airplane.enabled ? Icons.systemIcons.airplaneOn : Icons.systemIcons.airplaneOff
+            glyph: Icons.systemIcons.airplane
             active: Airplane.enabled
             onActivated: Airplane.toggle()
         }
