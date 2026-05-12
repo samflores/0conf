@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import "../../theme"
 import "../../panels"
+import "../../services"
 
 MouseArea {
     id: root
@@ -19,9 +20,19 @@ MouseArea {
         precision: SystemClock.Minutes
     }
 
+    function eventSuffix() {
+        var n = GoogleCalendar.nextEvent
+        var m = GoogleCalendar.minutesToNext
+        if (!n || m < 0 || m >= 60) return ""
+        var title = String(n.title || "")
+        if (title.length > 22) title = title.substring(0, 21) + "…"
+        var when = m <= 0 ? "now" : ("in " + m + "m")
+        return "  •  " + title + " " + when
+    }
+
     Text {
         id: label
-        text: Qt.formatDateTime(clock.date, "ddd, MMM d • HH:mm")
+        text: Qt.formatDateTime(clock.date, "ddd, MMM d • HH:mm") + root.eventSuffix()
         color: PanelState.openPanel === "calendar" ? Theme.accent : Theme.fg
         font.family: Theme.fontFamily
         font.pixelSize: Theme.fontSize

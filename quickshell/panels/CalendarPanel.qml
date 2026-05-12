@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import "../theme"
+import "../services"
 
 Panel {
     id: root
@@ -335,6 +336,279 @@ Panel {
                 }
             }
         }
+        }
+
+        // Events section
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: 8
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 8
+
+                Text {
+                    text: "UPCOMING"
+                    color: Theme.fgDim
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontSize - 1
+                    font.bold: true
+                    Layout.fillWidth: true
+                }
+                Text {
+                    visible: GoogleCalendar.lastRefresh.getTime() > 0
+                    text: {
+                        var d = GoogleCalendar.lastRefresh
+                        var h = d.getHours(), m = d.getMinutes()
+                        return "synced " + (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m)
+                    }
+                    color: Theme.fgDim
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontSize - 1
+                }
+                MouseArea {
+                    implicitWidth: refreshIcon.implicitWidth + 8
+                    implicitHeight: refreshIcon.implicitHeight + 4
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: GoogleCalendar.refresh()
+                    Text {
+                        id: refreshIcon
+                        anchors.centerIn: parent
+                        text: GoogleCalendar.refreshing ? "" : ""  // spinner / refresh
+                        color: Theme.fgDim
+                        font.family: Theme.fontFamily
+                        font.pixelSize: Theme.fontSize
+                    }
+                }
+            }
+
+            // Empty state
+            Text {
+                visible: !GoogleCalendar.accounts || GoogleCalendar.accounts.length === 0
+                text: "No calendar accounts configured.\nSet up accounts in ~/.config/0conf/gcal/settings.json"
+                color: Theme.fgDim
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.fontSize - 1
+            }
+            Text {
+                visible: GoogleCalendar.accounts.length > 0 && GoogleCalendar.events.length === 0
+                text: "No upcoming events."
+                color: Theme.fgDim
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.fontSize - 1
+            }
+
+            Repeater {
+                model: GoogleCalendar.events.slice(0, 12)
+
+                MouseArea {
+                    Layout.fillWidth: true
+                    implicitHeight: eventRow.implicitHeight
+                    cursorShape: modelData.url ? Qt.PointingHandCursor : Qt.ArrowCursor
+                    onClicked: GoogleCalendar.openUrl(modelData.url)
+
+                    RowLayout {
+                        id: eventRow
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        spacing: 10
+
+                        Rectangle {
+                            width: 3
+                            Layout.preferredHeight: eventTitle.implicitHeight + eventMeta.implicitHeight + 4
+                            radius: 1.5
+                            color: modelData.color && modelData.color.length > 0 ? modelData.color : Theme.accent
+                        }
+
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 0
+
+                            Text {
+                                id: eventTitle
+                                Layout.fillWidth: true
+                                text: modelData.title || "(untitled)"
+                                color: Theme.fg
+                                font.family: Theme.fontFamily
+                                font.pixelSize: Theme.fontSize
+                                elide: Text.ElideRight
+                            }
+                            Text {
+                                id: eventMeta
+                                Layout.fillWidth: true
+                                text: {
+                                    var s = modelData.start
+                                    var e = modelData.end
+                                    function pad(n) { return n < 10 ? "0" + n : "" + n }
+                                    function fmt(d) { return pad(d.getHours()) + ":" + pad(d.getMinutes()) }
+                                    var sameDay = s.getFullYear() === root.now.getFullYear()
+                                                && s.getMonth() === root.now.getMonth()
+                                                && s.getDate() === root.now.getDate()
+                                    var dateLabel = sameDay ? "Today"
+                                                  : Qt.formatDate(s, "ddd MMM d")
+                                    var timeLabel = modelData.allDay ? "all day"
+                                                  : (fmt(s) + "–" + fmt(e))
+                                    var bits = [dateLabel, timeLabel]
+                                    if (modelData.label) bits.push(modelData.label)
+                                    if (modelData.location) bits.push(modelData.location)
+                                    return bits.join(" · ")
+                                }
+                                color: Theme.fgDim
+                                font.family: Theme.fontFamily
+                                font.pixelSize: Theme.fontSize - 1
+                                elide: Text.ElideRight
+                            }
+                        }
+
+                        MouseArea {
+                            visible: modelData.meetUrl && modelData.meetUrl.length > 0
+                            implicitWidth: meetIcon.implicitWidth + 12
+                            implicitHeight: meetIcon.implicitHeight + 8
+                            cursorShape: Qt.PointingHandCursor
+                            hoverEnabled: true
+                            onClicked: GoogleCalendar.openUrl(modelData.meetUrl)
+
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: 4
+                                color: parent.containsMouse ? Theme.surface : "transparent"
+                            }
+                            Text {
+                                id: meetIcon
+                                anchors.centerIn: parent
+                                text: ""  // fa-video
+                                color: Theme.accent
+                                font.family: Theme.fontFamily
+                                font.pixelSize: Theme.fontSize
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Calendar picker (collapsible)
+        ColumnLayout {
+            id: picker
+            Layout.fillWidth: true
+            spacing: 6
+
+            property bool expanded: false
+
+            MouseArea {
+                Layout.fillWidth: true
+                implicitHeight: pickerHeader.implicitHeight + 4
+                cursorShape: Qt.PointingHandCursor
+                onClicked: picker.expanded = !picker.expanded
+
+                RowLayout {
+                    id: pickerHeader
+                    anchors.fill: parent
+                    spacing: 6
+                    Text {
+                        text: picker.expanded ? "" : ""  // chevron-down / chevron-right
+                        color: Theme.fgDim
+                        font.family: Theme.fontFamily
+                        font.pixelSize: Theme.fontSize - 2
+                    }
+                    Text {
+                        text: "CALENDARS"
+                        color: Theme.fgDim
+                        font.family: Theme.fontFamily
+                        font.pixelSize: Theme.fontSize - 1
+                        font.bold: true
+                        Layout.fillWidth: true
+                    }
+                }
+            }
+
+            Repeater {
+                model: picker.expanded ? GoogleCalendar.accounts : []
+
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 2
+
+                    property int accountIndex: index
+                    property var accountData: modelData
+
+                    Text {
+                        text: accountData.label || accountData.alias
+                        color: Theme.fg
+                        font.family: Theme.fontFamily
+                        font.pixelSize: Theme.fontSize - 1
+                        font.bold: true
+                        topPadding: 4
+                    }
+
+                    Repeater {
+                        model: GoogleCalendar.calendarsByAccount[accountData.alias] || []
+
+                        MouseArea {
+                            Layout.fillWidth: true
+                            id: calRow_ma
+                            implicitHeight: calRow.implicitHeight + 4
+                            cursorShape: Qt.PointingHandCursor
+                            property bool selected: {
+                                var cals = accountData.calendars || []
+                                // Empty selection = show all
+                                if (cals.length === 0) return true
+                                return cals.indexOf(modelData.title) >= 0
+                            }
+                            property bool allMode: (accountData.calendars || []).length === 0
+
+                            onClicked: {
+                                // If we're in "all mode", first click materializes
+                                // the full list minus the clicked one.
+                                if (allMode) {
+                                    var all = GoogleCalendar.calendarsByAccount[accountData.alias] || []
+                                    var next = []
+                                    for (var i = 0; i < all.length; i++) {
+                                        if (all[i].title !== modelData.title) next.push(all[i].title)
+                                    }
+                                    var accs = GoogleCalendar.accounts.slice()
+                                    var acc = Object.assign({}, accs[accountIndex])
+                                    acc.calendars = next
+                                    accs[accountIndex] = acc
+                                    GoogleCalendar.accounts = accs
+                                    GoogleCalendar.saveSettings()
+                                    GoogleCalendar.refresh()
+                                } else {
+                                    GoogleCalendar.toggleCalendar(accountIndex, modelData.title)
+                                }
+                            }
+
+                            RowLayout {
+                                id: calRow
+                                anchors.fill: parent
+                                spacing: 8
+
+                                Text {
+                                    // Filled square if selected, empty square otherwise.
+                                    text: calRow_ma.selected ? "" : ""
+                                    color: calRow_ma.selected ? Theme.accent : Theme.fgDim
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: Theme.fontSize - 1
+                                }
+                                Text {
+                                    text: modelData.title
+                                    color: Theme.fg
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: Theme.fontSize - 1
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
+                                }
+                                Text {
+                                    text: modelData.access
+                                    color: Theme.fgDim
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: Theme.fontSize - 2
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
