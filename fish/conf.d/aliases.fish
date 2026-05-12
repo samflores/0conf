@@ -38,3 +38,6 @@ alias type 'type -a'
 
 # ---- top
 alias top 'btop'
+
+# ---- fetch
+alias sysinfo 'blaeckfetch'
