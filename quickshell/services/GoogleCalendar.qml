@@ -29,6 +29,11 @@ Singleton {
     // Per-account discovered calendars (from `gcalcli list`). Keyed by alias.
     //   { alias: [{ access, title }, ...] }
     property var calendarsByAccount: ({})
+    // Per-account primary email, auto-discovered from `gcalcli list` output.
+    // The primary calendar is owned and named after the account email.
+    property var _accountEmails: ({})
+    property int _pendingListers: 0
+    property bool _refreshAfterDiscovery: false
 
     function refresh() {
         if (root.refreshing) return
@@ -47,6 +52,7 @@ Singleton {
     }
 
     function discoverCalendars() {
+        _pendingListers = root.accounts.length
         for (var i = 0; i < root.accounts.length; i++) {
             _listOne(root.accounts[i])
         }
@@ -109,7 +115,8 @@ Singleton {
         var cmd = _envForAccount(acc.alias).concat([
             "gcalcli", "agenda", "--tsv",
             "--details", "title", "--details", "location",
-            "--details", "calendar", "--details", "url"
+            "--details", "calendar", "--details", "url",
+            "--details", "conference"
         ])
         var cals = acc.calendars || []
         for (var i = 0; i < cals.length; i++) {
@@ -171,19 +178,26 @@ Singleton {
     function _parseTsv(text, account) {
         var lines = text.split("\n")
         var out = []
+        var email = root._accountEmails[account.alias] || ""
         // First line is header.
         for (var i = 1; i < lines.length; i++) {
             var line = lines[i]
             if (line === "") continue
             var p = line.split("\t")
-            // Expected columns: start_date, start_time, end_date, end_time,
-            //                   html_link, hangout_link, title, location, calendar
-            if (p.length < 9) continue
+            // Expected columns with --details title,location,calendar,url,conference:
+            //   start_date, start_time, end_date, end_time,
+            //   html_link, hangout_link, conference_entry_point_type, conference_uri,
+            //   title, location, calendar
+            if (p.length < 11) continue
             var startDate = p[0], startTime = p[1]
             var endDate = p[2], endTime = p[3]
             var url = p[4]
-            var meetUrl = p[5]
-            var title = p[6], location = p[7], calendar = p[8]
+            var hangoutLink = p[5]
+            // p[6] = conference_entry_point_type (ignored)
+            var conferenceUri = p[7]
+            var title = p[8], location = p[9], calendar = p[10]
+
+            var meetUrl = hangoutLink || conferenceUri || ""
 
             var allDay = startTime === "" && endTime === ""
             var start, end
@@ -203,12 +217,20 @@ Singleton {
                 title: title || "(untitled)",
                 location: location || "",
                 calendar: calendar || "",
-                url: url || "",
-                meetUrl: meetUrl || "",
+                url: _withAuthuser(url, email),
+                meetUrl: _withAuthuser(meetUrl, email),
                 start: start, end: end, allDay: allDay
             })
         }
         return out
+    }
+
+    // Append authuser=<email> to a Google URL so the browser uses the matching
+    // session even when multiple Google accounts are signed in.
+    function _withAuthuser(url, email) {
+        if (!url || url.length === 0 || !email || email.length === 0) return url || ""
+        var sep = url.indexOf("?") >= 0 ? "&" : "?"
+        return url + sep + "authuser=" + encodeURIComponent(email)
     }
 
     function _parseLocalDate(dateStr, timeStr) {
@@ -257,9 +279,25 @@ Singleton {
             var copy = Object.assign({}, root.calendarsByAccount)
             copy[alias] = cals
             root.calendarsByAccount = copy
+
+            // Heuristic: the account's primary calendar is owned and its title
+            // looks like an email address.
+            for (var i = 0; i < cals.length; i++) {
+                if (cals[i].access === "owner" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cals[i].title)) {
+                    var emails = Object.assign({}, root._accountEmails)
+                    emails[alias] = cals[i].title
+                    root._accountEmails = emails
+                    break
+                }
+            }
         }
         var l = _listers[alias]
         if (l) { l.destroy(); delete _listers[alias] }
+        _pendingListers = Math.max(0, _pendingListers - 1)
+        if (_pendingListers === 0 && _refreshAfterDiscovery) {
+            _refreshAfterDiscovery = false
+            root.refresh()
+        }
     }
 
     // --- Config load/save ----------------------------------------------------
@@ -284,8 +322,10 @@ Singleton {
                         root.lastError = "settings.json: " + e
                     }
                 }
+                // Run discovery first; refresh is triggered when it completes
+                // so events have the right authuser= for URL routing.
+                _refreshAfterDiscovery = true
                 root.discoverCalendars()
-                root.refresh()
             }
         }
     }
