@@ -476,7 +476,7 @@ Panel {
                             Text {
                                 id: meetIcon
                                 anchors.centerIn: parent
-                                text: ""  // fa-video
+                                text: ""  // fa-video-camera
                                 color: Theme.accent
                                 font.family: Theme.fontFamily
                                 font.pixelSize: Theme.fontSize
