@@ -79,6 +79,66 @@ Singleton {
         Quickshell.execDetached(["xdg-open", url])
     }
 
+    // Notify-before window for upcoming events, in minutes.
+    property int notifyMinutesBefore: 2
+    // Set of event keys already notified for this run; cleared on service reload.
+    property var _notifiedKeys: ({})
+    property var _notifiers: ({})
+    property int _notifierSeq: 0
+
+    function _eventKey(ev) { return ev.url + "|" + ev.start.getTime() }
+
+    function _maybeNotifyImminent(now) {
+        var thresholdMs = root.notifyMinutesBefore * 60000
+        for (var i = 0; i < root.events.length; i++) {
+            var e = root.events[i]
+            if (e.allDay) continue
+            var dt = e.start.getTime() - now.getTime()
+            if (dt > thresholdMs) break  // events are sorted by start
+            if (dt < -30000) continue    // already 30s past start; skip
+            var key = _eventKey(e)
+            if (_notifiedKeys[key]) continue
+            _notifiedKeys[key] = true
+            _dispatchNotification(e)
+        }
+    }
+
+    function _dispatchNotification(ev) {
+        var minutes = Math.max(0, Math.round((ev.start.getTime() - Date.now()) / 60000))
+        var when = minutes <= 0 ? "starting now" : ("in " + minutes + " min")
+        var bits = [when]
+        if (ev.label) bits.push(ev.label)
+        if (ev.location) bits.push(ev.location)
+        var body = bits.join(" · ")
+
+        var args = ["notify-send",
+                    "-a", "quickshell-calendar",
+                    "-u", "critical",
+                    "-t", "0",
+                    "-i", "appointment-soon-symbolic",
+                    "-A", "open=Open in Calendar"]
+        if (ev.meetUrl && ev.meetUrl.length > 0) {
+            args.push("-A"); args.push("meet=Join Meet")
+        }
+        args.push(ev.title || "(untitled)")
+        args.push(body)
+
+        var seq = ++_notifierSeq
+        var proc = notifierComponent.createObject(root, {
+            seq: seq, event: ev, cmd: args
+        })
+        _notifiers[seq] = proc
+        proc.start()
+    }
+
+    function _onNotifierDone(seq, ev, stdout) {
+        var action = String(stdout).trim()
+        if (action === "open") root.openUrl(ev.url)
+        else if (action === "meet") root.openUrl(ev.meetUrl)
+        var n = _notifiers[seq]
+        if (n) { n.destroy(); delete _notifiers[seq] }
+    }
+
     function toggleCalendar(accountIndex, calendarTitle) {
         var accs = root.accounts.slice()
         var acc = Object.assign({}, accs[accountIndex])
@@ -165,6 +225,7 @@ Singleton {
             if (e.start.getTime() > now.getTime()) { next = e; break }
         }
         root.nextEvent = next
+        _maybeNotifyImminent(now)
         if (next) {
             var diffMs = next.start.getTime() - now.getTime()
             root.minutesToNext = Math.max(0, Math.floor(diffMs / 60000))
@@ -388,6 +449,27 @@ Singleton {
             stdout: StdioCollector { onStreamFinished: { lp._text = this.text } }
             onExited: function(code) {
                 root._onListDone(lp.alias, lp._text, code === 0)
+            }
+        }
+    }
+
+    Component {
+        id: notifierComponent
+        Process {
+            id: np
+            property int seq: 0
+            property var event: ({})
+            property var cmd: []
+            property string _text: ""
+
+            function start() {
+                np.command = cmd
+                np.running = true
+            }
+
+            stdout: StdioCollector { onStreamFinished: { np._text = this.text } }
+            onExited: function(code) {
+                root._onNotifierDone(np.seq, np.event, np._text)
             }
         }
     }
