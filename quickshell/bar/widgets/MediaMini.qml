@@ -28,6 +28,13 @@ MouseArea {
         spacing: 6
 
         Text {
+            text: "•"
+            color: Theme.fg
+            font.family: Theme.fontFamily
+            font.pixelSize: Theme.fontSize
+        }
+
+        Text {
             text: Icons.systemIcons.media
             color: PanelState.openPanel === "media" ? Theme.accent : Theme.fg
             font.family: Theme.fontFamily
