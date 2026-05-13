@@ -271,6 +271,20 @@ Singleton {
             }
             if (!start || !end) continue
 
+            // Drop events whose title is in the account's ignore_titles list
+            // (case-insensitive, trimmed). Useful for auto-generated entries
+            // like Workspace "Working location" all-day events.
+            var ignored = false
+            var ignoreList = account.ignore_titles || []
+            var titleNorm = String(title || "").trim().toLowerCase()
+            for (var ig = 0; ig < ignoreList.length; ig++) {
+                if (String(ignoreList[ig]).trim().toLowerCase() === titleNorm) {
+                    ignored = true
+                    break
+                }
+            }
+            if (ignored) continue
+
             out.push({
                 account: account.alias,
                 label: account.label || account.alias,
