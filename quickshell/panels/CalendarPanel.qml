@@ -406,6 +406,13 @@ Panel {
                     implicitHeight: eventRow.implicitHeight
                     cursorShape: modelData.url ? Qt.PointingHandCursor : Qt.ArrowCursor
                     onClicked: GoogleCalendar.openUrl(modelData.url)
+                    opacity: {
+                        var nowMs = root.now.getTime()
+                        if (modelData.end.getTime() < nowMs) return 0.4
+                        // In-progress OR starts today = fully bright.
+                        if (modelData.start.getTime() <= nowMs) return 1.0
+                        return root.isSameDay(modelData.start, root.now) ? 1.0 : 0.7
+                    }
 
                     RowLayout {
                         id: eventRow
