@@ -57,6 +57,13 @@ declare -A DEPS=(
     [greetd]="greetd"
 )
 
+# Optional dependency map. Module still works without these; they enable
+# specific features (noted in the message). Missing optional deps print
+# a softer note rather than the usual warning.
+declare -A OPTIONAL_DEPS=(
+    [quickshell]="gcalcli:Google Calendar widget"
+)
+
 ALL_MODULES=("${!SRC[@]}")
 
 usage() {
@@ -83,14 +90,27 @@ have() { command -v "$1" >/dev/null 2>&1; }
 check_deps() {
     local module="$1"
     local deps="${DEPS[$module]:-}"
-    [[ -z "$deps" ]] && return
-    local missing=()
-    for d in $deps; do
-        have "$d" || missing+=("$d")
-    done
-    if (( ${#missing[@]} > 0 )); then
-        printf '  \033[33m! missing:\033[0m %s\n' "${missing[*]}"
+    if [[ -n "$deps" ]]; then
+        local missing=()
+        for d in $deps; do
+            have "$d" || missing+=("$d")
+        done
+        if (( ${#missing[@]} > 0 )); then
+            printf '  \033[33m! missing:\033[0m %s\n' "${missing[*]}"
+        fi
     fi
+
+    # Each entry in OPTIONAL_DEPS[$module] is "dep:purpose"; entries are
+    # separated by ';' so purpose strings may contain spaces.
+    local opt="${OPTIONAL_DEPS[$module]:-}"
+    [[ -z "$opt" ]] && return
+    local IFS=';'
+    for entry in $opt; do
+        [[ -z "$entry" ]] && continue
+        local dep="${entry%%:*}"
+        local purpose="${entry#*:}"
+        have "$dep" || printf '  \033[36m· optional:\033[0m %s (%s)\n' "$dep" "$purpose"
+    done
 }
 
 link_to() {
