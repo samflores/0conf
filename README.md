@@ -25,6 +25,7 @@ My dotfiles.
 | `qutebrowser`| qutebrowser                                                |
 | `pi`         | `pi` CLI config                                            |
 | `greetd`     | greetd + niri-based greeter (system-wide; install as root) |
+| `satty`      | Satty screenshot annotator                                 |
 
 `awww` is used as the wallpaper tool (replaces hyprpaper).
 
