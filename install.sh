@@ -29,6 +29,7 @@ declare -A SRC=(
     [zsh]="zsh"
     [qutebrowser]="qutebrowser"
     [greetd]="greetd"
+    [satty]="satty"
 )
 
 # Default selection.
@@ -55,6 +56,7 @@ declare -A DEPS=(
     [zsh]="zsh"
     [qutebrowser]="qutebrowser"
     [greetd]="greetd"
+    [satty]="satty"
 )
 
 ALL_MODULES=("${!SRC[@]}")

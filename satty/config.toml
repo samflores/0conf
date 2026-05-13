@@ -1,0 +1,8 @@
+[general]
+early-exit = true
+copy-command = "wl-copy"
+annotation-size-factor = 2
+output-filename = "~/Pictures/Screenshots/Screenshot-%Y-%m-%d_%H:%M:%S.png"
+default-hide-toolbars = false
+actions-on-enter = ["save-to-clipboard"]
+action-on-enter = "save-to-clipboard"
