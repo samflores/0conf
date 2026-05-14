@@ -15,6 +15,14 @@ default:
     r"steam_app_.*"
   ]
 
+  # pw-play is spawned by Claude Code's peon-ping hooks (and any short
+  # notification sound). Each invocation registers a one-second
+  # "PlayingLocal" pulse that resets stasis idle timers, so lock / suspend
+  # never fire while Claude Code is active. Treat it as non-media.
+  media_blacklist [
+    "pw-play"
+  ]
+
   lid_close_action "swaylock"
 
   custom_brightness_instant:
