@@ -3,6 +3,8 @@ nvim/undos
 nvim/swaps
 nvim/.netrwhist
 nvim/plugin/packer_compiled.lua
+nvim/.grip/
+.grip/
 tmux/plugins
 zsh/*.zwc
 zsh/.zshrc
