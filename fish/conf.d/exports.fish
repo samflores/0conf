@@ -60,8 +60,8 @@ set -x BUNDLE_PATH $HOME/.gem/ruby/3.4.0
 set -x BUNDLE_CACHE_PATH $HOME/.bundle/cache
 set -x BUNDLE_BIN $HOME/.bundle/bin
 
-set -x ANDROID_NDK_ROOT $HOME/Android/Sdk/ndk/27.0.12077973
-set -x ANDROID_HOME $HOME/Android/Sdk
+set -x ANDROID_NDK_ROOT $HOME/Code/Android/SDK/ndk/30.0.14904198
+set -x ANDROID_HOME $HOME/Code/Android/Sdk
 
 set -x ZK_NOTEBOOK_DIR $HOME/Documents/Notes
 set -x PASSWORD_STORE_DIR $HOME/.local/share/password-store
