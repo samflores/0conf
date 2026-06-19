@@ -397,6 +397,15 @@ Panel {
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSize - 1
             }
+            Text {
+                Layout.fillWidth: true
+                visible: GoogleCalendar.lastError.length > 0
+                text: GoogleCalendar.lastError
+                color: Theme.fgDim
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.fontSize - 2
+                wrapMode: Text.WordWrap
+            }
 
             Repeater {
                 model: GoogleCalendar.events.slice(0, 12)
