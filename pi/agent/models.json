@@ -14,18 +14,60 @@
             "image"
           ],
           "reasoning": true
+        },
+        {
+          "id": "gemma4:12b-128k",
+          "name": "Gemma 4 12B (Local)",
+          "input": [
+            "text",
+            "image"
+          ],
+          "contextWindow": 131072,
+          "reasoning": true,
+          "compat": {
+            "supportsDeveloperRole": false,
+            "supportsReasoningEffort": false
+          }
+        },
+        {
+          "id": "gemma4:12b",
+          "name": "Gemma 4 12B Base (Local)",
+          "input": [
+            "text",
+            "image"
+          ],
+          "contextWindow": 131072,
+          "reasoning": true,
+          "compat": {
+            "supportsDeveloperRole": false,
+            "supportsReasoningEffort": false
+          }
+        },
+        {
+          "id": "hf.co/yuxinlu1/gemma-4-12B-coder-fable5-composer2.5-v1-GGUF:Q4_K_M",
+          "name": "Gemma 4 12B Coder Fable (Local)",
+          "input": [
+            "text"
+          ],
+          "contextWindow": 262144,
+          "reasoning": true,
+          "compat": {
+            "supportsDeveloperRole": false
+          }
         }
       ]
     },
     "zai": {
       "api": "openai-completions",
-      "apiKey": "ZAI_API_KEY",
+      "apiKey": "$ZAI_API_KEY",
       "baseUrl": "https://api.z.ai/api/coding/paas/v4",
       "models": [
         {
           "contextWindow": 204800,
           "id": "glm-5.1",
-          "input": ["text"],
+          "input": [
+            "text"
+          ],
           "maxTokens": 131072,
           "name": "GLM-5.1",
           "reasoning": true
