@@ -1,8 +1,8 @@
 {
-  "defaultModel": "glm-5.1",
+  "defaultModel": "glm-5.2",
   "defaultProvider": "zai",
-  "lastChangelogVersion": "0.74.0",
+  "lastChangelogVersion": "0.79.7",
   "theme": "gypsum",
   "hideThinkingBlock": false,
-  "defaultThinkingLevel": "off"
+  "defaultThinkingLevel": "high"
 }
