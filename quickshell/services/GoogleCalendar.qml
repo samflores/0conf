@@ -35,8 +35,29 @@ Singleton {
     property int _pendingListers: 0
     property bool _refreshAfterDiscovery: false
 
+    // If an in-flight batch never completes (e.g. a gcalcli subprocess hangs
+    // or its onExited never fires), `refreshing` stays true and every later
+    // refresh() returns early — the widget silently freezes. Treat a batch
+    // older than this as dead and reclaim state on the next refresh attempt.
+    readonly property int _staleBatchMs: 120000
+    property double _batchStartedAt: 0
+
     function refresh() {
-        if (root.refreshing) return
+        if (root.refreshing) {
+            var ageMs = Date.now() - root._batchStartedAt
+            if (ageMs < root._staleBatchMs) return
+            // Stale batch: drop any in-flight subprocesses and reset.
+            for (var k in _fetchers) {
+                var p = _fetchers[k]
+                if (p) p.destroy()
+            }
+            _fetchers = ({})
+            _pendingFetches = 0
+            _collected = []
+            _batchErrors = []
+            root.refreshing = false
+            root.lastError = "previous refresh timed out"
+        }
         if (!root.accounts || root.accounts.length === 0) {
             root.events = []
             root.nextEvent = null
@@ -44,8 +65,10 @@ Singleton {
             return
         }
         root.refreshing = true
+        root._batchStartedAt = Date.now()
         _pendingFetches = root.accounts.length
         _collected = []
+        _batchErrors = []
         for (var i = 0; i < root.accounts.length; i++) {
             _fetchOne(i, root.accounts[i])
         }
@@ -156,12 +179,24 @@ Singleton {
     // --- Internal state for in-flight batch ----------------------------------
     property int _pendingFetches: 0
     property var _collected: []
+    property var _batchErrors: []
     property var _fetchers: ({})
     property var _listers: ({})
 
+    // `env` reset by Process doesn't inherit a useful PATH, so user-local
+    // tools like ~/.local/bin/gcalcli aren't found. Reconstruct PATH here.
+    readonly property string _path: {
+        var home = Quickshell.env("HOME") || ""
+        var inherited = Quickshell.env("PATH") || "/usr/local/bin:/usr/bin:/bin"
+        return home + "/.local/bin:" + inherited
+    }
+
     function _envForAccount(alias) {
         var dir = root.accountsDir + "/" + alias
-        return ["env", "GCALCLI_CONFIG=" + dir, "XDG_DATA_HOME=" + dir]
+        return ["env",
+                "PATH=" + root._path,
+                "GCALCLI_CONFIG=" + dir,
+                "XDG_DATA_HOME=" + dir]
     }
 
     function _pad(n) { return n < 10 ? "0" + n : "" + n }
@@ -190,11 +225,15 @@ Singleton {
     }
 
     function _onFetchDone(index, account, text, ok, err) {
+        var who = account.label || account.alias
         if (ok) {
             var parsed = _parseTsv(text, account)
             for (var i = 0; i < parsed.length; i++) _collected.push(parsed[i])
+            console.log("GoogleCalendar:", who, "fetched", parsed.length, "events")
         } else {
-            root.lastError = (account.label || account.alias) + ": " + err
+            var msg = who + ": " + err
+            _batchErrors.push(msg)
+            console.warn("GoogleCalendar:", msg)
         }
         var f = _fetchers[index]
         if (f) { f.destroy(); delete _fetchers[index] }
@@ -210,7 +249,16 @@ Singleton {
             kept.push(e)
             if (kept.length >= 200) break
         }
-        root.events = kept
+        // If every account errored, keep the previous events visible rather
+        // than blanking the widget. A transient gcalcli/network hiccup
+        // shouldn't make the day's schedule disappear.
+        var allFailed = _batchErrors.length === root.accounts.length
+        if (allFailed && root.events.length > 0) {
+            console.warn("GoogleCalendar: all fetches failed, keeping previous", root.events.length, "events")
+        } else {
+            root.events = kept
+        }
+        root.lastError = _batchErrors.join(" | ")
         root.lastRefresh = now
         root.refreshing = false
         _recomputeNext()
