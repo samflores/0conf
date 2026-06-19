@@ -2,10 +2,11 @@ return {
   {
     src = 'https://github.com/saghen/blink.cmp.git',
     name = 'blink.cmp',
-    data = { 
+    data = {
       event = 'DeferredUIEnter',
       version = '1.*',
       after = function()
+        require('blink.cmp').build():wait(60000)
         require('blink.cmp').setup({
           keymap = { preset = 'default' },
           -- snippets = { preset = 'luasnip' },
@@ -47,14 +48,18 @@ return {
     },
   },
   {
+    src = 'https://github.com/saghen/blink.lib',
+    data = { dep_of = 'blink.cmp' }
+  },
+  {
     src = 'https://github.com/Kaiser-Yang/blink-cmp-avante.git',
     data = { dep_of = 'blink.cmp' }
   },
-  { 
+  {
     src = 'https://github.com/rafamadriz/friendly-snippets.git',
     data = { dep_of = 'blink.cmp' }
   },
-  { 
+  {
     src = 'https://github.com/fang2hou/blink-copilot.git',
     data = { dep_of = 'blink.cmp' }
   },
