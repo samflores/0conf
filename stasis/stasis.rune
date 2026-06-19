@@ -21,6 +21,7 @@ default:
   # never fire while Claude Code is active. Treat it as non-media.
   media_blacklist [
     "pw-play"
+    "zen"
   ]
 
   lid_close_action "swaylock"
