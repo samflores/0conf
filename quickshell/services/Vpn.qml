@@ -194,8 +194,8 @@ Singleton {
 
         onConnectionStateChanged: {
             if (connected) {
-                write("state on\n")
                 write("hold release\n")
+                write("state\n")
                 if (root.openvpnState === "connecting") root.openvpnState = "auth"
             } else if (mgmt.path !== "") {
                 mgmt.path = ""
@@ -288,9 +288,16 @@ Singleton {
             return
         }
 
-        // State updates: >STATE:<ts>,<state-name>,<desc>,...
+        // State updates: >STATE:<ts>,<state-name>,<desc>,... (async push)
+        // or <ts>,<state-name>,<desc>,... (response to one-shot `state` query)
+        var stateBody = ""
         if (line.indexOf(">STATE:") === 0) {
-            var parts = line.substring(7).split(",")
+            stateBody = line.substring(7)
+        } else if (/^\d+,(CONNECTED|EXITING|RECONNECTING|WAIT|AUTH|GET_CONFIG|ASSIGN_IP|ADD_ROUTES|RESOLVE|TCP_CONNECT),/.test(line)) {
+            stateBody = line
+        }
+        if (stateBody !== "") {
+            var parts = stateBody.split(",")
             var st = parts[1]
             if (st === "CONNECTED") {
                 root.openvpnState = "up"
