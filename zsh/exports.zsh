@@ -57,7 +57,7 @@ export BUNDLE_PATH=$HOME/.gem/ruby/3.4.0
 export BUNDLE_CACHE_PATH=$HOME/.bundle/cache
 export BUNDLE_BIN=$HOME/.bundle/bin
 
-export ANDROID_NDK_ROOT=/home/samflores/Android/Sdk/ndk/27.0.12077973/
-export ANDROID_HOME=/home/samflores/Android/Sdk/
+export ANDROID_NDK_ROOT=$HOME/Code/Android/SDK/ndk/30.0.14904198
+export ANDROID_HOME=$HOME/Code/Android/Sdk
 
 export ZK_NOTEBOOK_DIR=/home/samflores/Documents/Notes/
