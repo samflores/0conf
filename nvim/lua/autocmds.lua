@@ -319,6 +319,26 @@ create_augroup('UserLspConfig', {
   }
 })
 
+create_augroup('GripWelcome', {
+  {
+    event = 'FileType',
+    pattern = 'grip-welcome',
+    callback = function()
+      vim.schedule(function()
+        for _, w in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+          local b = vim.api.nvim_win_get_buf(w)
+          if vim.api.nvim_buf_get_name(b) == 'grip://welcome' then
+            if #vim.api.nvim_tabpage_list_wins(0) > 1 then
+              pcall(vim.api.nvim_win_close, w, true)
+            end
+            break
+          end
+        end
+      end)
+    end
+  }
+})
+
 create_augroup('BackupRotation', {
   {
     event = 'VimEnter',
