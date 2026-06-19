@@ -4,7 +4,8 @@ binds {
 
     Mod+Shift+Slash { show-hotkey-overlay; }
     Mod+Return hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
-    Mod+Space hotkey-overlay-title="Run an Application: drmenu" { spawn-sh "/home/samflores/.local/share/cargo/bin/desx | /home/samflores/.local/share/cargo/bin/drmenu | sh"; }
+    Mod+Space hotkey-overlay-title="Run an Application: drmenu" { spawn-sh "/home/samflores/.local/share/cargo/bin/desx --category -game | /home/samflores/.local/share/cargo/bin/drmenu | sh"; }
+    Mod+Shift+Space hotkey-overlay-title="Run an Application: drmenu" { spawn-sh "/home/samflores/.local/share/cargo/bin/desx | /home/samflores/.local/share/cargo/bin/drmenu | sh"; }
     Mod+Ctrl+Space hotkey-overlay-title="Open a file manager: nautilus" { spawn "nautilus"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: stasis" { spawn "stasis" "trigger" "lock_screen"; }
 
