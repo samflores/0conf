@@ -1,6 +1,9 @@
 return {
   {
-    src = "git@github.com:ibhagwan/fzf-lua.git",
+    src = 'https://github.com/folke/snacks.nvim.git'
+  },
+  {
+    src = 'git@github.com:ibhagwan/fzf-lua.git',
     data = {
       event = 'DeferredUIEnter',
       keys = {
@@ -150,8 +153,9 @@ return {
             }
           }
         })
+        require('fzf-lua').register_ui_select()
       end,
     },
   },
-  { src =  'https://github.com/nvim-tree/nvim-web-devicons' },
+  { src = 'https://github.com/nvim-tree/nvim-web-devicons' },
 }
