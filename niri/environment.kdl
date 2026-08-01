@@ -9,6 +9,7 @@ cursor {
 
 environment {
     QT_QPA_PLATFORM "wayland"
+    XMODIFIERS "@im=fcitx"
     // SDL_VIDEODRIVER "wayland"
     CLUTTER_BACKEND "wayland"
     RADV_PERFTEST "video_decode"
