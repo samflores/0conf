@@ -1,6 +1,7 @@
 [core]
   ; pager = delta
 	excludesFile = ~/.gitignore_global
+	hooksPath = /dev/null
 
 ; [delta]
 ;   plus-color = "#012800"
@@ -30,3 +31,5 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+[commit]
+	gpgSign = false
