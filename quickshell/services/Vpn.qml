@@ -195,6 +195,7 @@ Singleton {
         onConnectionStateChanged: {
             if (connected) {
                 write("hold release\n")
+                write("state on\n")
                 write("state\n")
                 if (root.openvpnState === "connecting") root.openvpnState = "auth"
             } else if (mgmt.path !== "") {
