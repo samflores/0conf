@@ -1,4 +1,7 @@
 {
+  "extensions": [
+    "/home/samflores/Code/0conf/pi/agent/extensions/idle-inhibit.ts"
+  ],
   "defaultModel": "glm-5.2",
   "defaultProvider": "zai",
   "lastChangelogVersion": "0.79.7",
