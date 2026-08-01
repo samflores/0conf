@@ -56,7 +56,7 @@ set -x BAT_THEME 'Monokai Extended Light'
 set -x HOST_IP 172.17.0.1
 set -x DENO_INSTALL $HOME/.deno
 
-set -x BUNDLE_PATH $HOME/.gem/ruby/3.4.0
+# set -x BUNDLE_PATH $HOME/.gem/ruby/3.4.0
 set -x BUNDLE_CACHE_PATH $HOME/.bundle/cache
 set -x BUNDLE_BIN $HOME/.bundle/bin
 

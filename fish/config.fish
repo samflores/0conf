@@ -5,3 +5,6 @@ end
 
 # peon-ping quick controls
 function peon; bash /home/samflores/.claude/hooks/peon-ping/peon.sh $argv; end
+
+# mise version manager activation
+mise activate fish | source
