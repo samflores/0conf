@@ -1,3 +1,9 @@
 agent/auth.json
 agent/sessions/
 agent/trust.json
+agent/.pi-hermes-locks.sqlite
+agent/extensions/herdr-agent-state.ts
+agent/models-store.json
+agent/npm/
+agent/pi-hermes-memory/
+agent/projects-memory/
