@@ -1,5 +1,10 @@
 return {
-  init_options = { hostInfo = 'neovim' },
+  init_options = {
+    hostInfo = 'neovim',
+    tsserver = {
+      path = vim.fn.stdpath('data') .. '/typescript/node_modules/typescript/lib/tsserver.js',
+    },
+  },
   cmd = { 'typescript-language-server', '--stdio' },
   filetypes = {
     'javascript',
