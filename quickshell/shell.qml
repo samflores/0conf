@@ -27,6 +27,12 @@ ShellRoot {
     Variants {
         model: Quickshell.screens
 
+        CapsIndicator {}
+    }
+
+    Variants {
+        model: Quickshell.screens
+
         NotificationLayer {}
     }
 }
