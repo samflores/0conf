@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+import ctypes
+import ctypes.util
+import os
+import sys
+
+VID = 0xA8F8
+PID = 0x1834
+QMK_RAW_USAGE_PAGE = 0xFF60
+CMD_QUERY = 0x01
+
+DEBUG = bool(os.environ.get("QMK_DEBUG"))
+
+
+def dbg(msg):
+    if DEBUG:
+        sys.stderr.write(str(msg) + "\n")
+        sys.stderr.flush()
+
+
+def load_hidapi():
+    for name in ("hidapi-hidraw", "libhidapi-hidraw.so.0",
+                 "hidapi-libusb", "libhidapi-libusb.so.0"):
+        path = ctypes.util.find_library(name) or (name if name.startswith("lib") else None)
+        if path:
+            try:
+                dbg("trying %s" % path)
+                return ctypes.CDLL(path)
+            except OSError as e:
+                dbg("load failed %s: %s" % (path, e))
+    dbg("no hidapi library found")
+    sys.exit(5)
+
+
+hid = load_hidapi()
+
+
+class HidDeviceInfo(ctypes.Structure):
+    pass
+
+
+HidDeviceInfo._fields_ = [
+    ("path", ctypes.c_char_p),
+    ("vendor_id", ctypes.c_ushort),
+    ("product_id", ctypes.c_ushort),
+    ("serial_number", ctypes.c_wchar_p),
+    ("release_number", ctypes.c_ushort),
+    ("manufacturer_string", ctypes.c_wchar_p),
+    ("product_string", ctypes.c_wchar_p),
+    ("usage_page", ctypes.c_ushort),
+    ("usage", ctypes.c_ushort),
+    ("interface_number", ctypes.c_int),
+    ("next", ctypes.POINTER(HidDeviceInfo)),
+]
+
+hid.hid_init.restype = ctypes.c_int
+hid.hid_enumerate.restype = ctypes.POINTER(HidDeviceInfo)
+hid.hid_enumerate.argtypes = [ctypes.c_ushort, ctypes.c_ushort]
+hid.hid_free_enumeration.argtypes = [ctypes.POINTER(HidDeviceInfo)]
+hid.hid_open_path.restype = ctypes.c_void_p
+hid.hid_open_path.argtypes = [ctypes.c_char_p]
+hid.hid_write.restype = ctypes.c_int
+hid.hid_write.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_size_t]
+hid.hid_read_timeout.restype = ctypes.c_int
+hid.hid_read_timeout.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_size_t, ctypes.c_int]
+hid.hid_close.argtypes = [ctypes.c_void_p]
+
+hid.hid_init()
+head = hid.hid_enumerate(VID, PID)
+path = None
+node = head
+while node:
+    dbg("dev usage_page=0x%04x usage=0x%04x iface=%d path=%s" % (
+        node.contents.usage_page, node.contents.usage,
+        node.contents.interface_number, node.contents.path))
+    if node.contents.usage_page == QMK_RAW_USAGE_PAGE:
+        path = node.contents.path
+    node = node.contents.next
+if head:
+    hid.hid_free_enumeration(head)
+if not path:
+    dbg("no interface with usage_page 0x%04x" % QMK_RAW_USAGE_PAGE)
+    sys.exit(2)
+
+handle = hid.hid_open_path(path)
+if not handle:
+    dbg("hid_open_path failed")
+    sys.exit(3)
+dbg("opened")
+
+payloads = [
+    bytes([0x00, CMD_QUERY]) + bytes(31),
+    bytes([CMD_QUERY]) + bytes(31),
+]
+data = b""
+for payload in payloads:
+    buf = ctypes.create_string_buffer(64)
+    w = hid.hid_write(handle, payload, len(payload))
+    n = hid.hid_read_timeout(handle, buf, len(buf), 600)
+    dbg("payload %s wrote %d read %d: %s" % (
+        payload.hex(), w, n, buf.raw[:max(n, 0)].hex()))
+    if n and n > 0:
+        data = buf.raw[:n]
+        break
+hid.hid_close(handle)
+
+if not data:
+    sys.exit(4)
+if data and data[0] == 0x00:
+    data = data[1:]
+if len(data) >= 2 and data[0] == CMD_QUERY:
+    print(1 if data[1] == 1 else 0)
+else:
+    dbg("unexpected response: %s" % data.hex())
+    sys.exit(4)
