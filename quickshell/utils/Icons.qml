@@ -133,6 +133,7 @@ Singleton {
         perfPowerSaver:  "\uf06c",        // fa-leaf
         power:           "\uf011",        // fa-power-off
         lock:            "\uf023",        // fa-lock
+        autocorrect:     "\uf0d0",        // fa-magic
         suspend:         "\uf186",        // fa-moon
         reboot:          "\uf021",        // fa-refresh
         shutdown:        "\uf011",        // fa-power-off

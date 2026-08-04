@@ -123,6 +123,9 @@ PanelWindow {
             Docker {
                 barScreen: root.screen
             }
+            Autocorrect {
+                barScreen: root.screen
+            }
             Vpn {
                 barScreen: root.screen
             }
