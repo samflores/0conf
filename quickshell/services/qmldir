@@ -4,6 +4,7 @@ singleton Autocorrect 1.0 Autocorrect.qml
 singleton Battery 1.0 Battery.qml
 singleton Brightness 1.0 Brightness.qml
 singleton Bluetooth 1.0 Bluetooth.qml
+singleton Capslock 1.0 Capslock.qml
 singleton Dnd 1.0 Dnd.qml
 singleton Docker 1.0 Docker.qml
 singleton GoogleCalendar 1.0 GoogleCalendar.qml
