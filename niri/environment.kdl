@@ -8,6 +8,10 @@ cursor {
 }
 
 environment {
+    // Session bus run by the supervise-daemon user service. Hardcoded because
+    // niri does not expand $XDG_RUNTIME_DIR here.
+    DBUS_SESSION_BUS_ADDRESS "unix:path=/run/user/1000/bus"
+
     QT_QPA_PLATFORM "wayland"
     XMODIFIERS "@im=fcitx"
     // SDL_VIDEODRIVER "wayland"
