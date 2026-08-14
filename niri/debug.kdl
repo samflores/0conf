@@ -1,0 +1,3 @@
+debug {
+    wait-for-frame-completion-before-queueing
+}
