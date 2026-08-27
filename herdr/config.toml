@@ -1,0 +1,200 @@
+onboarding = false
+# ~/.config/herdr/config.toml
+# Ported from ~/.config/tmux/{tmux,settings,bindings,theme,plugins}.conf
+# Validate any change with:  herdr server reload-config   (then check ~/.config/herdr/herdr-server.log)
+
+# ── Terminal / shell ─────────────────────────────────────────────────────────
+# tmux: new-window/split-window -c '#{pane_current_path}'  +  default-terminal tmux-256color
+[terminal]
+default_shell = ""          # use $SHELL (was tmux-256color + your login shell)
+new_cwd = "follow"          # inherit source pane cwd  ==  -c '#{pane_current_path}'
+shell_mode = "auto"
+
+# ── Keys ─────────────────────────────────────────────────────────────────────
+[keys]
+# tmux: set -g prefix 'C-q'
+prefix = "ctrl+q"
+
+# --- tabs (tmux "windows") ---
+# tmux: unbind c ; bind + new-window -c cwd
+new_tab = "prefix+plus"
+# tmux: M-n / M-p  select-window -n / -p   (direct, no prefix) + keep prefix+n/p
+next_tab = ["prefix+n", "alt+n"]
+previous_tab = ["prefix+p", "alt+p"]
+switch_tab = "prefix+1..9"            # tmux base-index 1 -> herdr tabs are 1-based
+rename_tab = "prefix+shift+t"
+close_tab = "prefix+shift+x"
+
+# --- workspaces (tmux "sessions") ---
+# tmux: M-C-n / M-C-p  switch-client -n / -p   (direct)
+next_workspace = "alt+ctrl+n"
+previous_workspace = "alt+ctrl+p"
+# replaces tmux `s`/`w` (choose-tree) and the `bind T` sesh picker.
+workspace_picker = "prefix+w"
+goto = "prefix+g"
+
+# --- panes ---
+# tmux: bind v split-window -h   (side-by-side)   ;   bind s split-window -v   (stacked)
+split_vertical = "prefix+v"           # vertical divider  == tmux -h
+split_horizontal = "prefix+s"         # horizontal divider == tmux -v
+# tmux: bind-key x kill-pane  (skip prompt)  -- already herdr default
+close_pane = "prefix+x"
+zoom = "prefix+z"
+# tmux: M-Up copy-mode  +  vi copy mode (mode-keys vi)
+copy_mode = ["prefix+[", "alt+up"]
+# tmux pane focus used vim-tmux-navigator (Ctrl-hjkl); herdr-splits.nvim
+# plugin now bridges Neovim splits <-> herdr panes on the same keys (bound as
+# [[keys.command]] plugin_action entries below, since these aren't [keys]
+# actions). ctrl+l collides with tmux's clear-history muscle memory, so clear
+# moved to prefix+ctrl+l (also a [[keys.command]] entry below).
+# tmux had no equivalent binding; "toggle back" now handled by
+# beyondlex.herdr-recent-navigator's quick-focus-previous-tab/pane actions
+# (see [[keys.command]] entries below), which track real MRU history instead
+# of a single previous-focus pointer.
+
+# --- collision resolution ---
+# herdr hot-reloads config.toml on save, so no manual reload key is needed.
+# prefix+r stays on resize_mode (herdr default); manual reload is prefix+shift+r.
+# split_horizontal claimed prefix+s, so move herdr Settings off prefix+s:
+settings = "prefix+shift+s"
+
+# --- popup shell  (tmux: bind Enter popup -w 80% -h 80% -E) ---
+[[keys.command]]
+key = "prefix+enter"
+type = "popup"
+command = "$SHELL"
+width = "80%"
+height = "80%"
+description = "scratch shell (popup)"
+
+# --- new project tab  (tmux: bind Space command-prompt "Project:" -> new-window + ~name cd) ---
+[[keys.command]]
+key = "prefix+space"
+type = "popup"
+command = "~/.local/bin/herdr-new-project-tab"
+width = "60%"
+height = "40%"
+description = "new tab for a ~/Code project"
+
+# --- move current pane to another tab/space, picked via fzf ---
+[[keys.command]]
+key = "prefix+alt+m"
+type = "popup"
+command = "~/.local/bin/herdr-move-pane-to-tab"
+width = "60%"
+height = "40%"
+description = "move pane to tab"
+
+# --- beyondlex.herdr-recent-navigator: MRU workspaces/tabs/agents/panes ---
+[[keys.command]]
+key = "prefix+t"
+type = "plugin_action"
+command = "beyondlex.herdr-recent-navigator.open"
+description = "recent navigator"
+
+[[keys.command]]
+key = "prefix+backspace"
+type = "plugin_action"
+command = "beyondlex.herdr-recent-navigator.focus-previous-tab"
+description = "jump to previous tab (MRU)"
+
+[[keys.command]]
+key = "prefix+alt+backspace"
+type = "plugin_action"
+command = "beyondlex.herdr-recent-navigator.focus-previous-pane"
+description = "jump to previous pane (MRU)"
+
+# --- herdr-splits.nvim: seamless Neovim split <-> herdr pane navigation ---
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "herdr-splits.nav-left"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "herdr-splits.nav-down"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "herdr-splits.nav-up"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "herdr-splits.nav-right"
+
+# tmux: bind C-l clear-history ; send-keys 'C-l' 'C-l'  (moved off bare ctrl+l,
+# now claimed by herdr-splits.nvim nav-right)
+[[keys.command]]
+key = "prefix+ctrl+l"
+type = "shell"
+command = "~/.local/bin/herdr-clear-screen"
+description = "clear screen (tmux C-l)"
+
+# --- flip-split: flip a two-pane tab between left-right and top-bottom ---
+[[keys.command]]
+key = "prefix+f"
+type = "plugin_action"
+command = "flip-split.flip"
+description = "flip split orientation"
+
+# ── Theme  (Ghostty "Gypsum" theme colors) ───────────────────────────────────
+# "terminal" follows Ghostty's actual Gypsum bg/fg (#F7F7F7/#000000).
+# Requires herdr >= 0.8.0 (built from master) for selection_bg/active_row_bg
+# contrast fix; see https://github.com/herdrdev/herdr/issues/1307
+[theme]
+name = "terminal"
+
+auto_switch = false
+[theme.custom]
+# Ghostty "Gypsum" theme colors (~/Code/0conf/ghostty/themes/Gypsum)
+# panel_bg doubles as the tab-bar active-pill foreground (see panel_contrast_fg
+# in src/ui/widgets.rs) so it's set to Gypsum's bg instead of left as "reset".
+panel_bg = "#F7F7F7"      # Gypsum background
+accent = "#325CC0"        # Gypsum palette 4 (blue)
+red = "#AA3731"           # Gypsum palette 1
+green = "#448C27"         # Gypsum palette 2
+yellow = "#B58105"        # darker amber for "working" state contrast (Gypsum #FFBC5D too pale)
+overlay0 = "#1A1A1A"      # near-black: agent-panel labels render with Modifier::DIM
+                          # (see agent_style in src/ui/sidebar.rs), which visibly
+                          # softens/lightens whatever color is set here
+text = "#000000"          # Gypsum foreground (bold row labels like workspace name)
+subtext0 = "#333333"      # dark gray for inactive-row bold labels
+sidebar_bg = "#E0E0E0"      # Gypsum status_bar_bg (via tuicr gypsum theme)
+active_row_bg = "#CFCFCF"   # darker than sidebar_bg for clearer separation
+selection_bg = "#8FB8F5"    # darker Gypsum blue-tint for stronger contrast
+
+# ── UI / sidebar  (settings.conf: mouse on; theme.conf: compact grey borders) ─
+[ui]
+accent = "#325CC0"                    # Gypsum blue, match theme.custom accent
+sidebar_start_collapsed = true
+tab_bar_position = "bottom"
+tab_label_mode = "compact"            # tmux: window-status-format shows only #I; current tab shows #I + #W
+mouse_capture = true                  # tmux: set -g mouse on
+mouse_scroll_lines = 3                # tmux WheelUpPane behavior
+pane_borders = true                   # tmux pane-border-style (fg=colour8); draws real divider lines both directions
+pane_outer_borders = false            # only internal dividers between panes, no frame around the whole pane area
+pane_gaps = false                     # tmux has compact borders, no gaps
+prompt_new_tab_name = false           # tmux `bind + new-window` did not prompt
+# confirm_close left at default (true): closing a whole workspace is destructive
+
+# hide the "copied to clipboard" popup (copy still works); tmux used wl-copy silently
+show_agent_labels_on_pane_borders = true
+agent_panel_sort = "spaces"
+status_indicators = "symbols"
+[ui.sidebar.agents]
+rows = [["state_icon", { token = "tab", bold = true, dim = false }, "agent"], [{ token = "workspace", bold = false, dim = true }]]
+[ui.toast.clipboard]
+enabled = false
+
+# tmux was silent on agent events; disable herdr's agent sounds during eval
+[ui.sound]
+enabled = false
+
+[update]
+channel = "preview"
+
+[ui.toast]
+delivery = "system"

@@ -1,0 +1,38 @@
+#!/usr/bin/env fish
+# Port of tmux `prefix+Space`: prompt for a project name, create a herdr tab
+# named after it, cwd'd into ~/Code/<name> (or ~/Code/stack-development/stack-<name>).
+# Uses the same directory mapping as ~/Code/0conf/fish/conf.d/hashes.fish.
+
+set -l root $HOME/Code
+set -q ZDIR_ROOT; and set root $ZDIR_ROOT
+set -l stack_root $root/stack-development
+set -q ZDIR_STACK_ROOT; and set stack_root $ZDIR_STACK_ROOT
+
+set -l candidates
+for d in $root/*/
+    test -d "$d"; or continue
+    set -a candidates (basename -- (string replace -r '/$' '' -- $d))
+end
+for d in $stack_root/*/
+    test -d "$d"; or continue
+    set -l dir (basename -- (string replace -r '/$' '' -- $d))
+    set -l name $dir
+    string match -q 'stack-*' -- $dir; and set name (string replace -r '^stack-' '' -- $dir)
+    set -a candidates $name
+end
+
+set -l selection (printf '%s\n' $candidates | fzf --print-query --prompt 'Project: ' --border-label ' new tab ')
+set -l name $selection[-1]
+test -n "$name"; or exit 0
+
+set -l path
+if test -d "$stack_root/stack-$name"
+    set path "$stack_root/stack-$name"
+else if test -d "$root/$name"
+    set path "$root/$name"
+else
+    echo "no directory found for '$name'" >&2
+    exit 1
+end
+
+herdr tab create --cwd "$path" --label "$name" --focus

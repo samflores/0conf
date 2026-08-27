@@ -1,0 +1,7 @@
+#!/usr/bin/env fish
+# tmux port: bind C-l clear-history ; send-keys 'C-l' 'C-l'
+# herdr has no scrollback-clear primitive, so this only clears the visible
+# screen via the shell's own Ctrl-L handling.
+
+test -n "$HERDR_ACTIVE_PANE_ID"; or exit 1
+herdr pane send-keys "$HERDR_ACTIVE_PANE_ID" ctrl+l
