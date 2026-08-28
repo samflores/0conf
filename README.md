@@ -9,7 +9,8 @@ My dotfiles.
 | `nvim`       | Neovim config                                              |
 | `fish`       | Fish shell                                                 |
 | `zsh`        | Zsh shell (`.zshrc`, `.zshenv`, `.zprofile`)               |
-| `tmux`       | tmux + sesh                                                |
+| `tmux`       | tmux + sesh (legacy; superseded by herdr)                  |
+| `herdr`      | herdr terminal workspace + picker scripts (`bin/` → `~/.local/bin`) |
 | `niri`       | Niri scrollable-tile compositor                            |
 | `hypr`       | Hyprland (legacy; superseded by niri)                      |
 | `quickshell` | Quickshell bar + notification daemon (Google Calendar widget needs `gcalcli`, see below) |
@@ -41,7 +42,7 @@ My dotfiles.
 ./install.sh --dry-run ...    # print actions, touch nothing
 ```
 
-Defaults: `nvim fish tmux niri quickshell ghostty fontconfig git pi stasis swaylock`.
+Defaults: `nvim fish herdr niri quickshell ghostty fontconfig git pi stasis swaylock`.
 
 The interactive picker uses [gum](https://github.com/charmbracelet/gum) for the module checklist and the wallpaper chooser. If `gum` isn't on `$PATH`, the installer falls back to the default set (and a numbered prompt for the wallpaper).
 

@@ -13,6 +13,7 @@ declare -A SRC=(
     [nvim]="nvim"
     [fish]="fish"
     [tmux]="tmux"
+    [herdr]="herdr"
     [niri]="niri"
     [hypr]="hypr"
     [mako]="mako"
@@ -33,13 +34,14 @@ declare -A SRC=(
 )
 
 # Default selection.
-DEFAULTS=(nvim fish tmux niri quickshell ghostty fontconfig git pi stasis swaylock)
+DEFAULTS=(nvim fish herdr niri quickshell ghostty fontconfig git pi stasis swaylock)
 
 # Runtime dependency map. Missing deps are warned, never installed.
 declare -A DEPS=(
     [nvim]="nvim"
     [fish]="fish eza fzf"
     [tmux]="tmux sesh"
+    [herdr]="herdr"
     [niri]="niri grim slurp satty jq wlsunset awww"
     [hypr]="hyprpaper hypridle hyprlock"
     [stasis]="stasis"
@@ -64,6 +66,7 @@ declare -A DEPS=(
 # a softer note rather than the usual warning.
 declare -A OPTIONAL_DEPS=(
     [quickshell]="gcalcli:Google Calendar widget"
+    [herdr]="fzf:picker popups;jq:picker scripts"
 )
 
 ALL_MODULES=("${!SRC[@]}")
@@ -216,6 +219,20 @@ install_module() {
                 ln -sf "$target/zsh/zprofile" "$HOME/.zprofile"
                 printf '  \033[32mlinked\033[0m ~/.zshrc, ~/.zshenv, ~/.zprofile\n'
             fi
+            ;;
+        herdr)
+            # herdr's config dir also holds live server state (session.json,
+            # logs, sockets, plugin installs), so only the config itself is
+            # linked; the picker scripts go to ~/.local/bin (config.toml
+            # references them by absolute path).
+            if [[ "$DRY" != 1 ]]; then
+                mkdir -p "$target/herdr" "$HOME/.local/bin"
+            fi
+            link_to "$src/config.toml" "$target/herdr/config.toml"
+            for script in "$src"/bin/*; do
+                [[ -e "$script" ]] || continue
+                link_to "$script" "$HOME/.local/bin/$(basename "$script")"
+            done
             ;;
         greetd)
             printf '  greetd lives under /etc/. Run as root:\n'

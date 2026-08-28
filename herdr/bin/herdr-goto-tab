@@ -1,0 +1,31 @@
+#!/usr/bin/env fish
+# Fuzzy-pick a space/tab from a tree view (workspace headers, tabs indented
+# underneath) and jump straight to it.
+
+set -l ws_json (herdr workspace list | jq -c '.result.workspaces' | string collect)
+set -l tabs_json (herdr tab list | jq -c '.result.tabs' | string collect)
+
+set -l lines (jq -n --argjson ws "$ws_json" --argjson tabs "$tabs_json" -r '
+    def status_icon:
+        if .agent_status == "working" then "*"
+        elif .agent_status == "done" then "+"
+        elif .agent_status == "idle" then "."
+        else " " end;
+    ($tabs | group_by(.workspace_id) | map({(.[0].workspace_id): .}) | add) as $tabs_by_ws
+    | $ws[] as $w
+    | $w.active_tab_id + "\t" + (if $w.focused then "> " else "  " end) + $w.label,
+      (($tabs_by_ws[$w.workspace_id] // [])[] as $t
+        | $t.tab_id + "\t"
+        + "    " + ($t | status_icon) + " "
+        + (if $t.focused then "> " else "  " end) + $t.label)
+')
+
+set -l picked (printf '%s\n' $lines \
+    | fzf --prompt 'Go to: ' --border-label ' spaces / tabs ' \
+        --with-nth 2 --delimiter '\t' \
+        --header '  * working  + done  . idle' \
+    | string split \t)
+
+test -n "$picked[1]"; or exit 0
+
+herdr tab focus "$picked[1]"

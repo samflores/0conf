@@ -1,0 +1,26 @@
+#!/usr/bin/env fish
+# Move the focused pane to a tab picked via fzf, across any space/workspace.
+
+set -l current $HERDR_ORIGIN_PANE_ID
+if test -z "$current"
+    echo "HERDR_ORIGIN_PANE_ID not set" >&2
+    read -P "press enter to close"
+    exit 1
+end
+
+set -l ws_json (herdr workspace list | jq -c '.result.workspaces' | string collect)
+set -l tabs_json (herdr tab list | jq -c '.result.tabs' | string collect)
+
+set -l picked (jq -n --argjson ws "$ws_json" --argjson tabs "$tabs_json" '
+    ($ws | map({(.workspace_id): .label}) | add) as $ws_labels
+    | $tabs[]
+    | "\(.tab_id)\t\($ws_labels[.workspace_id]) / \(.label)"
+' -r | fzf --prompt 'Move to tab: ' --border-label ' move pane ' --with-nth 2 --delimiter '\t')
+
+test -n "$picked"; or exit 0
+set -l target_tab (string split \t -- $picked)[1]
+test -n "$target_tab"; or exit 1
+
+if not herdr pane move "$current" --tab "$target_tab" --split right --focus
+    read -P "move failed, press enter to close"
+end
