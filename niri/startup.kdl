@@ -1,5 +1,11 @@
-spawn-sh-at-startup "eval \"$(dbus-launch --sh-syntax)\""
-spawn-sh-at-startup "dbus-update-activation-environment I3SOCK SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri NO_AT_BRIDGE=1 DBUS_SESSION_BUS_ADDRESS DBUS_SESSION_BUS_PID DBUS_SESSION_BUS_WINDOWID"
+// The session bus is run by a supervise-daemon user service at
+// $XDG_RUNTIME_DIR/bus; niri must not start one of its own. Its address is set
+// in environment.kdl so niri and its children inherit it, and this line copies
+// it into the bus activation environment so activated services agree.
+//
+// Note spawn-sh-at-startup runs each command in a throwaway shell, so it
+// cannot be used to export variables into the session, use environment.kdl.
+spawn-sh-at-startup "dbus-update-activation-environment I3SOCK SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri NO_AT_BRIDGE=1 DBUS_SESSION_BUS_ADDRESS"
 spawn-sh-at-startup "wlsunset -l -5.1 -L -42.7"
 
 spawn-at-startup "qs"
